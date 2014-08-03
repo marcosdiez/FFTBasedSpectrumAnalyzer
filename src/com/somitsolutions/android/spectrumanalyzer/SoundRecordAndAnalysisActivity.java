@@ -103,16 +103,15 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
                     	
                     }
                     while (started) {
-                    	if(isCancelled()){
-                    		break;
-                    	}
+                    	
                     	/*if(width > 512){
                     		bufferReadResult = audioRecord.read(buffer, 0, 512);
                     	}
                     	else{*/
                     		bufferReadResult = audioRecord.read(buffer, 0, blockSize);
                     	//}
-                    
+                    	if(isCancelled())
+                            	break;
 
                     for (int i = 0; i < blockSize && i < bufferReadResult; i++) {
                         toTransform[i] = (double) buffer[i] / 32768.0; // signed 16 bit
@@ -124,18 +123,21 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
                     	publishProgress(toTransform);
                     }*/
                     publishProgress(toTransform);
+                    if(isCancelled())
+                    	break;
+                    	//return null;
                     }
+                    
                     try{
                     	audioRecord.stop();
                     }
                     catch(IllegalStateException e){
                     	Log.e("Stop failed", e.toString());
                     	
-                    }
+                    }               
                     
                     return null;
-                    
-                    }
+        }
         
         protected void onProgressUpdate(double[]... toTransform) {
         	Log.e("RecordingProgress", "Displaying in progress");
