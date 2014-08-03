@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
@@ -16,7 +15,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
-import android.view.SurfaceHolder;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
@@ -26,7 +25,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 import ca.uol.aig.fftpack.RealDoubleFFT;
 
 
@@ -243,7 +241,7 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
             else{
             	 bitmapDisplaySpectrum = Bitmap.createBitmap((int)256,(int)150,Bitmap.Config.ARGB_8888);
             }
-            LayoutParams layoutParams_imageViewScale;
+            LinearLayout.LayoutParams layoutParams_imageViewScale;
             //Bitmap scaled = Bitmap.createScaledBitmap(bitmapDisplaySpectrum, 320, 480, true);
             canvasDisplaySpectrum = new Canvas(bitmapDisplaySpectrum);
             //canvasDisplaySpectrum = new Canvas(scaled);
@@ -252,16 +250,22 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
             imageViewDisplaySectrum.setImageBitmap(bitmapDisplaySpectrum);
             if(width >512){
             	//imageViewDisplaySectrum.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
-            	LayoutParams layoutParams_imageViewDisplaySpectrum=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            	LinearLayout.LayoutParams layoutParams_imageViewDisplaySpectrum=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 ((MarginLayoutParams) layoutParams_imageViewDisplaySpectrum).setMargins(0, 100, 0, 100);
                 imageViewDisplaySectrum.setLayoutParams(layoutParams_imageViewDisplaySpectrum);
-                layoutParams_imageViewScale=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                layoutParams_imageViewScale= new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                //layoutParams_imageViewScale.gravity = Gravity.CENTER_HORIZONTAL;
                 ((MarginLayoutParams) layoutParams_imageViewScale).setMargins(0, 20, 0, 20);
+                
             }
            
             else{
-            	imageViewDisplaySectrum.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
+            	LinearLayout.LayoutParams layoutParams_imageViewDisplaySpectrum=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                ((MarginLayoutParams) layoutParams_imageViewDisplaySpectrum).setMargins(30, 100, 0, 100);
+                imageViewDisplaySectrum.setLayoutParams(layoutParams_imageViewDisplaySpectrum);
+            	//imageViewDisplaySectrum.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
             	layoutParams_imageViewScale=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            	layoutParams_imageViewScale.gravity = Gravity.CENTER;
             }
             
             main.addView(imageViewDisplaySectrum);
@@ -271,6 +275,7 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
             
             imageViewScale = new MyImageView(this);
             imageViewScale.setLayoutParams(layoutParams_imageViewScale);
+            
             //imageViewScale.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
             main.addView(imageViewScale);
             
@@ -359,8 +364,8 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
                      }
                 	canvas.drawBitmap(bitmapScale, 128, 0, paintScaleDisplay);
                 }
-                else{
-                	 canvasScale.drawLine(0, 30, 256, 30, paintScaleDisplay);
+                if ((width >256) && (width<512)){
+                	 canvasScale.drawLine(left_Of_BimapScale, 30, left_Of_BimapScale+ 256, 30, paintScaleDisplay);
                 	 for(int i = 0,j = 0; i<256; i=i+64, j++){
                      	for (int k = i; k<(i+64); k=k+8){
                      		canvasScale.drawLine(k, 30, k, 25, paintScaleDisplay);
@@ -369,9 +374,21 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
                      	String text = Integer.toString(j) + " KHz";
                      	canvasScale.drawText(text, i, 45, paintScaleDisplay);
                      }
-                	 canvas.drawBitmap(bitmapScale, 0, 0, paintScaleDisplay);
+                	 canvas.drawBitmap(bitmapScale, 128, 0, paintScaleDisplay);
                 }
                
+                if (width <256){
+               	 canvasScale.drawLine(0, 30,  256, 30, paintScaleDisplay);
+               	 for(int i = 0,j = 0; i<256; i=i+64, j++){
+                    	for (int k = i; k<(i+64); k=k+8){
+                    		canvasScale.drawLine(k, 30, k, 25, paintScaleDisplay);
+                    	}
+                    	canvasScale.drawLine(i, 40, i, 25, paintScaleDisplay);
+                    	String text = Integer.toString(j) + " KHz";
+                    	canvasScale.drawText(text, i, 45, paintScaleDisplay);
+                    }
+               	 canvas.drawBitmap(bitmapScale, 0, 0, paintScaleDisplay);
+               }
                 
                 //canvas.drawBitmap(bitmapScale, 0, 400, paintScaleDisplay);
                 //invalidate();
