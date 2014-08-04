@@ -55,7 +55,9 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
     int width;
     int height;
     int left_Of_BimapScale;
-    
+    int left_Of_DisplaySpectrum;
+    private final static int ID_BITMAPDISPLAYSPECTRUM = 1;
+    private final static int ID_IMAGEVIEWSCALE = 2;
     
     /** Called when the activity is first created. */
     @Override
@@ -71,11 +73,17 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
     	}
     	else{*/
     		blockSize = 256;
-    	//}
-    		
-        
+    	//}  
     }
-
+    
+    @Override
+	public void onWindowFocusChanged (boolean hasFocus) {
+    	//left_Of_BimapScale = main.getC.getLeft();
+    	MyImageView  scale = (MyImageView)main.findViewById(ID_IMAGEVIEWSCALE);
+    	ImageView bitmap = (ImageView)main.findViewById(ID_BITMAPDISPLAYSPECTRUM);
+    	left_Of_BimapScale = scale.getLeft();
+    	left_Of_DisplaySpectrum = bitmap.getLeft();
+    }
     private class RecordAudio extends AsyncTask<Void, double[], Void> {
     	
         @Override
@@ -241,7 +249,7 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
             else{
             	 bitmapDisplaySpectrum = Bitmap.createBitmap((int)256,(int)150,Bitmap.Config.ARGB_8888);
             }
-            LinearLayout.LayoutParams layoutParams_imageViewScale;
+            LinearLayout.LayoutParams layoutParams_imageViewScale = null;
             //Bitmap scaled = Bitmap.createScaledBitmap(bitmapDisplaySpectrum, 320, 480, true);
             canvasDisplaySpectrum = new Canvas(bitmapDisplaySpectrum);
             //canvasDisplaySpectrum = new Canvas(scaled);
@@ -250,24 +258,36 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
             imageViewDisplaySectrum.setImageBitmap(bitmapDisplaySpectrum);
             if(width >512){
             	//imageViewDisplaySectrum.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
-            	LinearLayout.LayoutParams layoutParams_imageViewDisplaySpectrum=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                ((MarginLayoutParams) layoutParams_imageViewDisplaySpectrum).setMargins(0, 100, 0, 100);
+            	LinearLayout.LayoutParams layoutParams_imageViewDisplaySpectrum=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                ((MarginLayoutParams) layoutParams_imageViewDisplaySpectrum).setMargins(100, 600, 0, 0);
                 imageViewDisplaySectrum.setLayoutParams(layoutParams_imageViewDisplaySpectrum);
-                layoutParams_imageViewScale= new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                layoutParams_imageViewScale= new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 //layoutParams_imageViewScale.gravity = Gravity.CENTER_HORIZONTAL;
-                ((MarginLayoutParams) layoutParams_imageViewScale).setMargins(0, 20, 0, 20);
+                ((MarginLayoutParams) layoutParams_imageViewScale).setMargins(100, 20, 0, 0);
                 
             }
-           
-            else{
-            	LinearLayout.LayoutParams layoutParams_imageViewDisplaySpectrum=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                ((MarginLayoutParams) layoutParams_imageViewDisplaySpectrum).setMargins(30, 100, 0, 100);
-                imageViewDisplaySectrum.setLayoutParams(layoutParams_imageViewDisplaySpectrum);
-            	//imageViewDisplaySectrum.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
-            	layoutParams_imageViewScale=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            	layoutParams_imageViewScale.gravity = Gravity.CENTER;
-            }
             
+            else if ((width >320) && (width<512)){
+            	LinearLayout.LayoutParams layoutParams_imageViewDisplaySpectrum=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                ((MarginLayoutParams) layoutParams_imageViewDisplaySpectrum).setMargins(60, 250, 0, 0);
+               //layoutParams_imageViewDisplaySpectrum.gravity = Gravity.CENTER_HORIZONTAL;
+                imageViewDisplaySectrum.setLayoutParams(layoutParams_imageViewDisplaySpectrum);
+                
+            	//imageViewDisplaySectrum.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
+            	layoutParams_imageViewScale=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            	((MarginLayoutParams) layoutParams_imageViewScale).setMargins(60, 20, 0, 100);
+            	//layoutParams_imageViewScale.gravity = Gravity.CENTER_HORIZONTAL;
+            }
+           
+            else if (width < 320){
+            	/*LinearLayout.LayoutParams layoutParams_imageViewDisplaySpectrum=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                ((MarginLayoutParams) layoutParams_imageViewDisplaySpectrum).setMargins(30, 100, 0, 100);
+                imageViewDisplaySectrum.setLayoutParams(layoutParams_imageViewDisplaySpectrum);*/
+            	imageViewDisplaySectrum.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
+            	layoutParams_imageViewScale=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            	//layoutParams_imageViewScale.gravity = Gravity.CENTER;
+            }
+            imageViewDisplaySectrum.setId(ID_BITMAPDISPLAYSPECTRUM);
             main.addView(imageViewDisplaySectrum);
             
             
@@ -275,6 +295,7 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
             
             imageViewScale = new MyImageView(this);
             imageViewScale.setLayoutParams(layoutParams_imageViewScale);
+            imageViewScale.setId(ID_IMAGEVIEWSCALE);
             
             //imageViewScale.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
             main.addView(imageViewScale);
@@ -290,7 +311,7 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
             //recordTask = new RecordAudio();
             
             
-            left_Of_BimapScale = main.getChildAt(1).getLeft();
+            /*left_Of_BimapScale = main.getChildAt(1).getLeft();*/
             
             mainActivity = this;
             
@@ -353,7 +374,7 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
                // int x_Of_BimapScale = bitmapScale.
                
                 if(width > 512){
-                	 canvasScale.drawLine(left_Of_BimapScale, 0, left_Of_BimapScale + 512, 0, paintScaleDisplay);
+                	 canvasScale.drawLine(0, 30,  512, 30, paintScaleDisplay);
                 	for(int i = 0,j = 0; i< 512; i=i+128, j++){
                      	for (int k = i; k<(i+128); k=k+16){
                      		canvasScale.drawLine(k, 30, k, 25, paintScaleDisplay);
@@ -362,10 +383,10 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
                      	String text = Integer.toString(j) + " KHz";
                      	canvasScale.drawText(text, i, 45, paintScaleDisplay);
                      }
-                	canvas.drawBitmap(bitmapScale, 128, 0, paintScaleDisplay);
+                	canvas.drawBitmap(bitmapScale, 0, 0, paintScaleDisplay);
                 }
-                if ((width >256) && (width<512)){
-                	 canvasScale.drawLine(left_Of_BimapScale, 30, left_Of_BimapScale+ 256, 30, paintScaleDisplay);
+                else if ((width >320) && (width<512)){
+                	 canvasScale.drawLine(0, 30, 0 + 256, 30, paintScaleDisplay);
                 	 for(int i = 0,j = 0; i<256; i=i+64, j++){
                      	for (int k = i; k<(i+64); k=k+8){
                      		canvasScale.drawLine(k, 30, k, 25, paintScaleDisplay);
@@ -374,10 +395,10 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
                      	String text = Integer.toString(j) + " KHz";
                      	canvasScale.drawText(text, i, 45, paintScaleDisplay);
                      }
-                	 canvas.drawBitmap(bitmapScale, 128, 0, paintScaleDisplay);
+                	 canvas.drawBitmap(bitmapScale, 0, 0, paintScaleDisplay);
                 }
                
-                if (width <256){
+                else if (width <320){
                	 canvasScale.drawLine(0, 30,  256, 30, paintScaleDisplay);
                	 for(int i = 0,j = 0; i<256; i=i+64, j++){
                     	for (int k = i; k<(i+64); k=k+8){
