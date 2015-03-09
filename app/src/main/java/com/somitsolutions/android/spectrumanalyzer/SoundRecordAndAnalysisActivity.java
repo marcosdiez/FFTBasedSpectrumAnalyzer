@@ -15,7 +15,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
-import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
@@ -42,7 +41,7 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
 
     RecordAudio recordTask;
     ImageView imageViewDisplaySectrum;
-    MyImageView imageViewScale;
+    TheScaleImageView imageViewScale;
     Bitmap bitmapDisplaySpectrum;
 
     Canvas canvasDisplaySpectrum;
@@ -79,7 +78,7 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
     @Override
     public void onWindowFocusChanged (boolean hasFocus) {
         //left_Of_BimapScale = main.getC.getLeft();
-        MyImageView  scale = (MyImageView)main.findViewById(ID_IMAGEVIEWSCALE);
+        TheScaleImageView scale = (TheScaleImageView)main.findViewById(ID_IMAGEVIEWSCALE);
         ImageView bitmap = (ImageView)main.findViewById(ID_BITMAPDISPLAYSPECTRUM);
         left_Of_BimapScale = scale.getLeft();
         left_Of_DisplaySpectrum = bitmap.getLeft();
@@ -262,11 +261,13 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
         if(width >512){
             //imageViewDisplaySectrum.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
             LinearLayout.LayoutParams layoutParams_imageViewDisplaySpectrum=new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.FILL_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT);
             ((MarginLayoutParams) layoutParams_imageViewDisplaySpectrum).setMargins(0, 600, 0, 0);
             imageViewDisplaySectrum.setLayoutParams(layoutParams_imageViewDisplaySpectrum);
-            layoutParams_imageViewScale= new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            layoutParams_imageViewScale= new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.FILL_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
             //layoutParams_imageViewScale.gravity = Gravity.CENTER_HORIZONTAL;
             //((MarginLayoutParams) layoutParams_imageViewScale).setMargins(0, 20, 0, 0);
 
@@ -279,7 +280,7 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
 
         //((MarginLayoutParams) layoutParams_imageViewScale).setMargins(0, 20, 0, 20);
 
-        imageViewScale = new MyImageView(this);
+        imageViewScale = new TheScaleImageView(this);
         imageViewScale.setLayoutParams(layoutParams_imageViewScale);
         imageViewScale.setId(ID_IMAGEVIEWSCALE);
 
@@ -325,12 +326,12 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
         startActivity(intent);
     }
     //Custom Imageview Class
-    public class MyImageView extends ImageView {
+    public class TheScaleImageView extends ImageView {
         Paint paintScaleDisplay;
         Bitmap bitmapScale;
         Canvas canvasScale;
         //Bitmap scaled;
-        public MyImageView(Context context) {
+        public TheScaleImageView(Context context) {
             super(context);
             // TODO Auto-generated constructor stub
             // if(width >512){
