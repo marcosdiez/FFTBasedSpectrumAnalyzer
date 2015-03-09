@@ -3,8 +3,33 @@
     android:id="@+id/mainLayOut"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    >
+<ImageView
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/imageViewDisplaySectrum"
+    android:layout_marginLeft="0px"
+    android:layout_marginTop="600px"
+    android:layout_marginRight="0px"
+    android:layout_marginBottom="0px"
+    />
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/theScaleImageView"
+        android:layout_marginLeft="0px"
+        android:layout_marginTop="50px"
+        android:layout_marginRight="0px"
+        android:layout_marginBottom="0px"
+        />
 
-   
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="StartMM"
+        android:id="@+id/startStopButton"/>
+
+
 
 </LinearLayout>

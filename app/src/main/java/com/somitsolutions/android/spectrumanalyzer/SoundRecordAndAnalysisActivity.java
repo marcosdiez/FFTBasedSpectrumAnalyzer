@@ -17,17 +17,14 @@ import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
-import android.view.ViewGroup.MarginLayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import ca.uol.aig.fftpack.RealDoubleFFT;
 
 
-public class SoundRecordAndAnalysisActivity extends Activity implements OnClickListener{
+public class SoundRecordAndAnalysisActivity extends Activity{
 
     int frequency = 8000;
     int channelConfiguration = AudioFormat.CHANNEL_CONFIGURATION_MONO;
@@ -41,7 +38,7 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
 
     RecordAudio recordTask;
     ImageView imageViewDisplaySectrum;
-    TheScaleImageView imageViewScale;
+    ImageView imageViewScale;
     Bitmap bitmapDisplaySpectrum;
 
     Canvas canvasDisplaySpectrum;
@@ -50,13 +47,11 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
     Paint paintSpectrumDisplay;
     Paint paintScaleDisplay;
     static SoundRecordAndAnalysisActivity mainActivity;
-    LinearLayout main;
+    // LinearLayout main;
     int width;
     int height;
     int left_Of_BimapScale;
     int left_Of_DisplaySpectrum;
-    private final static int ID_BITMAPDISPLAYSPECTRUM = 1;
-    private final static int ID_IMAGEVIEWSCALE = 2;
 
     /** Called when the activity is first created. */
     @Override
@@ -73,15 +68,18 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
     	else{*/
         blockSize = 256;
         //}
+
+        prepareUi();
     }
 
     @Override
     public void onWindowFocusChanged (boolean hasFocus) {
         //left_Of_BimapScale = main.getC.getLeft();
-        TheScaleImageView scale = (TheScaleImageView)main.findViewById(ID_IMAGEVIEWSCALE);
-        ImageView bitmap = (ImageView)main.findViewById(ID_BITMAPDISPLAYSPECTRUM);
-        left_Of_BimapScale = scale.getLeft();
-        left_Of_DisplaySpectrum = bitmap.getLeft();
+//        TheScaleImageView scale = (TheScaleImageView)main.findViewById(ID_IMAGEVIEWSCALE);
+        // ImageView bitmap = (ImageView)main.findViewById(ID_BITMAPDISPLAYSPECTRUM);
+
+        left_Of_BimapScale = imageViewScale.getLeft();
+        left_Of_DisplaySpectrum = imageViewDisplaySectrum.getLeft();
     }
     private class RecordAudio extends AsyncTask<Void, double[], Void> {
 
@@ -195,7 +193,7 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
 
 
 
-    public void onClick(View v) {
+    public void buttonClicked() {
 
         if (started == true) {
             started = false;
@@ -229,74 +227,105 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
         startActivity(intent);
     }
 
-    public void onStart(){
-
-        super.onStart();
-        main = new LinearLayout(this);
-        main.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,android.view.ViewGroup.LayoutParams.FILL_PARENT));
-        main.setOrientation(LinearLayout.VERTICAL);
+    protected void prepareUi(){
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        setContentView(R.layout.main);
+        // numDuration = (NumberPicker ) findViewById(R.id.numberPickerDuration);
+        imageViewDisplaySectrum = (ImageView) findViewById(R.id.imageViewDisplaySectrum);
+        imageViewScale = (ImageView) findViewById(R.id.theScaleImageView);
+        startStopButton = (Button) findViewById(R.id.startStopButton);
+        startStopButton.setOnClickListener(new OnClickListener() {
+            public void onClick(View view) {
+                buttonClicked();
+            }
+        });
+
+        bitmapDisplaySpectrum = Bitmap.createBitmap(width,(int)300,Bitmap.Config.ARGB_8888);
+        imageViewDisplaySectrum.setImageBitmap(bitmapDisplaySpectrum);
+
+        canvasDisplaySpectrum = new Canvas(bitmapDisplaySpectrum);
+        paintSpectrumDisplay = new Paint();
+        paintSpectrumDisplay.setColor(Color.GREEN);
+    }
+
+    public void onStart(){
 
 
+        super.onStart();
         transformer = new RealDoubleFFT(blockSize);
 
-        imageViewDisplaySectrum = new ImageView(this);
+
+//        main = new LinearLayout(this);
+//        main.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,android.view.ViewGroup.LayoutParams.FILL_PARENT));
+//        main.setOrientation(LinearLayout.VERTICAL);
+
+//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+      //  imageViewDisplaySectrum = new ImageView(this);
         // if(width > 512){
-            bitmapDisplaySpectrum = Bitmap.createBitmap(width,(int)300,Bitmap.Config.ARGB_8888);
+    //        bitmapDisplaySpectrum = Bitmap.createBitmap(width,(int)300,Bitmap.Config.ARGB_8888);
         // }
 //        else{
 //            bitmapDisplaySpectrum = Bitmap.createBitmap((int)256,(int)150,Bitmap.Config.ARGB_8888);
 //        }
-        LinearLayout.LayoutParams layoutParams_imageViewScale = null;
+      //  LinearLayout.LayoutParams layoutParams_imageViewScale = null;
         //Bitmap scaled = Bitmap.createScaledBitmap(bitmapDisplaySpectrum, 320, 480, true);
-        canvasDisplaySpectrum = new Canvas(bitmapDisplaySpectrum);
-        //canvasDisplaySpectrum = new Canvas(scaled);
-        paintSpectrumDisplay = new Paint();
-        paintSpectrumDisplay.setColor(Color.GREEN);
-        imageViewDisplaySectrum.setImageBitmap(bitmapDisplaySpectrum);
-        if(width >512){
-            //imageViewDisplaySectrum.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
-            LinearLayout.LayoutParams layoutParams_imageViewDisplaySpectrum=new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.FILL_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
-            ((MarginLayoutParams) layoutParams_imageViewDisplaySpectrum).setMargins(0, 600, 0, 0);
-            imageViewDisplaySectrum.setLayoutParams(layoutParams_imageViewDisplaySpectrum);
-            layoutParams_imageViewScale= new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.FILL_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
-            //layoutParams_imageViewScale.gravity = Gravity.CENTER_HORIZONTAL;
-            //((MarginLayoutParams) layoutParams_imageViewScale).setMargins(0, 20, 0, 0);
+//        canvasDisplaySpectrum = new Canvas(bitmapDisplaySpectrum);
+//        //canvasDisplaySpectrum = new Canvas(scaled);
+//        paintSpectrumDisplay = new Paint();
+//        paintSpectrumDisplay.setColor(Color.GREEN);
+//        imageViewDisplaySectrum.setImageBitmap(bitmapDisplaySpectrum);
+//        if(width >512){
+//
+//            //imageViewDisplaySectrum.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
+//            LinearLayout.LayoutParams layoutParams_imageViewDisplaySpectrum=new LinearLayout.LayoutParams(
+//                    LinearLayout.LayoutParams.FILL_PARENT,
+//                    LinearLayout.LayoutParams.WRAP_CONTENT);
+//            ((MarginLayoutParams) layoutParams_imageViewDisplaySpectrum).setMargins(0, 600, 0, 0);
+//            imageViewDisplaySectrum.setLayoutParams(layoutParams_imageViewDisplaySpectrum);
+//
+//
+//            layoutParams_imageViewScale= new LinearLayout.LayoutParams(
+//                    LinearLayout.LayoutParams.FILL_PARENT,
+//                    LinearLayout.LayoutParams.WRAP_CONTENT);
+//            //layoutParams_imageViewScale.gravity = Gravity.CENTER_HORIZONTAL;
+//            //((MarginLayoutParams) layoutParams_imageViewScale).setMargins(0, 20, 0, 0);
+//
+//        }
 
-        }
 
-
-        imageViewDisplaySectrum.setId(ID_BITMAPDISPLAYSPECTRUM);
-        main.addView(imageViewDisplaySectrum);
+//        imageViewDisplaySectrum.setId(ID_BITMAPDISPLAYSPECTRUM);
+//        main.addView(imageViewDisplaySectrum);
 
 
         //((MarginLayoutParams) layoutParams_imageViewScale).setMargins(0, 20, 0, 20);
 
-        imageViewScale = new TheScaleImageView(this);
-        imageViewScale.setLayoutParams(layoutParams_imageViewScale);
-        imageViewScale.setId(ID_IMAGEVIEWSCALE);
+//        imageViewScale = new TheScaleImageView(this);
+//        imageViewScale.setLayoutParams(layoutParams_imageViewScale);
+//        imageViewScale.setId(ID_IMAGEVIEWSCALE);
 
         //imageViewScale.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
-        main.addView(imageViewScale);
+//        main.addView(imageViewScale);
 
-        startStopButton = new Button(this);
-        startStopButton.setText("StartW");
-        startStopButton.setOnClickListener(this);
-        startStopButton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
+//        startStopButton = new Button(this);
+//        startStopButton.setText("StartW");
+//        startStopButton.setOnClickListener(this);
+//        startStopButton.setLayoutParams(new LinearLayout.LayoutParams(
+//                LinearLayout.LayoutParams.FILL_PARENT,
+//                LinearLayout.LayoutParams.WRAP_CONTENT));
 
-        main.addView(startStopButton);
-
-        setContentView(main);
-        //recordTask = new RecordAudio();
-
+//        main.addView(startStopButton);
+//
+//        setContentView(main);
+//        recordTask = new RecordAudio();
+//
 
             /*left_Of_BimapScale = main.getChildAt(1).getLeft();*/
 
@@ -326,59 +355,59 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
         startActivity(intent);
     }
     //Custom Imageview Class
-    public class TheScaleImageView extends ImageView {
-        Paint paintScaleDisplay;
-        Bitmap bitmapScale;
-        Canvas canvasScale;
-        //Bitmap scaled;
-        public TheScaleImageView(Context context) {
-            super(context);
-            // TODO Auto-generated constructor stub
-            // if(width >512){
-            bitmapScale = Bitmap.createBitmap(width,(int)50,Bitmap.Config.ARGB_8888);
-            // }
-
-            paintScaleDisplay = new Paint();
-            paintScaleDisplay.setColor(Color.WHITE);
-            paintScaleDisplay.setStyle(Paint.Style.FILL);
-
-            canvasScale = new Canvas(bitmapScale);
-
-            setImageBitmap(bitmapScale);
-            invalidate();
-
-
-        }
-        @Override
-        protected void onDraw(Canvas canvas)
-        {
-            // TODO Auto-generated method stub
-            super.onDraw(canvas);
-
-            // int x_Of_BimapScale = bitmapScale.
-
-            //if(width > 512){
-            float delta = width / 4;
-            float delta_by_8 = delta/8;
-
-            canvasScale.drawLine(0, 30,  width, 30, paintScaleDisplay);
-            for(float i = 0, j = 0; i< width; i=i+delta, j++){
-                for (float k = i; k<(i+delta); k=k+delta_by_8){
-                    canvasScale.drawLine(k, 30, k, 25, paintScaleDisplay);
-                }
-                canvasScale.drawLine(i, 40, i, 25, paintScaleDisplay);
-                String text = Integer.toString((int)j) + " KHz";
-                canvasScale.drawText(text, i, 45, paintScaleDisplay);
-            }
-            canvas.drawBitmap(bitmapScale, 0, 0, paintScaleDisplay);
-            //}
-
-
-            //canvas.drawBitmap(bitmapScale, 0, 400, paintScaleDisplay);
-            //invalidate();
-        }
-
-    }
+//    public class TheScaleImageView extends ImageView {
+//        Paint paintScaleDisplay;
+//        Bitmap bitmapScale;
+//        Canvas canvasScale;
+//        //Bitmap scaled;
+//        public TheScaleImageView(Context context) {
+//            super(context);
+//            // TODO Auto-generated constructor stub
+//            // if(width >512){
+//            bitmapScale = Bitmap.createBitmap(width,(int)50,Bitmap.Config.ARGB_8888);
+//            // }
+//
+//            paintScaleDisplay = new Paint();
+//            paintScaleDisplay.setColor(Color.WHITE);
+//            paintScaleDisplay.setStyle(Paint.Style.FILL);
+//
+//            canvasScale = new Canvas(bitmapScale);
+//
+//            setImageBitmap(bitmapScale);
+//            invalidate();
+//
+//
+//        }
+//        @Override
+//        protected void onDraw(Canvas canvas)
+//        {
+//            // TODO Auto-generated method stub
+//            super.onDraw(canvas);
+//
+//            // int x_Of_BimapScale = bitmapScale.
+//
+//            //if(width > 512){
+//            float delta = width / 4;
+//            float delta_by_8 = delta/8;
+//
+//            canvasScale.drawLine(0, 30,  width, 30, paintScaleDisplay);
+//            for(float i = 0, j = 0; i< width; i=i+delta, j++){
+//                for (float k = i; k<(i+delta); k=k+delta_by_8){
+//                    canvasScale.drawLine(k, 30, k, 25, paintScaleDisplay);
+//                }
+//                canvasScale.drawLine(i, 40, i, 25, paintScaleDisplay);
+//                String text = Integer.toString((int)j) + " KHz";
+//                canvasScale.drawText(text, i, 45, paintScaleDisplay);
+//            }
+//            canvas.drawBitmap(bitmapScale, 0, 0, paintScaleDisplay);
+//            //}
+//
+//
+//            //canvas.drawBitmap(bitmapScale, 0, 400, paintScaleDisplay);
+//            //invalidate();
+//        }
+//
+//    }
 
 }
 
