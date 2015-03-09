@@ -74,6 +74,7 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
     	else{*/
         blockSize = 256;
         //}
+        Log.d("RecordingProgress", "Activity created");
     }
 
     @Override
@@ -146,7 +147,7 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
         }
 
         protected void onProgressUpdate(double[]... toTransform) {
-            Log.e("RecordingProgress", "Displaying in progress");
+            Log.d("RecordingProgress", "Displaying in progress at width: " + width);
 
             if (width > 512){
                 for (int i = 0; i < toTransform[0].length; i++) {
@@ -301,7 +302,7 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
         main.addView(imageViewScale);
 
         startStopButton = new Button(this);
-        startStopButton.setText("StartW");
+        startStopButton.setText("StartWV");
         startStopButton.setOnClickListener(this);
         startStopButton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
 
