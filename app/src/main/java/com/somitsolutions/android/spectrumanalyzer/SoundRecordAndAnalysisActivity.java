@@ -151,7 +151,7 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
 
             double[] toTransformZero = toTransform[0];
 
-            float delta = 2 * width / 512;
+            float delta = width / toTransformZero.length;
 
             //if (width > 512){
             for (int i = 0; i < toTransformZero.length; i++) {
