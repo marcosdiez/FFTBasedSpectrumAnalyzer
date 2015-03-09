@@ -74,7 +74,7 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
     	else{*/
         blockSize = 256;
         //}
-        Log.d("RecordingProgress", "Activity created");
+        Log.d("RecordingProgress", "Activity created. Width:" + width + " height:" + height); // Width:1080 height:1920
     }
 
     @Override
@@ -147,7 +147,7 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
         }
 
         protected void onProgressUpdate(double[]... toTransform) {
-            Log.d("RecordingProgress", "Displaying in progress at width: " + width);
+            Log.d("RecordingProgress", "Displaying in progress at width: " + width + "/" + toTransform[0].length);
 
             if (width > 512){
                 for (int i = 0; i < toTransform[0].length; i++) {
@@ -155,6 +155,7 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
                     int downy = (int) (150 - (toTransform[0][i] * 10));
                     int upy = 150;
                     canvasDisplaySpectrum.drawLine(x, downy, x, upy, paintSpectrumDisplay);
+                    //Log.d("RecordingProgress", "Line: " + i + " x: " + x + " downy: " + downy + " " + upy );
                 }
 
                 imageViewDisplaySectrum.invalidate();
