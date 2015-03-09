@@ -151,9 +151,11 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
 
             double[] toTransformZero = toTransform[0];
 
+            float delta = 2 * width / 512;
+
             if (width > 512){
                 for (int i = 0; i < toTransformZero.length; i++) {
-                    int x = 2*i;
+                    float x = delta * i;
                     double toAnalyze = toTransformZero[i];
                     int downy = (int) (150 - (toAnalyze * 10));
                     int upy = 150;
@@ -256,7 +258,7 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
 
         imageViewDisplaySectrum = new ImageView(this);
         if(width > 512){
-            bitmapDisplaySpectrum = Bitmap.createBitmap((int)512,(int)300,Bitmap.Config.ARGB_8888);
+            bitmapDisplaySpectrum = Bitmap.createBitmap(width,(int)300,Bitmap.Config.ARGB_8888);
         }
         else{
             bitmapDisplaySpectrum = Bitmap.createBitmap((int)256,(int)150,Bitmap.Config.ARGB_8888);
@@ -270,12 +272,14 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
         imageViewDisplaySectrum.setImageBitmap(bitmapDisplaySpectrum);
         if(width >512){
             //imageViewDisplaySectrum.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
-            LinearLayout.LayoutParams layoutParams_imageViewDisplaySpectrum=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            ((MarginLayoutParams) layoutParams_imageViewDisplaySpectrum).setMargins(100, 600, 0, 0);
+            LinearLayout.LayoutParams layoutParams_imageViewDisplaySpectrum=new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            ((MarginLayoutParams) layoutParams_imageViewDisplaySpectrum).setMargins(0, 600, 0, 0);
             imageViewDisplaySectrum.setLayoutParams(layoutParams_imageViewDisplaySpectrum);
             layoutParams_imageViewScale= new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             //layoutParams_imageViewScale.gravity = Gravity.CENTER_HORIZONTAL;
-            ((MarginLayoutParams) layoutParams_imageViewScale).setMargins(100, 20, 0, 0);
+            //((MarginLayoutParams) layoutParams_imageViewScale).setMargins(0, 20, 0, 0);
 
         }
 
@@ -360,7 +364,7 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
             super(context);
             // TODO Auto-generated constructor stub
             if(width >512){
-                bitmapScale = Bitmap.createBitmap((int)512,(int)50,Bitmap.Config.ARGB_8888);
+                bitmapScale = Bitmap.createBitmap(width,(int)50,Bitmap.Config.ARGB_8888);
             }
             else{
                 bitmapScale =  Bitmap.createBitmap((int)256,(int)50,Bitmap.Config.ARGB_8888);
@@ -386,13 +390,16 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
             // int x_Of_BimapScale = bitmapScale.
 
             if(width > 512){
-                canvasScale.drawLine(0, 30,  512, 30, paintScaleDisplay);
-                for(int i = 0,j = 0; i< 512; i=i+128, j++){
-                    for (int k = i; k<(i+128); k=k+16){
+                float delta = width / 4;
+                float delta_by_8 = delta/8;
+
+                canvasScale.drawLine(0, 30,  width, 30, paintScaleDisplay);
+                for(float i = 0, j = 0; i< width; i=i+delta, j++){
+                    for (float k = i; k<(i+delta); k=k+delta_by_8){
                         canvasScale.drawLine(k, 30, k, 25, paintScaleDisplay);
                     }
                     canvasScale.drawLine(i, 40, i, 25, paintScaleDisplay);
-                    String text = Integer.toString(j) + " KHz";
+                    String text = Integer.toString((int)j) + " KHz";
                     canvasScale.drawText(text, i, 45, paintScaleDisplay);
                 }
                 canvas.drawBitmap(bitmapScale, 0, 0, paintScaleDisplay);
