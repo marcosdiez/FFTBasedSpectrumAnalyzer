@@ -137,16 +137,28 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
         }
 
         protected void onProgressUpdate(double[]... toTransform) {
-            Log.d("RecordingProgress", "Displaying in progress at width: " + width + "/" + toTransform[0].length);
+            int delta = ( 2 * width ) / 512;
+
+
+            double maxValue = 0;
+            int maxPosition = 0;
 
             for (int i = 0; i < toTransform[0].length; i++) {
-                int x = 2 * i;
+                int x = delta * i;
                 int downy = (int) (150 - (toTransform[0][i] * 10));
                 int upy = 150;
                 canvasDisplaySpectrum.drawLine(x, downy, x, upy, paintSpectrumDisplay);
+
+
+                double toBeAnalized = toTransform[0][i];
+                if(toBeAnalized > maxValue){
+                    maxPosition = i;
+                    maxValue = toBeAnalized;
+                }
+
                 //Log.d("RecordingProgress", "Line: " + i + " x: " + x + " downy: " + downy + " " + upy );
             }
-
+            Log.d("RecordingProgress", "Displaying width: " + width + "/" + toTransform[0].length + "/" + delta + "/" + maxPosition);
             imageViewDisplaySectrum.invalidate();
 
 
@@ -230,12 +242,14 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
         imageViewDisplaySectrum.setImageBitmap(bitmapDisplaySpectrum);
 
         //imageViewDisplaySectrum.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
-        LinearLayout.LayoutParams layoutParams_imageViewDisplaySpectrum = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        ((MarginLayoutParams) layoutParams_imageViewDisplaySpectrum).setMargins(100, 600, 0, 0);
+        LinearLayout.LayoutParams layoutParams_imageViewDisplaySpectrum = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        ((MarginLayoutParams) layoutParams_imageViewDisplaySpectrum).setMargins(0, 600, 0, 0);
         imageViewDisplaySectrum.setLayoutParams(layoutParams_imageViewDisplaySpectrum);
         layoutParams_imageViewScale = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         //layoutParams_imageViewScale.gravity = Gravity.CENTER_HORIZONTAL;
-        ((MarginLayoutParams) layoutParams_imageViewScale).setMargins(100, 20, 0, 0);
+        ((MarginLayoutParams) layoutParams_imageViewScale).setMargins(0, 20, 0, 0);
 
 
         imageViewDisplaySectrum.setId(ID_BITMAPDISPLAYSPECTRUM);
