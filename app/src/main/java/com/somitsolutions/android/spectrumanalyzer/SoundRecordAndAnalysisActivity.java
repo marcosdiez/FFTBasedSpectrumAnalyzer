@@ -153,36 +153,25 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
 
             float delta = 2 * width / 512;
 
-            if (width > 512){
-                for (int i = 0; i < toTransformZero.length; i++) {
-                    float x = delta * i;
-                    double toAnalyze = toTransformZero[i];
-                    int downy = (int) (150 - (toAnalyze * 10));
-                    int upy = 150;
-                    canvasDisplaySpectrum.drawLine(x, downy, x, upy, paintSpectrumDisplay);
+            //if (width > 512){
+            for (int i = 0; i < toTransformZero.length; i++) {
+                float x = delta * i;
+                double toAnalyze = toTransformZero[i];
+                int downy = (int) (150 - (toAnalyze * 10));
+                int upy = 150;
+                canvasDisplaySpectrum.drawLine(x, downy, x, upy, paintSpectrumDisplay);
 
-                    if(toAnalyze>maxValue){
-                        maxValue=toAnalyze;
-                        maxIndex = i;
-                    }
+                if(toAnalyze>maxValue){
+                    maxValue=toAnalyze;
+                    maxIndex = i;
                 }
-                int fixedValue =(int)maxValue*1000;
-                if( fixedValue > 0 ) {
-                    Log.d("RecordingProgress", "Calc:" + width + "/" + maxIndex + "/" + fixedValue);
-                }
-                imageViewDisplaySectrum.invalidate();
             }
-
-            else{
-                for (int i = 0; i < toTransform[0].length; i++) {
-                    int x = i;
-                    int downy = (int) (150 - (toTransform[0][i] * 10));
-                    int upy = 150;
-                    canvasDisplaySpectrum.drawLine(x, downy, x, upy, paintSpectrumDisplay);
-                }
-
-                imageViewDisplaySectrum.invalidate();
+            int fixedValue =(int)maxValue*1000;
+            if( fixedValue > 0 ) {
+                Log.d("RecordingProgress", "Calc:" + width + "/" + maxIndex + "/" + fixedValue);
             }
+            imageViewDisplaySectrum.invalidate();
+//            }
 
         }
 
@@ -257,12 +246,12 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
         transformer = new RealDoubleFFT(blockSize);
 
         imageViewDisplaySectrum = new ImageView(this);
-        if(width > 512){
+        // if(width > 512){
             bitmapDisplaySpectrum = Bitmap.createBitmap(width,(int)300,Bitmap.Config.ARGB_8888);
-        }
-        else{
-            bitmapDisplaySpectrum = Bitmap.createBitmap((int)256,(int)150,Bitmap.Config.ARGB_8888);
-        }
+        // }
+//        else{
+//            bitmapDisplaySpectrum = Bitmap.createBitmap((int)256,(int)150,Bitmap.Config.ARGB_8888);
+//        }
         LinearLayout.LayoutParams layoutParams_imageViewScale = null;
         //Bitmap scaled = Bitmap.createScaledBitmap(bitmapDisplaySpectrum, 320, 480, true);
         canvasDisplaySpectrum = new Canvas(bitmapDisplaySpectrum);
@@ -283,26 +272,7 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
 
         }
 
-        else if ((width >320) && (width<512)){
-            LinearLayout.LayoutParams layoutParams_imageViewDisplaySpectrum=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            ((MarginLayoutParams) layoutParams_imageViewDisplaySpectrum).setMargins(60, 250, 0, 0);
-            //layoutParams_imageViewDisplaySpectrum.gravity = Gravity.CENTER_HORIZONTAL;
-            imageViewDisplaySectrum.setLayoutParams(layoutParams_imageViewDisplaySpectrum);
 
-            //imageViewDisplaySectrum.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
-            layoutParams_imageViewScale=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            ((MarginLayoutParams) layoutParams_imageViewScale).setMargins(60, 20, 0, 100);
-            //layoutParams_imageViewScale.gravity = Gravity.CENTER_HORIZONTAL;
-        }
-
-        else if (width < 320){
-            	/*LinearLayout.LayoutParams layoutParams_imageViewDisplaySpectrum=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                ((MarginLayoutParams) layoutParams_imageViewDisplaySpectrum).setMargins(30, 100, 0, 100);
-                imageViewDisplaySectrum.setLayoutParams(layoutParams_imageViewDisplaySpectrum);*/
-            imageViewDisplaySectrum.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
-            layoutParams_imageViewScale=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            //layoutParams_imageViewScale.gravity = Gravity.CENTER;
-        }
         imageViewDisplaySectrum.setId(ID_BITMAPDISPLAYSPECTRUM);
         main.addView(imageViewDisplaySectrum);
 
@@ -363,12 +333,9 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
         public MyImageView(Context context) {
             super(context);
             // TODO Auto-generated constructor stub
-            if(width >512){
-                bitmapScale = Bitmap.createBitmap(width,(int)50,Bitmap.Config.ARGB_8888);
-            }
-            else{
-                bitmapScale =  Bitmap.createBitmap((int)256,(int)50,Bitmap.Config.ARGB_8888);
-            }
+            // if(width >512){
+            bitmapScale = Bitmap.createBitmap(width,(int)50,Bitmap.Config.ARGB_8888);
+            // }
 
             paintScaleDisplay = new Paint();
             paintScaleDisplay.setColor(Color.WHITE);
@@ -389,46 +356,22 @@ public class SoundRecordAndAnalysisActivity extends Activity implements OnClickL
 
             // int x_Of_BimapScale = bitmapScale.
 
-            if(width > 512){
-                float delta = width / 4;
-                float delta_by_8 = delta/8;
+            //if(width > 512){
+            float delta = width / 4;
+            float delta_by_8 = delta/8;
 
-                canvasScale.drawLine(0, 30,  width, 30, paintScaleDisplay);
-                for(float i = 0, j = 0; i< width; i=i+delta, j++){
-                    for (float k = i; k<(i+delta); k=k+delta_by_8){
-                        canvasScale.drawLine(k, 30, k, 25, paintScaleDisplay);
-                    }
-                    canvasScale.drawLine(i, 40, i, 25, paintScaleDisplay);
-                    String text = Integer.toString((int)j) + " KHz";
-                    canvasScale.drawText(text, i, 45, paintScaleDisplay);
+            canvasScale.drawLine(0, 30,  width, 30, paintScaleDisplay);
+            for(float i = 0, j = 0; i< width; i=i+delta, j++){
+                for (float k = i; k<(i+delta); k=k+delta_by_8){
+                    canvasScale.drawLine(k, 30, k, 25, paintScaleDisplay);
                 }
-                canvas.drawBitmap(bitmapScale, 0, 0, paintScaleDisplay);
+                canvasScale.drawLine(i, 40, i, 25, paintScaleDisplay);
+                String text = Integer.toString((int)j) + " KHz";
+                canvasScale.drawText(text, i, 45, paintScaleDisplay);
             }
-            else if ((width >320) && (width<512)){
-                canvasScale.drawLine(0, 30, 0 + 256, 30, paintScaleDisplay);
-                for(int i = 0,j = 0; i<256; i=i+64, j++){
-                    for (int k = i; k<(i+64); k=k+8){
-                        canvasScale.drawLine(k, 30, k, 25, paintScaleDisplay);
-                    }
-                    canvasScale.drawLine(i, 40, i, 25, paintScaleDisplay);
-                    String text = Integer.toString(j) + " KHz";
-                    canvasScale.drawText(text, i, 45, paintScaleDisplay);
-                }
-                canvas.drawBitmap(bitmapScale, 0, 0, paintScaleDisplay);
-            }
+            canvas.drawBitmap(bitmapScale, 0, 0, paintScaleDisplay);
+            //}
 
-            else if (width <320){
-                canvasScale.drawLine(0, 30,  256, 30, paintScaleDisplay);
-                for(int i = 0,j = 0; i<256; i=i+64, j++){
-                    for (int k = i; k<(i+64); k=k+8){
-                        canvasScale.drawLine(k, 30, k, 25, paintScaleDisplay);
-                    }
-                    canvasScale.drawLine(i, 40, i, 25, paintScaleDisplay);
-                    String text = Integer.toString(j) + " KHz";
-                    canvasScale.drawText(text, i, 45, paintScaleDisplay);
-                }
-                canvas.drawBitmap(bitmapScale, 0, 0, paintScaleDisplay);
-            }
 
             //canvas.drawBitmap(bitmapScale, 0, 400, paintScaleDisplay);
             //invalidate();
