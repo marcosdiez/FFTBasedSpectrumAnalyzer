@@ -35,13 +35,12 @@ public class SoundRecordAndAnalysisActivity extends Activity{
     Button startStopButton;
     boolean started = false;
 
-    RecordAudio recordTask;
+    RecordAudio recordTask=null;
     ImageView imageViewDisplaySectrum;
-    ImageView imageViewScale;
+    View imageViewScale;
     Bitmap bitmapDisplaySpectrum;
 
     Canvas canvasDisplaySpectrum;
-
 
     Paint paintSpectrumDisplay;
     static SoundRecordAndAnalysisActivity mainActivity;
@@ -165,8 +164,9 @@ public class SoundRecordAndAnalysisActivity extends Activity{
                 Log.e("Stop failed", e.toString());
 
             }
-            recordTask.cancel(true);
-            //}
+            if( recordTask != null) {
+                recordTask.cancel(true);
+            }
             Intent intent = new Intent(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_HOME);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -203,9 +203,9 @@ public class SoundRecordAndAnalysisActivity extends Activity{
         super.onStop();
         	/*started = false;
             startStopButton.setText("Start");*/
-        //if(recordTask != null){
-        recordTask.cancel(true);
-        //}
+        if(recordTask != null){
+            recordTask.cancel(true);
+        }
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -218,9 +218,11 @@ public class SoundRecordAndAnalysisActivity extends Activity{
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        Log.d("MMM", "Before");
         setContentView(R.layout.main);
+        Log.d("MMM", "After");
         imageViewDisplaySectrum = (ImageView) findViewById(R.id.imageViewDisplaySectrum);
-        imageViewScale = (ImageView) findViewById(R.id.theScaleImageView);
+        imageViewScale = (View) ((TheScaleImageView) findViewById(R.id.theScaleImageView));
         startStopButton = (Button) findViewById(R.id.startStopButton);
         startStopButton.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {
@@ -244,9 +246,9 @@ public class SoundRecordAndAnalysisActivity extends Activity{
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        //if(recordTask != null){
-        recordTask.cancel(true);
-        //}
+        if(recordTask != null){
+            recordTask.cancel(true);
+        }
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -257,7 +259,9 @@ public class SoundRecordAndAnalysisActivity extends Activity{
     protected void onDestroy() {
         // TODO Auto-generated method stub
         super.onDestroy();
-        recordTask.cancel(true);
+        if(recordTask != null) {
+            recordTask.cancel(true);
+        }
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
