@@ -61,10 +61,8 @@ public class TheScaleImageView extends ImageView {
         if(width == 0 ) {
             return;
         }
-        Log.d("MMM", "TheScaleImageView.onDraw: " + width + "/" + height);
-        // int x_Of_BimapScale = bitmapScale.
+        // Log.d("MMM", "TheScaleImageView.onDraw: " + width + "/" + height);
 
-//        //if(width > 512){
         float delta = width / 4;
         float delta_by_8 = delta / 8;
 
@@ -78,8 +76,7 @@ public class TheScaleImageView extends ImageView {
             canvasScale.drawText(text, i, 45, paintScaleDisplay);
         }
         canvas.drawBitmap(bitmapScale, 0, 0, paintScaleDisplay);
-        //}
-        //canvas.drawBitmap(bitmapScale, 0, 400, paintScaleDisplay);
+
         invalidate();
     }
 

@@ -132,9 +132,7 @@ public class SoundRecordAndAnalysisActivity extends Activity{
 
             double[] toTransformZero = toTransform[0];
 
-            float delta = width / toTransformZero.length;
-
-            //if (width > 512){
+            float delta = ((float) width) / ((float) ( toTransformZero.length -1 ));
             for (int i = 0; i < toTransformZero.length; i++) {
                 float x = delta * i;
                 double toAnalyze = toTransformZero[i];
@@ -148,11 +146,11 @@ public class SoundRecordAndAnalysisActivity extends Activity{
                 }
             }
             int fixedValue =(int)maxValue*1000;
+
             if( fixedValue > 0 ) {
-                Log.d("RecordingProgress", "Calc:" + width + "/" + maxIndex + "/" + fixedValue);
+                Log.d("MMM", "Calc:" + width + "/" + height + "/"  + toTransformZero.length + "/" + maxIndex + "/" + fixedValue);
             }
             imageViewDisplaySectrum.invalidate();
-//            }
 
         }
 
@@ -234,8 +232,44 @@ public class SoundRecordAndAnalysisActivity extends Activity{
         imageViewDisplaySectrum.setImageBitmap(bitmapDisplaySpectrum);
 
         canvasDisplaySpectrum = new Canvas(bitmapDisplaySpectrum);
+
         paintSpectrumDisplay = new Paint();
+        paintSpectrumDisplay.setColor(Color.RED);
+
+        drawBorders();
+
         paintSpectrumDisplay.setColor(Color.GREEN);
+    }
+
+    private void drawBorders() {
+        canvasDisplaySpectrum.drawLine(0, 0, 0,
+                canvasDisplaySpectrum.getHeight() -1,
+                paintSpectrumDisplay);
+
+        canvasDisplaySpectrum.drawLine(0, 0,
+                canvasDisplaySpectrum.getWidth() -1,
+                0,
+                paintSpectrumDisplay);
+
+        canvasDisplaySpectrum.drawLine(
+                canvasDisplaySpectrum.getWidth() -1,
+                0,
+                canvasDisplaySpectrum.getWidth() -1 ,
+                canvasDisplaySpectrum.getHeight() -1,
+                paintSpectrumDisplay);
+
+        canvasDisplaySpectrum.drawLine(
+                0,
+                canvasDisplaySpectrum.getHeight() -1 ,
+                canvasDisplaySpectrum.getWidth() -1,
+                canvasDisplaySpectrum.getHeight() -1,
+                paintSpectrumDisplay);
+
+
+        canvasDisplaySpectrum.drawLine(0, 0,
+                canvasDisplaySpectrum.getWidth(),
+                canvasDisplaySpectrum.getHeight()
+                , paintSpectrumDisplay);
     }
 
     public void onStart(){
