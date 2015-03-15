@@ -46,8 +46,7 @@ public class SoundRecordAndAnalysisActivity extends Activity{
     static SoundRecordAndAnalysisActivity mainActivity;
     int width;
     int height;
-    int left_Of_BimapScale;
-    int left_Of_DisplaySpectrum;
+
 
     /** Called when the activity is first created. */
     @Override
@@ -60,11 +59,6 @@ public class SoundRecordAndAnalysisActivity extends Activity{
         prepareUi();
     }
 
-    @Override
-    public void onWindowFocusChanged (boolean hasFocus) {
-        left_Of_BimapScale = imageViewScale.getLeft();
-        left_Of_DisplaySpectrum = imageViewDisplaySectrum.getLeft();
-    }
     private class RecordAudio extends AsyncTask<Void, double[], Void> {
 
         @Override
@@ -130,14 +124,17 @@ public class SoundRecordAndAnalysisActivity extends Activity{
             double maxValue =0;
             int maxIndex = 0;
 
+            int myWidth = canvasDisplaySpectrum.getWidth();
+            int myHeight = canvasDisplaySpectrum.getHeight();
+
             double[] toTransformZero = toTransform[0];
 
-            float delta = ((float) width) / ((float) ( toTransformZero.length -1 ));
+            float delta = ((float) myWidth) / ((float) ( toTransformZero.length -1 ));
             for (int i = 0; i < toTransformZero.length; i++) {
                 float x = delta * i;
                 double toAnalyze = toTransformZero[i];
-                int downy = (int) (150 - (toAnalyze * 10));
-                int upy = 150;
+                int downy = (int) (myHeight/2 - (toAnalyze * 10));
+                int upy = myHeight/2;
                 canvasDisplaySpectrum.drawLine(x, downy, x, upy, paintSpectrumDisplay);
 
                 if(toAnalyze>maxValue){
@@ -145,10 +142,13 @@ public class SoundRecordAndAnalysisActivity extends Activity{
                     maxIndex = i;
                 }
             }
+
             int fixedValue =(int)maxValue*1000;
 
             if( fixedValue > 0 ) {
-                Log.d("MMM", "Calc:" + width + "/" + height + "/"  + toTransformZero.length + "/" + maxIndex + "/" + fixedValue);
+                Log.d("MMM", "Calc:" +  myWidth + "/"
+                        + myHeight + "/" +
+                        toTransformZero.length + "/" + maxIndex + "/" + fixedValue);
             }
             imageViewDisplaySectrum.invalidate();
 
@@ -211,10 +211,10 @@ public class SoundRecordAndAnalysisActivity extends Activity{
     }
 
     protected void prepareUi(){
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         Log.d("MMM", "Before");
         setContentView(R.layout.main);
@@ -228,16 +228,16 @@ public class SoundRecordAndAnalysisActivity extends Activity{
             }
         });
 
-        bitmapDisplaySpectrum = Bitmap.createBitmap(width,(int)300,Bitmap.Config.ARGB_8888);
+        initDisplaySpectrum();
+    }
+
+    private void initDisplaySpectrum() {
+        bitmapDisplaySpectrum = Bitmap.createBitmap(width, 300, Bitmap.Config.ARGB_8888);
         imageViewDisplaySectrum.setImageBitmap(bitmapDisplaySpectrum);
-
         canvasDisplaySpectrum = new Canvas(bitmapDisplaySpectrum);
-
         paintSpectrumDisplay = new Paint();
         paintSpectrumDisplay.setColor(Color.RED);
-
         drawBorders();
-
         paintSpectrumDisplay.setColor(Color.GREEN);
     }
 
