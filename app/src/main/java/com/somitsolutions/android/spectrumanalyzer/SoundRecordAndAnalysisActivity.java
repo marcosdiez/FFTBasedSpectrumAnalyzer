@@ -9,7 +9,6 @@ import android.media.MediaRecorder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -132,30 +131,30 @@ public class SoundRecordAndAnalysisActivity extends Activity{
     public void buttonClicked() {
 
         if (started == true) {
-            started = false;
-            startStopButton.setText("StartX");
-            recordTask.cancel(true);
-            imageViewDisplaySectrum.canvasDisplaySpectrum.drawColor(Color.BLACK);
-            imageViewDisplaySectrum.drawBorders();
+            stopAnalyzer();
         } else {
-            started = true;
-            startStopButton.setText("StopZ");
-            recordTask = new RecordAudio();
-            recordTask.execute();
+            startAnalyzer();
         }
+    }
+
+    private void startAnalyzer() {
+        started = true;
+        startStopButton.setText("StopZ");
+        recordTask = new RecordAudio();
+        recordTask.execute();
+    }
+
+    private void stopAnalyzer() {
+        started = false;
+        startStopButton.setText("StartX");
+        recordTask.cancel(true);
+        imageViewDisplaySectrum.canvasDisplaySpectrum.drawColor(Color.BLACK);
+        imageViewDisplaySectrum.drawBorders();
     }
 
     public void onStop(){
         super.onStop();
-        	/*started = false;
-            startStopButton.setText("Start");*/
-        if(recordTask != null){
-            recordTask.cancel(true);
-        }
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        stopAnalyzer();
     }
 
     public void onStart(){
@@ -165,26 +164,14 @@ public class SoundRecordAndAnalysisActivity extends Activity{
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if(recordTask != null){
-            recordTask.cancel(true);
-        }
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        stopAnalyzer();
     }
 
     @Override
     protected void onDestroy() {
         // TODO Auto-generated method stub
         super.onDestroy();
-        if(recordTask != null) {
-            recordTask.cancel(true);
-        }
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        stopAnalyzer();
     }
 
 }
