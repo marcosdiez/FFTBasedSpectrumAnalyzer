@@ -2,10 +2,7 @@ package com.somitsolutions.android.spectrumanalyzer;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
@@ -16,7 +13,8 @@ import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.TextView;
+
 import ca.uol.aig.fftpack.RealDoubleFFT;
 
 
@@ -36,13 +34,9 @@ public class SoundRecordAndAnalysisActivity extends Activity{
     boolean started = false;
 
     RecordAudio recordTask=null;
-    ImageView imageViewDisplaySectrum;
-    View imageViewScale;
-    Bitmap bitmapDisplaySpectrum;
-
-    Canvas canvasDisplaySpectrum;
-
-    Paint paintSpectrumDisplay;
+    TheSpectrumAnalizerImageView imageViewDisplaySectrum;
+    TheScaleImageView imageViewScale;
+    TextView textViewMeasuredValue;
     int width;
     int height;
 
@@ -83,13 +77,7 @@ public class SoundRecordAndAnalysisActivity extends Activity{
 
             }
             while (started) {
-
-                    	/*if(width > 512){
-                    		bufferReadResult = audioRecord.read(buffer, 0, 512);
-                    	}
-                    	else{*/
                 bufferReadResult = audioRecord.read(buffer, 0, blockSize);
-                //}
                 if(isCancelled())
                     break;
 
@@ -101,7 +89,6 @@ public class SoundRecordAndAnalysisActivity extends Activity{
                 publishProgress(toTransform);
                 if(isCancelled())
                     break;
-                //return null;
             }
 
             try{
@@ -119,12 +106,12 @@ public class SoundRecordAndAnalysisActivity extends Activity{
             double maxValue =0;
             int maxIndex = 0;
 
-            int myWidth = canvasDisplaySpectrum.getWidth();
-            int myHeight = canvasDisplaySpectrum.getHeight();
+            int myWidth = imageViewDisplaySectrum.canvasDisplaySpectrum.getWidth();
+            int myHeight = imageViewDisplaySectrum.canvasDisplaySpectrum.getHeight();
 
             double[] toTransformZero = toTransform[0];
 
-            paintSpectrumDisplay.setColor(Color.GREEN);
+            imageViewDisplaySectrum.paintSpectrumDisplay.setColor(Color.GREEN);
 
             float delta = ((float) myWidth) / ((float) ( toTransformZero.length -1 ));
             for (int i = 0; i < toTransformZero.length; i++) {
@@ -132,7 +119,7 @@ public class SoundRecordAndAnalysisActivity extends Activity{
                 double toAnalyze = toTransformZero[i];
                 int downy = (int) (myHeight/2 - (toAnalyze * 10));
                 int upy = myHeight/2;
-                canvasDisplaySpectrum.drawLine(x, downy, x, upy, paintSpectrumDisplay);
+                imageViewDisplaySectrum.canvasDisplaySpectrum.drawLine(x, downy, x, upy, imageViewDisplaySectrum.paintSpectrumDisplay);
 
                 if(toAnalyze>maxValue){
                     maxValue=toAnalyze;
@@ -175,16 +162,14 @@ public class SoundRecordAndAnalysisActivity extends Activity{
             started = false;
             startStopButton.setText("StartX");
             recordTask.cancel(true);
-            //recordTask = null;
-            canvasDisplaySpectrum.drawColor(Color.BLACK);
-            drawBorders();
+            imageViewDisplaySectrum.canvasDisplaySpectrum.drawColor(Color.BLACK);
+            imageViewDisplaySectrum.drawBorders();
         } else {
             started = true;
             startStopButton.setText("StopZ");
             recordTask = new RecordAudio();
             recordTask.execute();
         }
-
     }
 
     public void onStop(){
@@ -201,72 +186,16 @@ public class SoundRecordAndAnalysisActivity extends Activity{
     }
 
     protected void prepareUi(){
-//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
         setContentView(R.layout.main);
-        imageViewDisplaySectrum = (ImageView) findViewById(R.id.imageViewDisplaySectrum);
-        imageViewScale = (View) ((TheScaleImageView) findViewById(R.id.theScaleImageView));
+        textViewMeasuredValue = (TextView) findViewById(R.id.textViewMeasuredValue);
+        imageViewDisplaySectrum = (TheSpectrumAnalizerImageView) findViewById(R.id.imageViewDisplaySectrum);
+        imageViewScale = (TheScaleImageView) findViewById(R.id.theScaleImageView);
         startStopButton = (Button) findViewById(R.id.startStopButton);
         startStopButton.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {
                 buttonClicked();
             }
         });
-
-        initDisplaySpectrum();
-    }
-
-    private void initDisplaySpectrum() {
-        bitmapDisplaySpectrum = Bitmap.createBitmap(width, 300, Bitmap.Config.ARGB_8888);
-        imageViewDisplaySectrum.setImageBitmap(bitmapDisplaySpectrum);
-        canvasDisplaySpectrum = new Canvas(bitmapDisplaySpectrum);
-        paintSpectrumDisplay = new Paint();
-        drawBorders();
-    }
-
-    private void drawBorders() {
-        paintSpectrumDisplay.setColor(Color.WHITE);
-
-        int maxWidth = canvasDisplaySpectrum.getWidth() -1;
-        int maxHeight = canvasDisplaySpectrum.getHeight() -1;
-
-        canvasDisplaySpectrum.drawLine(0, maxHeight/2,
-                maxWidth,
-                maxHeight/2,
-                paintSpectrumDisplay);
-
-        paintSpectrumDisplay.setColor(Color.RED);
-        canvasDisplaySpectrum.drawLine(0, 0, 0,
-                maxHeight,
-                paintSpectrumDisplay);
-
-        canvasDisplaySpectrum.drawLine(0, 0,
-                maxWidth,
-                0,
-                paintSpectrumDisplay);
-
-        canvasDisplaySpectrum.drawLine(
-                maxWidth,
-                0,
-                maxWidth,
-                maxHeight,
-                paintSpectrumDisplay);
-
-        canvasDisplaySpectrum.drawLine(
-                0,
-                maxHeight,
-                maxWidth,
-                maxHeight,
-                paintSpectrumDisplay);
-
-
-        canvasDisplaySpectrum.drawLine(0, 0,
-                maxWidth,
-                maxHeight,
-                paintSpectrumDisplay);
     }
 
     public void onStart(){

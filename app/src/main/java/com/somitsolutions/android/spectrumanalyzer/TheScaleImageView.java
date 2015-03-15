@@ -19,6 +19,8 @@ public class TheScaleImageView extends ImageView {
     int width = 0;
     boolean initialized = false;
 
+    public static String TAG = "TheScaleImageView";
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -47,21 +49,21 @@ public class TheScaleImageView extends ImageView {
     // somehow things just worked after I overload the 3 constructors
     public TheScaleImageView(Context context, AttributeSet blah , int bleh) {
         super(context, blah, bleh);
-        Log.d("MMM", "TheScaleImageViewZ");
+        Log.d(TAG, "TheScaleImageViewZ");
         init();
     }
 
     // somehow things just worked after I overload the 3 constructors
     public TheScaleImageView(Context context, AttributeSet blah) {
         super(context, blah);
-        Log.d("MMM", "TheScaleImageViewY");
+        Log.d(TAG, "TheScaleImageViewY");
         init();
     }
 
     // somehow things just worked after I overload the 3 constructors
     public TheScaleImageView(Context context) {
         super(context);
-        Log.d("MMM", "TheScaleImageViewX");
+        Log.d(TAG, "TheScaleImageViewX");
         init();
     }
 
