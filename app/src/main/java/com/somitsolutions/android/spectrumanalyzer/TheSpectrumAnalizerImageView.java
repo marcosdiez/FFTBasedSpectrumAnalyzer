@@ -43,6 +43,40 @@ public class TheSpectrumAnalizerImageView extends ImageView {
         initialized=true;
     }
 
+    public void plot(double[] toTransform) {
+        double maxValue =0;
+        int maxIndex = 0;
+
+        int myWidth = canvasDisplaySpectrum.getWidth();
+        int myHeight = canvasDisplaySpectrum.getHeight();
+
+        paintSpectrumDisplay.setColor(Color.GREEN);
+
+        float delta = ((float) myWidth) / ((float) ( toTransform.length -1 ));
+        for (int i = 0; i < toTransform.length; i++) {
+            float x = delta * i;
+            double toAnalyze = toTransform[i];
+            int downy = (int) (myHeight/2 - (toAnalyze * 10));
+            int upy = myHeight/2;
+            canvasDisplaySpectrum.drawLine(x, downy, x, upy, paintSpectrumDisplay);
+
+            if(toAnalyze>maxValue){
+                maxValue=toAnalyze;
+                maxIndex = i;
+            }
+        }
+
+        int fixedValue =(int)maxValue*1000;
+
+        if( fixedValue > 0 ) {
+            Log.d(TAG, "Calc:" +  myWidth + "/"
+                    + myHeight + "/" +
+                    toTransform.length + "/" + maxIndex + "/" + fixedValue);
+        }
+        invalidate();
+    }
+
+
     private void init() {
         paintSpectrumDisplay = new Paint();
     }
