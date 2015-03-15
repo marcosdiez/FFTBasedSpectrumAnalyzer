@@ -147,9 +147,13 @@ public class SoundRecordAndAnalysisActivity extends Activity{
     private void stopAnalyzer() {
         started = false;
         startStopButton.setText("StartX");
-        recordTask.cancel(true);
-        imageViewDisplaySectrum.canvasDisplaySpectrum.drawColor(Color.BLACK);
-        imageViewDisplaySectrum.drawBorders();
+        if(recordTask!=null) {
+            recordTask.cancel(true);
+        }
+        if(imageViewDisplaySectrum.canvasDisplaySpectrum!=null) {
+            imageViewDisplaySectrum.canvasDisplaySpectrum.drawColor(Color.BLACK);
+            imageViewDisplaySectrum.drawBorders();
+        }
     }
 
     public void onStop(){

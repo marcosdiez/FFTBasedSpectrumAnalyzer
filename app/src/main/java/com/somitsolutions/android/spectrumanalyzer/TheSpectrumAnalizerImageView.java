@@ -13,9 +13,9 @@ import android.widget.ImageView;
  * Created by Marcos on 09-Mar-15.
  */
 public class TheSpectrumAnalizerImageView extends ImageView {
-    public Bitmap bitmapDisplaySpectrum;
-    public Canvas canvasDisplaySpectrum;
-    public Paint paintSpectrumDisplay;
+    public Bitmap bitmapDisplaySpectrum=null;
+    public Canvas canvasDisplaySpectrum=null;
+    public Paint paintSpectrumDisplay=null;
 
     int height = 0;
     int width = 0;
