@@ -2,7 +2,6 @@ package com.somitsolutions.android.spectrumanalyzer;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -16,14 +15,14 @@ import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import ca.uol.aig.fftpack.RealDoubleFFT;
 
 
 public class SoundRecordAndAnalysisActivity extends Activity{
+
+    public static String TAG = "SoundRecordAndAnalysisActivity";
 
     int frequency = 8000;
     int channelConfiguration = AudioFormat.CHANNEL_CONFIGURATION_MONO;
@@ -99,10 +98,6 @@ public class SoundRecordAndAnalysisActivity extends Activity{
                 }
 
                 transformer.ft(toTransform);
-                    /*if(width > 512){
-
-                    	publishProgress(toTransform);
-                    }*/
                 publishProgress(toTransform);
                 if(isCancelled())
                     break;
@@ -148,7 +143,7 @@ public class SoundRecordAndAnalysisActivity extends Activity{
             int fixedValue =(int)maxValue*1000;
 
             if( fixedValue > 0 ) {
-                Log.d("MMM", "Calc:" +  myWidth + "/"
+                Log.d(TAG, "Calc:" +  myWidth + "/"
                         + myHeight + "/" +
                         toTransformZero.length + "/" + maxIndex + "/" + fixedValue);
             }
@@ -211,9 +206,7 @@ public class SoundRecordAndAnalysisActivity extends Activity{
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 //                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        Log.d("MMM", "Before");
         setContentView(R.layout.main);
-        Log.d("MMM", "After");
         imageViewDisplaySectrum = (ImageView) findViewById(R.id.imageViewDisplaySectrum);
         imageViewScale = (View) ((TheScaleImageView) findViewById(R.id.theScaleImageView));
         startStopButton = (Button) findViewById(R.id.startStopButton);
@@ -235,35 +228,45 @@ public class SoundRecordAndAnalysisActivity extends Activity{
     }
 
     private void drawBorders() {
+        paintSpectrumDisplay.setColor(Color.WHITE);
+
+        int maxWidth = canvasDisplaySpectrum.getWidth() -1;
+        int maxHeight = canvasDisplaySpectrum.getHeight() -1;
+
+        canvasDisplaySpectrum.drawLine(0, maxHeight/2,
+                maxWidth,
+                maxHeight/2,
+                paintSpectrumDisplay);
+
         paintSpectrumDisplay.setColor(Color.RED);
         canvasDisplaySpectrum.drawLine(0, 0, 0,
-                canvasDisplaySpectrum.getHeight() -1,
+                maxHeight,
                 paintSpectrumDisplay);
 
         canvasDisplaySpectrum.drawLine(0, 0,
-                canvasDisplaySpectrum.getWidth() -1,
+                maxWidth,
                 0,
                 paintSpectrumDisplay);
 
         canvasDisplaySpectrum.drawLine(
-                canvasDisplaySpectrum.getWidth() -1,
+                maxWidth,
                 0,
-                canvasDisplaySpectrum.getWidth() -1 ,
-                canvasDisplaySpectrum.getHeight() -1,
+                maxWidth,
+                maxHeight,
                 paintSpectrumDisplay);
 
         canvasDisplaySpectrum.drawLine(
                 0,
-                canvasDisplaySpectrum.getHeight() -1 ,
-                canvasDisplaySpectrum.getWidth() -1,
-                canvasDisplaySpectrum.getHeight() -1,
+                maxHeight,
+                maxWidth,
+                maxHeight,
                 paintSpectrumDisplay);
 
 
         canvasDisplaySpectrum.drawLine(0, 0,
-                canvasDisplaySpectrum.getWidth(),
-                canvasDisplaySpectrum.getHeight()
-                , paintSpectrumDisplay);
+                maxWidth,
+                maxHeight,
+                paintSpectrumDisplay);
     }
 
     public void onStart(){
