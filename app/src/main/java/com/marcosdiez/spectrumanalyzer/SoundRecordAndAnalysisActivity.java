@@ -1,4 +1,4 @@
-package com.somitsolutions.android.spectrumanalyzer;
+package com.marcosdiez.spectrumanalyzer;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.marcosdiez.spectrumanalyzer.R;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
