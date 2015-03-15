@@ -13,6 +13,9 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import ca.uol.aig.fftpack.RealDoubleFFT;
 
 
@@ -27,12 +30,18 @@ public class SoundRecordAndAnalysisActivity extends Activity {
     AudioRecord audioRecord;
     int blockSize;// = 256;
     Button startStopButton;
+    Button btn0500hz;
+    Button btn1000hz;
+    Button btn1500hz;
+    Button btn2000hz;
     boolean started = false;
     RecordAudio recordTask = null;
     TheSpectrumAnalizerImageView imageViewDisplaySectrum;
     TheScaleImageView imageViewScale;
     TextView textViewMeasuredValue;
     private RealDoubleFFT transformer;
+
+    private static final ExecutorService threadPool = Executors.newCachedThreadPool();
 
     /**
      * Called when the activity is first created.
@@ -50,11 +59,46 @@ public class SoundRecordAndAnalysisActivity extends Activity {
         imageViewDisplaySectrum = (TheSpectrumAnalizerImageView) findViewById(R.id.imageViewDisplaySectrum);
         imageViewScale = (TheScaleImageView) findViewById(R.id.theScaleImageView);
         startStopButton = (Button) findViewById(R.id.startStopButton);
+        btn0500hz = (Button) findViewById(R.id.button500Hz);
+        btn1000hz = (Button) findViewById(R.id.button1kHz);
+        btn1500hz = (Button) findViewById(R.id.button1500Hz);
+        btn2000hz = (Button) findViewById(R.id.button2kHz);
+
         startStopButton.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {
                 buttonClicked();
             }
         });
+
+        btn0500hz.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                playSound(500);
+            }
+        });
+
+        btn1000hz.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                playSound(1000);
+            }
+        });
+
+        btn1500hz.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                playSound(1500);
+            }
+        });
+
+        btn2000hz.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                playSound(2000);
+            }
+        });
+
+    }
+
+    void playSound(int frequency){
+        int playTimeInSeconds=1;
+        threadPool.execute(new TonePlayer(playTimeInSeconds, frequency));
     }
 
     public void buttonClicked() {
@@ -68,14 +112,14 @@ public class SoundRecordAndAnalysisActivity extends Activity {
 
     private void startAnalyzer() {
         started = true;
-        startStopButton.setText("StopZ");
+        startStopButton.setText("Stop");
         recordTask = new RecordAudio();
         recordTask.execute();
     }
 
     private void stopAnalyzer() {
         started = false;
-        startStopButton.setText("StartX");
+        startStopButton.setText("Start");
         if (recordTask != null) {
             recordTask.cancel(true);
         }

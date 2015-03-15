@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/mainLayOut"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
     >
-
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -24,11 +22,37 @@
         android:layout_height="30px"
         android:id="@+id/theScaleImageView"
         />
-
-    <Button
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="StartMWM"
+        android:orientation="horizontal"
+        >
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start"
         android:id="@+id/startStopButton"/>
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="500 Hz"
+            android:id="@+id/button500Hz"/>
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1k Hz"
+            android:id="@+id/button1kHz"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1.5k Hz"
+        android:id="@+id/button1500Hz"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2k Hz"
+        android:id="@+id/button2kHz"/>
+
+    </LinearLayout>
 </LinearLayout>
