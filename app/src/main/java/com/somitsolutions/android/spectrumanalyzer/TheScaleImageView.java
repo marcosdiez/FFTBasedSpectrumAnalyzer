@@ -32,7 +32,6 @@ public class TheScaleImageView extends ImageView {
             return;
         }
 
-
         bitmapScale = Bitmap.createBitmap(width, (int) 50, Bitmap.Config.ARGB_8888);
         setImageBitmap(bitmapScale);
         canvasScale = new Canvas(bitmapScale);

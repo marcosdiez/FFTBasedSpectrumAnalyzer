@@ -32,6 +32,7 @@ public class SoundRecordAndAnalysisActivity extends Activity{
     AudioRecord audioRecord;
     private RealDoubleFFT transformer;
     int blockSize;// = 256;
+
     Button startStopButton;
     boolean started = false;
 
@@ -43,7 +44,6 @@ public class SoundRecordAndAnalysisActivity extends Activity{
     Canvas canvasDisplaySpectrum;
 
     Paint paintSpectrumDisplay;
-    static SoundRecordAndAnalysisActivity mainActivity;
     int width;
     int height;
 
@@ -193,10 +193,6 @@ public class SoundRecordAndAnalysisActivity extends Activity{
 
     }
 
-    static SoundRecordAndAnalysisActivity getMainActivity(){
-        return mainActivity;
-    }
-
     public void onStop(){
         super.onStop();
         	/*started = false;
@@ -275,7 +271,6 @@ public class SoundRecordAndAnalysisActivity extends Activity{
     public void onStart(){
         super.onStart();
         transformer = new RealDoubleFFT(blockSize);
-        mainActivity = this;
     }
     @Override
     public void onBackPressed() {
