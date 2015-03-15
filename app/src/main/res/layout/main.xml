@@ -21,10 +21,8 @@
 
     <com.somitsolutions.android.spectrumanalyzer.TheScaleImageView
         android:layout_width="fill_parent"
-        android:layout_height="50px"
+        android:layout_height="30px"
         android:id="@+id/theScaleImageView"
-        android:layout_marginTop="50px"
-        android:focusable="false"
         />
 
     <Button
@@ -32,7 +30,5 @@
         android:layout_height="wrap_content"
         android:text="StartMWM"
         android:id="@+id/startStopButton"/>
-
-
 
 </LinearLayout>

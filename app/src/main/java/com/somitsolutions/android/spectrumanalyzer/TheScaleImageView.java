@@ -39,6 +39,7 @@ public class TheScaleImageView extends ImageView {
         bitmapScale = Bitmap.createBitmap(width, (int) 50, Bitmap.Config.ARGB_8888);
         setImageBitmap(bitmapScale);
         canvasScale = new Canvas(bitmapScale);
+        plot();
         initialized=true;
     }
 
@@ -69,32 +70,30 @@ public class TheScaleImageView extends ImageView {
         init();
     }
 
+    private void plot(){
+        Log.d(TAG, "plot()");
+        float delta = width / 4;
+        float delta_by_10 = delta / 10;
+
+        int lineHeight = height * 2/5;
+        canvasScale.drawColor(Color.BLUE);
+        canvasScale.drawLine(0, lineHeight, width, lineHeight, paintScaleDisplay);
+        for (float i = 0, j = 0; i < width; i = i + delta, j++) {
+            for (float k = i; k < (i + delta); k = k + delta_by_10) {
+                canvasScale.drawLine(k, lineHeight, k, lineHeight*2/5, paintScaleDisplay);
+            }
+            canvasScale.drawLine(i, height*4/5, i, 0, paintScaleDisplay);
+            String text = Integer.toString((int) j) + " KHz";
+            canvasScale.drawText(text, i, height*45/50, paintScaleDisplay);
+        }
+        invalidate();
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         // TODO Auto-generated method stub
         super.onDraw(canvas);
-        if(!initialized) {
-            return;
-        }
-
-        Log.d(TAG, "width: " + width + " height: " + height);
-        float delta = width / 4;
-        float delta_by_8 = delta / 8;
-
-        int centerHeight = height * 30 / 50;
-
-        canvasScale.drawLine(0, centerHeight, width, centerHeight, paintScaleDisplay);
-        for (float i = 0, j = 0; i < width; i = i + delta, j++) {
-            for (float k = i; k < (i + delta); k = k + delta_by_8) {
-                canvasScale.drawLine(k, centerHeight, k, height/2, paintScaleDisplay);
-            }
-            canvasScale.drawLine(i, height*4/5, i, height/2, paintScaleDisplay);
-            String text = Integer.toString((int) j) + " KHz";
-            canvasScale.drawText(text, i, height*45/50, paintScaleDisplay);
-        }
         canvas.drawBitmap(bitmapScale, 0, 0, paintScaleDisplay);
-
-        invalidate();
     }
 
 }
