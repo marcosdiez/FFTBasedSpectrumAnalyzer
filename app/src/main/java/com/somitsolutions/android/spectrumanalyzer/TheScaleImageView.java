@@ -93,6 +93,7 @@ public class TheScaleImageView extends ImageView {
     protected void onDraw(Canvas canvas) {
         // TODO Auto-generated method stub
         super.onDraw(canvas);
+        if(bitmapScale == null){return;}
         canvas.drawBitmap(bitmapScale, 0, 0, paintScaleDisplay);
     }
 
