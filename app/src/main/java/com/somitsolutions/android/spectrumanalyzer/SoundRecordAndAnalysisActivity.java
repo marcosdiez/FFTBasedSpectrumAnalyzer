@@ -129,6 +129,8 @@ public class SoundRecordAndAnalysisActivity extends Activity{
 
             double[] toTransformZero = toTransform[0];
 
+            paintSpectrumDisplay.setColor(Color.GREEN);
+
             float delta = ((float) myWidth) / ((float) ( toTransformZero.length -1 ));
             for (int i = 0; i < toTransformZero.length; i++) {
                 float x = delta * i;
@@ -165,10 +167,6 @@ public class SoundRecordAndAnalysisActivity extends Activity{
             if( recordTask != null) {
                 recordTask.cancel(true);
             }
-            Intent intent = new Intent(Intent.ACTION_MAIN);
-            intent.addCategory(Intent.CATEGORY_HOME);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
         }
 
     }
@@ -184,6 +182,7 @@ public class SoundRecordAndAnalysisActivity extends Activity{
             recordTask.cancel(true);
             //recordTask = null;
             canvasDisplaySpectrum.drawColor(Color.BLACK);
+            drawBorders();
         } else {
             started = true;
             startStopButton.setText("StopZ");
@@ -232,12 +231,11 @@ public class SoundRecordAndAnalysisActivity extends Activity{
         imageViewDisplaySectrum.setImageBitmap(bitmapDisplaySpectrum);
         canvasDisplaySpectrum = new Canvas(bitmapDisplaySpectrum);
         paintSpectrumDisplay = new Paint();
-        paintSpectrumDisplay.setColor(Color.RED);
         drawBorders();
-        paintSpectrumDisplay.setColor(Color.GREEN);
     }
 
     private void drawBorders() {
+        paintSpectrumDisplay.setColor(Color.RED);
         canvasDisplaySpectrum.drawLine(0, 0, 0,
                 canvasDisplaySpectrum.getHeight() -1,
                 paintSpectrumDisplay);
