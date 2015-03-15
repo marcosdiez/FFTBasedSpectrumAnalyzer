@@ -37,19 +37,26 @@ public class SoundRecordAndAnalysisActivity extends Activity{
     TheSpectrumAnalizerImageView imageViewDisplaySectrum;
     TheScaleImageView imageViewScale;
     TextView textViewMeasuredValue;
-    int width;
-    int height;
-
 
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Display display = getWindowManager().getDefaultDisplay();
-        width = display.getWidth();
-        height = display.getHeight();
         blockSize = 256;
         prepareUi();
+    }
+
+    protected void prepareUi(){
+        setContentView(R.layout.main);
+        textViewMeasuredValue = (TextView) findViewById(R.id.textViewMeasuredValue);
+        imageViewDisplaySectrum = (TheSpectrumAnalizerImageView) findViewById(R.id.imageViewDisplaySectrum);
+        imageViewScale = (TheScaleImageView) findViewById(R.id.theScaleImageView);
+        startStopButton = (Button) findViewById(R.id.startStopButton);
+        startStopButton.setOnClickListener(new OnClickListener() {
+            public void onClick(View view) {
+                buttonClicked();
+            }
+        });
     }
 
     private class RecordAudio extends AsyncTask<Void, double[], Void> {
@@ -122,9 +129,6 @@ public class SoundRecordAndAnalysisActivity extends Activity{
 
     }
 
-
-
-
     public void buttonClicked() {
 
         if (started == true) {
@@ -152,19 +156,6 @@ public class SoundRecordAndAnalysisActivity extends Activity{
         intent.addCategory(Intent.CATEGORY_HOME);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
-    }
-
-    protected void prepareUi(){
-        setContentView(R.layout.main);
-        textViewMeasuredValue = (TextView) findViewById(R.id.textViewMeasuredValue);
-        imageViewDisplaySectrum = (TheSpectrumAnalizerImageView) findViewById(R.id.imageViewDisplaySectrum);
-        imageViewScale = (TheScaleImageView) findViewById(R.id.theScaleImageView);
-        startStopButton = (Button) findViewById(R.id.startStopButton);
-        startStopButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View view) {
-                buttonClicked();
-            }
-        });
     }
 
     public void onStart(){

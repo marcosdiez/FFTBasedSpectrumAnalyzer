@@ -17,6 +17,7 @@ public class TheSpectrumAnalizerImageView extends ImageView {
     public Canvas canvasDisplaySpectrum;
     public Paint paintSpectrumDisplay;
 
+    int height = 0;
     int width = 0;
     boolean initialized = false;
 
@@ -25,17 +26,16 @@ public class TheSpectrumAnalizerImageView extends ImageView {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        //getMeasuredHeight() and getMeasuredWidth() now contain the suggested size
         if(initialized){
             return;
         }
 
-        width = this.getWidth(); //  widthMeasureSpec;
+        width = this.getWidth();
+        height = this.getHeight();
         if(width == 0) {
             return;
         }
-
-        bitmapDisplaySpectrum = Bitmap.createBitmap(width, 300, Bitmap.Config.ARGB_8888);
+        bitmapDisplaySpectrum = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         setImageBitmap(bitmapDisplaySpectrum);
         canvasDisplaySpectrum = new Canvas(bitmapDisplaySpectrum);
         drawBorders();
@@ -47,17 +47,15 @@ public class TheSpectrumAnalizerImageView extends ImageView {
         double maxValue =0;
         int maxIndex = 0;
 
-        int myWidth = canvasDisplaySpectrum.getWidth();
-        int myHeight = canvasDisplaySpectrum.getHeight();
 
         paintSpectrumDisplay.setColor(Color.GREEN);
 
-        float delta = ((float) myWidth) / ((float) ( toTransform.length -1 ));
+        float delta = ((float) width) / ((float) ( toTransform.length -1 ));
         for (int i = 0; i < toTransform.length; i++) {
             float x = delta * i;
             double toAnalyze = toTransform[i];
-            int downy = (int) (myHeight/2 - (toAnalyze * 10));
-            int upy = myHeight/2;
+            int downy = (int) (height/2 - (toAnalyze * 10));
+            int upy = height/2;
             canvasDisplaySpectrum.drawLine(x, downy, x, upy, paintSpectrumDisplay);
 
             if(toAnalyze>maxValue){
@@ -69,8 +67,8 @@ public class TheSpectrumAnalizerImageView extends ImageView {
         int fixedValue =(int)maxValue*1000;
 
         if( fixedValue > 0 ) {
-            Log.d(TAG, "Calc:" +  myWidth + "/"
-                    + myHeight + "/" +
+            Log.d(TAG, "Calc:" +  width + "/"
+                    + height + "/" +
                     toTransform.length + "/" + maxIndex + "/" + fixedValue);
         }
         invalidate();
@@ -143,18 +141,5 @@ public class TheSpectrumAnalizerImageView extends ImageView {
         Log.d(TAG, "TheSpectrumAnalizerImageView1");
         init();
     }
-
-//    @Override
-//    protected void onDraw(Canvas canvas) {
-//        // TODO Auto-generated method stub
-//        super.onDraw(canvas);
-//        if(!initialized) {
-//            return;
-//        }
-//
-//
-//
-//        invalidate();
-//    }
 
 }
