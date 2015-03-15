@@ -17,41 +17,52 @@ public class TheScaleImageView extends ImageView {
     Bitmap bitmapScale;
     Canvas canvasScale;
     int width = 0;
-    int height = 0;
+    boolean initialized = false;
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         //getMeasuredHeight() and getMeasuredWidth() now contain the suggested size
+        if(initialized){
+            return;
+        }
+
         width = this.getWidth(); //  widthMeasureSpec;
-        height = this.getHeight();
         if(width == 0) {
             return;
         }
 
-        Log.d("MMM", "TheScaleImageView.onMeasure: " + width + "/" + height);
         bitmapScale = Bitmap.createBitmap(width, (int) 50, Bitmap.Config.ARGB_8888);
+        setImageBitmap(bitmapScale);
+        initialized=true;
+    }
+
+    void init(){
+        canvasScale = new Canvas(bitmapScale);
         paintScaleDisplay = new Paint();
         paintScaleDisplay.setColor(Color.WHITE);
         paintScaleDisplay.setStyle(Paint.Style.FILL);
-        canvasScale = new Canvas(bitmapScale);
-        setImageBitmap(bitmapScale);
     }
 
-    //Bitmap scaled;
+    // somehow things just worked after I overload the 3 constructors
     public TheScaleImageView(Context context, AttributeSet blah , int bleh) {
         super(context, blah, bleh);
         Log.d("MMM", "TheScaleImageViewZ");
+        init();
     }
 
+    // somehow things just worked after I overload the 3 constructors
     public TheScaleImageView(Context context, AttributeSet blah) {
         super(context, blah);
         Log.d("MMM", "TheScaleImageViewY");
+        init();
     }
 
+    // somehow things just worked after I overload the 3 constructors
     public TheScaleImageView(Context context) {
         super(context);
         Log.d("MMM", "TheScaleImageViewX");
+        init();
     }
 
     @Override
@@ -61,7 +72,6 @@ public class TheScaleImageView extends ImageView {
         if(width == 0 ) {
             return;
         }
-        // Log.d("MMM", "TheScaleImageView.onDraw: " + width + "/" + height);
 
         float delta = width / 4;
         float delta_by_8 = delta / 8;
