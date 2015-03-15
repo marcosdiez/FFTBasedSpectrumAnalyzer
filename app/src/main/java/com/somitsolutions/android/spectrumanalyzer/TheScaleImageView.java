@@ -32,13 +32,14 @@ public class TheScaleImageView extends ImageView {
             return;
         }
 
+
         bitmapScale = Bitmap.createBitmap(width, (int) 50, Bitmap.Config.ARGB_8888);
         setImageBitmap(bitmapScale);
+        canvasScale = new Canvas(bitmapScale);
         initialized=true;
     }
 
     void init(){
-        canvasScale = new Canvas(bitmapScale);
         paintScaleDisplay = new Paint();
         paintScaleDisplay.setColor(Color.WHITE);
         paintScaleDisplay.setStyle(Paint.Style.FILL);
@@ -69,7 +70,7 @@ public class TheScaleImageView extends ImageView {
     protected void onDraw(Canvas canvas) {
         // TODO Auto-generated method stub
         super.onDraw(canvas);
-        if(width == 0 ) {
+        if(!initialized) {
             return;
         }
 
