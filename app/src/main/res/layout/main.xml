@@ -7,7 +7,7 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="New Text2"
+        android:text=""
         android:id="@+id/textViewMeasuredValue" />
 
     <com.somitsolutions.android.spectrumanalyzer.TheSpectrumAnalizerImageView

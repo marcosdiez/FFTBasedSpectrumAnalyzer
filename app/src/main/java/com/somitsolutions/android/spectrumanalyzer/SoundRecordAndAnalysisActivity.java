@@ -58,6 +58,7 @@ public class SoundRecordAndAnalysisActivity extends Activity {
         textViewMeasuredValue = (TextView) findViewById(R.id.textViewMeasuredValue);
         imageViewDisplaySectrum = (TheSpectrumAnalizerImageView) findViewById(R.id.imageViewDisplaySectrum);
         imageViewScale = (TheScaleImageView) findViewById(R.id.theScaleImageView);
+        imageViewDisplaySectrum.setOutput(textViewMeasuredValue);
         startStopButton = (Button) findViewById(R.id.startStopButton);
         btn0500hz = (Button) findViewById(R.id.button500Hz);
         btn1000hz = (Button) findViewById(R.id.button1kHz);
@@ -115,6 +116,8 @@ public class SoundRecordAndAnalysisActivity extends Activity {
         startStopButton.setText("Stop");
         recordTask = new RecordAudio();
         recordTask.execute();
+
+        imageViewDisplaySectrum.clearMeasurement();
     }
 
     private void stopAnalyzer() {
