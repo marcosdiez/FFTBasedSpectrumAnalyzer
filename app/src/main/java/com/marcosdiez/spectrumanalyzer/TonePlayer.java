@@ -8,37 +8,43 @@ import android.media.AudioTrack;
  * Created by Marcos on 15-Mar-15.
  */
 public class TonePlayer implements Runnable {
-    private  int duration = 3; // seconds
-    private  int sampleRate = 8000;
-    private  double freqOfTone = 440; // hz
+    private int duration = 3; // seconds
+    private int sampleRate = 8000;
+    private double freqOfTone = 440; // hz
     private final byte generatedSnd[] = new byte[64000];
+    private double sample[];
+    private int numSamples;
     private boolean initialized = false;
 
     public TonePlayer(int duration, int freqOfTone){
-        this.duration = duration;
-        this.freqOfTone = freqOfTone;
-        initialized=false;
+        init(duration, freqOfTone);
     }
 
     public void play(int duration, int freqOfTone){
+        init(duration, freqOfTone);
+        play();
+    }
+
+    private void init(int duration, int freqOfTone) {
         this.duration = duration;
         this.freqOfTone = freqOfTone;
+        numSamples = duration * sampleRate;
+        sample = new double[numSamples];
+
         initialized=false;
-        play();
     }
 
     public void run(){
         play();
     }
 
-    public void play(){
+    public synchronized void play(){
         prepareSound();
         replaySound();
     }
 
     public void prepareSound(){ // int sampleRate, int duration, int freqOfTone, byte[] generatedSnd){
-        int numSamples = duration * sampleRate;
-        double sample[] = new double[numSamples];
+
         // fill out the array
         for (int i = 0; i < numSamples; ++i) {
             sample[i] = Math.sin(2 * Math.PI * i / (sampleRate/freqOfTone));
