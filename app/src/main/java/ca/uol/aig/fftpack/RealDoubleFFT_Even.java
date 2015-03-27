@@ -27,7 +27,7 @@ public class RealDoubleFFT_Even extends RealDoubleFFT_Mixed
      public RealDoubleFFT_Even(int n)
      {
           ndim = n;
-          norm_factor = 2*(n-1);
+          norm_factor = 2.0*(n-1);
           if(wavetable == null || wavetable.length !=(3*ndim+15))
           {
               wavetable = new double[3*ndim + 15];
@@ -119,7 +119,7 @@ public class RealDoubleFFT_Even extends RealDoubleFFT_Mixed
 	      }
 	      if(modn !=0) x[n-1]=xim2;
          }
-     } 
+     }
 
 /*----------------------------------
    costi: initialization of cos-FFT
