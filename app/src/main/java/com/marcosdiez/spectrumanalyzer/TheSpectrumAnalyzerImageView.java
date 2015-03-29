@@ -18,18 +18,12 @@ public class TheSpectrumAnalyzerImageView extends ImageView {
     public Canvas canvasDisplaySpectrum=null;
     public Paint paintSpectrumDisplay=null;
 
-    TextView output=null;
-
     public final int maxAge = 100;
     int height = 0;
     int width = 0;
     boolean initialized = false;
 
-    public static String TAG = "TheSpectrumAnalizerImageView";
-
-    public void setOutput(TextView output){
-        this.output=output;
-    }
+    public static String TAG = "TheSpectrumAnalyzerImageView";
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
@@ -55,6 +49,8 @@ public class TheSpectrumAnalyzerImageView extends ImageView {
     int globalMaxIndex =0;
     int age=0;
     int timePos=0;
+
+    public String msg="";
 
     public void clearMeasurement(){
         globalMaxToAnalise=0;
@@ -94,16 +90,11 @@ public class TheSpectrumAnalyzerImageView extends ImageView {
             int convertedIndex = (int)((double) maxIndex * convertFactor);
             int convertedGlobalMaxIndex = (int)((double) globalMaxIndex * convertFactor);
 
-            String msg;
-
             msg = "Local: " + convertedIndex + " Hz /" + (int) maxValue
                     + " Max: " + convertedGlobalMaxIndex + " Hz / " + (int) globalMaxToAnalise;
 
 
-            // Log.d(TAG, msg);
-            if(output!=null){
-                output.setText(msg);
-            }
+
             if( age++ > maxAge ){
                 int p = timePos;
                 clearMeasurement();
@@ -113,8 +104,6 @@ public class TheSpectrumAnalyzerImageView extends ImageView {
         }
 
         plotTimeInformation(toTransform);
-
-        // invalidate();
     }
 
     int last_x=0;

@@ -57,7 +57,6 @@ public class SoundRecordAndAnalysisActivity extends Activity {
         textViewMeasuredValue = (TextView) findViewById(R.id.textViewMeasuredValue);
         imageViewDisplaySpectrum = (TheSpectrumAnalyzerImageView) findViewById(R.id.imageViewDisplaySectrum);
         imageViewScale = (TheScaleImageView) findViewById(R.id.theScaleImageView);
-        imageViewDisplaySpectrum.setOutput(textViewMeasuredValue);
         startStopButton = (Button) findViewById(R.id.startStopButton);
         btn0500hz = (Button) findViewById(R.id.button500Hz);
         btn1000hz = (Button) findViewById(R.id.button1kHz);
@@ -186,8 +185,8 @@ public class SoundRecordAndAnalysisActivity extends Activity {
                 }
 
                 transformer.ft(toTransform);
-                publishProgress(toTransform);
                 imageViewDisplaySpectrum.plot(toTransform);
+                publishProgress(toTransform);
 
                 if (isCancelled())
                     break;
@@ -204,8 +203,8 @@ public class SoundRecordAndAnalysisActivity extends Activity {
         }
 
         protected void onProgressUpdate(double[]... toTransform) {
-
             imageViewDisplaySpectrum.invalidate();
+            textViewMeasuredValue.setText(imageViewDisplaySpectrum.msg);
         }
 
         protected void onPostExecute(Void result) {
