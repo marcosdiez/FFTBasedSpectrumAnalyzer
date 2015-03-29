@@ -13,7 +13,7 @@ import android.widget.TextView;
 /**
  * Created by Marcos on 09-Mar-15.
  */
-public class TheSpectrumAnalizerImageView extends ImageView {
+public class TheSpectrumAnalyzerImageView extends ImageView {
     public Bitmap bitmapDisplaySpectrum=null;
     public Canvas canvasDisplaySpectrum=null;
     public Paint paintSpectrumDisplay=null;
@@ -54,11 +54,13 @@ public class TheSpectrumAnalizerImageView extends ImageView {
     double globalMaxToAnalise =0;
     int globalMaxIndex =0;
     int age=0;
+    int timePos=0;
 
     public void clearMeasurement(){
         globalMaxToAnalise=0;
         globalMaxIndex=0;
         age=0;
+        timePos=0;
     }
 
     public void plot(double[] toTransform) {
@@ -87,9 +89,7 @@ public class TheSpectrumAnalizerImageView extends ImageView {
 
 
 
-        if( maxValue > 1 ) {
-            String slash = "/";
-
+        if(  maxValue > 1 ) {
             double convertFactor = 4000d / (double) (toTransform.length);
             int convertedIndex = (int)((double) maxIndex * convertFactor);
             int convertedGlobalMaxIndex = (int)((double) globalMaxIndex * convertFactor);
@@ -99,17 +99,42 @@ public class TheSpectrumAnalizerImageView extends ImageView {
             msg = "Local: " + convertedIndex + " Hz /" + (int) maxValue
                     + " Max: " + convertedGlobalMaxIndex + " Hz / " + (int) globalMaxToAnalise;
 
+
             // Log.d(TAG, msg);
             if(output!=null){
                 output.setText(msg);
             }
             if( age++ > maxAge ){
+                int p = timePos;
                 clearMeasurement();
+                timePos=p;
             }
 
         }
 
+        plotTimeInformation(toTransform);
+
         invalidate();
+    }
+
+    int last_x=0;
+    int last_y=0;
+
+    private void plotTimeInformation(double[] toTransform) {
+        // prints time pos
+        int maxValue = toTransform.length;
+
+        int x = timePos = ++timePos % width; // x
+        int y = (int)( ((double) globalMaxIndex / (double) maxValue ) * (double) height);
+
+
+        //canvasDisplaySpectrum.drawPoint(timePos, y , paintSpectrumDisplay);
+        paintSpectrumDisplay.setColor(Color.BLUE);
+        canvasDisplaySpectrum.drawLine(last_x, last_y, x, y , paintSpectrumDisplay);
+
+        last_x = x;
+        last_y = y;
+
     }
 
 
@@ -160,21 +185,21 @@ public class TheSpectrumAnalizerImageView extends ImageView {
     }
 
     // somehow things just worked after I overload the 3 constructors
-    public TheSpectrumAnalizerImageView(Context context, AttributeSet blah, int bleh) {
+    public TheSpectrumAnalyzerImageView(Context context, AttributeSet blah, int bleh) {
         super(context, blah, bleh);
         Log.d(TAG, "TheSpectrumAnalizerImageView3");
         init();
     }
 
     // somehow things just worked after I overload the 3 constructors
-    public TheSpectrumAnalizerImageView(Context context, AttributeSet blah) {
+    public TheSpectrumAnalyzerImageView(Context context, AttributeSet blah) {
         super(context, blah);
         Log.d(TAG, "TheSpectrumAnalizerImageView2");
         init();
     }
 
     // somehow things just worked after I overload the 3 constructors
-    public TheSpectrumAnalizerImageView(Context context) {
+    public TheSpectrumAnalyzerImageView(Context context) {
         super(context);
         Log.d(TAG, "TheSpectrumAnalizerImageView1");
         init();

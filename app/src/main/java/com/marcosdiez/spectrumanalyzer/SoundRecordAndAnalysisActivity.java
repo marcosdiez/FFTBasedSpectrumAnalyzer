@@ -13,8 +13,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.marcosdiez.spectrumanalyzer.R;
-
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -38,7 +36,7 @@ public class SoundRecordAndAnalysisActivity extends Activity {
     Button btn2000hz;
     boolean started = false;
     RecordAudio recordTask = null;
-    TheSpectrumAnalizerImageView imageViewDisplaySectrum;
+    TheSpectrumAnalyzerImageView imageViewDisplaySpectrum;
     TheScaleImageView imageViewScale;
     TextView textViewMeasuredValue;
     private RealDoubleFFT transformer;
@@ -58,9 +56,9 @@ public class SoundRecordAndAnalysisActivity extends Activity {
     protected void prepareUi() {
         setContentView(R.layout.main);
         textViewMeasuredValue = (TextView) findViewById(R.id.textViewMeasuredValue);
-        imageViewDisplaySectrum = (TheSpectrumAnalizerImageView) findViewById(R.id.imageViewDisplaySectrum);
+        imageViewDisplaySpectrum = (TheSpectrumAnalyzerImageView) findViewById(R.id.imageViewDisplaySectrum);
         imageViewScale = (TheScaleImageView) findViewById(R.id.theScaleImageView);
-        imageViewDisplaySectrum.setOutput(textViewMeasuredValue);
+        imageViewDisplaySpectrum.setOutput(textViewMeasuredValue);
         startStopButton = (Button) findViewById(R.id.startStopButton);
         btn0500hz = (Button) findViewById(R.id.button500Hz);
         btn1000hz = (Button) findViewById(R.id.button1kHz);
@@ -119,7 +117,7 @@ public class SoundRecordAndAnalysisActivity extends Activity {
         recordTask = new RecordAudio();
         recordTask.execute();
 
-        imageViewDisplaySectrum.clearMeasurement();
+        imageViewDisplaySpectrum.clearMeasurement();
     }
 
     private void stopAnalyzer() {
@@ -128,9 +126,9 @@ public class SoundRecordAndAnalysisActivity extends Activity {
         if (recordTask != null) {
             recordTask.cancel(true);
         }
-        if (imageViewDisplaySectrum.canvasDisplaySpectrum != null) {
-            imageViewDisplaySectrum.canvasDisplaySpectrum.drawColor(Color.BLACK);
-            imageViewDisplaySectrum.drawBorders();
+        if (imageViewDisplaySpectrum.canvasDisplaySpectrum != null) {
+            imageViewDisplaySpectrum.canvasDisplaySpectrum.drawColor(Color.BLACK);
+            imageViewDisplaySpectrum.drawBorders();
         }
     }
 
@@ -208,7 +206,7 @@ public class SoundRecordAndAnalysisActivity extends Activity {
 
         protected void onProgressUpdate(double[]... toTransform) {
             double[] toTransformZero = toTransform[0];
-            imageViewDisplaySectrum.plot(toTransformZero);
+            imageViewDisplaySpectrum.plot(toTransformZero);
         }
 
         protected void onPostExecute(Void result) {
