@@ -18,6 +18,8 @@ public class TheSpectrumAnalyzerImageView extends ImageView {
     public Canvas canvasDisplaySpectrum=null;
     public Paint paintSpectrumDisplay=null;
 
+    public CalculateStatistics statistics = new CalculateStatistics();
+
     public final int maxAge = 100;
     int height = 0;
     int width = 0;
@@ -45,85 +47,40 @@ public class TheSpectrumAnalyzerImageView extends ImageView {
         initialized=true;
     }
 
-    double globalMaxToAnalise =0;
-    int globalMaxIndex =0;
-    int age=0;
-    int timePos=0;
-
     public String msg="";
 
-    public void clearMeasurement(){
-        globalMaxToAnalise=0;
-        globalMaxIndex=0;
-        age=0;
-        timePos=0;
-    }
+
+
+
+
 
     public void plot(double[] toTransform) {
-        double maxValue =0;
-        int maxIndex = 0;
-
         paintSpectrumDisplay.setColor(Color.GREEN);
 
         float delta = ((float) width) / ((float) ( toTransform.length ));
         int center_of_the_graph = height/2;
+
+        statistics.beforeIteration();
+
         for (int i = 0; i < toTransform.length; i++) {
             float x = delta * i;
             double toAnalyze = toTransform[i];
             int downy = (int) (center_of_the_graph - (toAnalyze * 10));
+            statistics.analyzeElement(i, toAnalyze);
             canvasDisplaySpectrum.drawLine(x, downy, x, center_of_the_graph, paintSpectrumDisplay);
-
-            if(toAnalyze>maxValue){
-                if(toAnalyze> globalMaxToAnalise){
-                    globalMaxToAnalise = toAnalyze;
-                    globalMaxIndex = i;
-                }
-                maxValue = toAnalyze;
-                maxIndex = i;
-            }
         }
 
-
-
-        if(  maxValue > 1 ) {
-            double convertFactor = 4000d / (double) (toTransform.length);
-            int convertedIndex = (int)((double) maxIndex * convertFactor);
-            int convertedGlobalMaxIndex = (int)((double) globalMaxIndex * convertFactor);
-
-            msg = "Local: " + convertedIndex + " Hz /" + (int) maxValue
-                    + " Max: " + convertedGlobalMaxIndex + " Hz / " + (int) globalMaxToAnalise;
-
-
-
-            if( age++ > maxAge ){
-                int p = timePos;
-                clearMeasurement();
-                timePos=p;
-            }
-
-        }
-
-        plotTimeInformation(toTransform);
+        statistics.afterIteration();
+        writeMsg(toTransform.length);
     }
 
-    int last_x=0;
-    int last_y=0;
-
-    private void plotTimeInformation(double[] toTransform) {
-        // prints time pos
-        int maxValue = toTransform.length;
-
-        int x = timePos = ++timePos % width; // x
-        int y = (int)( ((double) globalMaxIndex / (double) maxValue ) * (double) height);
-
-
-        //canvasDisplaySpectrum.drawPoint(timePos, y , paintSpectrumDisplay);
-        paintSpectrumDisplay.setColor(Color.BLUE);
-        canvasDisplaySpectrum.drawLine(last_x, last_y, x, y , paintSpectrumDisplay);
-
-        last_x = x;
-        last_y = y;
-
+    private void writeMsg(int tl){
+        double convertFactor = 4000d / (double) (tl);
+        int convertedIndex = (int)((double) statistics.getLargestX()  * convertFactor);
+        msg = "Local: " + convertedIndex + " Hz " + statistics.getLargestY();
+        if(statistics.getLargestY() > .01 ) {
+            Log.d(TAG, msg);
+        }
     }
 
 

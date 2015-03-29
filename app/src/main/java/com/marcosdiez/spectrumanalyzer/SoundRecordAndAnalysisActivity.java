@@ -112,7 +112,7 @@ public class SoundRecordAndAnalysisActivity extends Activity {
     private void startAnalyzer() {
         started = true;
         startStopButton.setText("Stop");
-        imageViewDisplaySpectrum.clearMeasurement();
+        // imageViewDisplaySpectrum.clearMeasurement();
         recordTask = new RecordAudio();
         recordTask.execute();
     }
