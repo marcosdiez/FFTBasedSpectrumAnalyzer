@@ -36,7 +36,7 @@ public class TheSpectrumAnalyzerImageView extends ImageView {
 
         width = this.getWidth();
         height = this.getHeight();
-        if(width == 0) {
+        if(width == 0 || height == 0) {
             return;
         }
         bitmapDisplaySpectrum = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);

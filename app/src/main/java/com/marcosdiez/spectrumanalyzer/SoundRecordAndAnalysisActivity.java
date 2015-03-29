@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -49,6 +50,7 @@ public class SoundRecordAndAnalysisActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         prepareUi();
     }
 
@@ -63,6 +65,16 @@ public class SoundRecordAndAnalysisActivity extends Activity {
         btn1500hz = (Button) findViewById(R.id.button1500Hz);
         btn2000hz = (Button) findViewById(R.id.button2kHz);
 
+        ((Button) findViewById(R.id.button2500Hz)).setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                playSound(2500);
+            }
+        });
+        ((Button) findViewById(R.id.button3000Hz)).setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                playSound(3000);
+            }
+        });
         startStopButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 buttonClicked();
