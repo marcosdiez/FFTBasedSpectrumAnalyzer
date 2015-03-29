@@ -114,7 +114,7 @@ public class TheSpectrumAnalyzerImageView extends ImageView {
 
         plotTimeInformation(toTransform);
 
-        invalidate();
+        // invalidate();
     }
 
     int last_x=0;
@@ -194,14 +194,14 @@ public class TheSpectrumAnalyzerImageView extends ImageView {
     // somehow things just worked after I overload the 3 constructors
     public TheSpectrumAnalyzerImageView(Context context, AttributeSet blah) {
         super(context, blah);
-        Log.d(TAG, "TheSpectrumAnalizerImageView2");
+        Log.d(TAG, "TheSpectrumAnalyzerImageView2");
         init();
     }
 
     // somehow things just worked after I overload the 3 constructors
     public TheSpectrumAnalyzerImageView(Context context) {
         super(context);
-        Log.d(TAG, "TheSpectrumAnalizerImageView1");
+        Log.d(TAG, "TheSpectrumAnalyzerImageView1");
         init();
     }
 

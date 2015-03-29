@@ -28,7 +28,7 @@ public class SoundRecordAndAnalysisActivity extends Activity {
     int audioEncoding = AudioFormat.ENCODING_PCM_16BIT;
 
     AudioRecord audioRecord;
-    int blockSize;// = 256;
+    final int blockSize = 256;
     Button startStopButton;
     Button btn0500hz;
     Button btn1000hz;
@@ -39,7 +39,7 @@ public class SoundRecordAndAnalysisActivity extends Activity {
     TheSpectrumAnalyzerImageView imageViewDisplaySpectrum;
     TheScaleImageView imageViewScale;
     TextView textViewMeasuredValue;
-    private RealDoubleFFT transformer;
+    private RealDoubleFFT transformer = new RealDoubleFFT(blockSize);
 
     private static final ExecutorService threadPool = Executors.newCachedThreadPool();
 
@@ -49,7 +49,6 @@ public class SoundRecordAndAnalysisActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        blockSize = 256;
         prepareUi();
     }
 
@@ -66,7 +65,7 @@ public class SoundRecordAndAnalysisActivity extends Activity {
         btn2000hz = (Button) findViewById(R.id.button2kHz);
 
         startStopButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View view) {
+            public void onClick(View v) {
                 buttonClicked();
             }
         });
@@ -114,10 +113,9 @@ public class SoundRecordAndAnalysisActivity extends Activity {
     private void startAnalyzer() {
         started = true;
         startStopButton.setText("Stop");
+        imageViewDisplaySpectrum.clearMeasurement();
         recordTask = new RecordAudio();
         recordTask.execute();
-
-        imageViewDisplaySpectrum.clearMeasurement();
     }
 
     private void stopAnalyzer() {
@@ -139,7 +137,6 @@ public class SoundRecordAndAnalysisActivity extends Activity {
 
     public void onStart() {
         super.onStart();
-        transformer = new RealDoubleFFT(blockSize);
     }
 
     @Override
@@ -190,6 +187,8 @@ public class SoundRecordAndAnalysisActivity extends Activity {
 
                 transformer.ft(toTransform);
                 publishProgress(toTransform);
+                imageViewDisplaySpectrum.plot(toTransform);
+
                 if (isCancelled())
                     break;
             }
@@ -205,8 +204,8 @@ public class SoundRecordAndAnalysisActivity extends Activity {
         }
 
         protected void onProgressUpdate(double[]... toTransform) {
-            double[] toTransformZero = toTransform[0];
-            imageViewDisplaySpectrum.plot(toTransformZero);
+
+            imageViewDisplaySpectrum.invalidate();
         }
 
         protected void onPostExecute(Void result) {
