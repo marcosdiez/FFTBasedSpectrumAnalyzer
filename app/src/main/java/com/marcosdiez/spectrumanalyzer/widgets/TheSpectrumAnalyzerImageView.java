@@ -20,7 +20,7 @@ public class TheSpectrumAnalyzerImageView extends ImageView {
     public Bitmap bitmapDisplaySpectrum = null;
     public Canvas canvasDisplaySpectrum = null;
     public Paint paintSpectrumDisplay = null;
-    public CalculateStatistics statistics = new CalculateStatistics();
+
     public String msg = "";
     int height = 0;
     int width = 0;
@@ -68,27 +68,28 @@ public class TheSpectrumAnalyzerImageView extends ImageView {
         initialized = true;
     }
 
-    public void plot(double[] toTransform) {
+    public void plot(double[] toTransform, CalculateStatistics statistics) {
         paintSpectrumDisplay.setColor(Color.GREEN);
 
         float delta = ((float) width) / ((float) (toTransform.length));
         int center_of_the_graph = height / 2;
 
-        statistics.beforeIteration();
+        statistics.calculateStatistics(toTransform);
 
         for (int i = 0; i < toTransform.length; i++) {
             float x = delta * i;
             double toAnalyze = toTransform[i];
             int downy = (int) (center_of_the_graph - (toAnalyze * 10));
-            statistics.analyzeElement(i, toAnalyze);
             canvasDisplaySpectrum.drawLine(x, downy, x, center_of_the_graph, paintSpectrumDisplay);
         }
 
-        statistics.afterIteration();
-        writeMsg(toTransform.length);
+
+        writeMsg(toTransform.length, statistics);
     }
 
-    private void writeMsg(int tl) {
+
+
+    private void writeMsg(int tl, CalculateStatistics statistics) {
         double convertFactor = 4000d / (double) (tl);
         int convertedIndex = (int) ((double) statistics.getLargestX() * convertFactor);
         msg = "Local: " + convertedIndex + " Hz " + statistics.getLargestY();

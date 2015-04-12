@@ -35,6 +35,17 @@ public class CalculateStatistics {
         return largestY;
     }
 
+    public void calculateStatistics(double[] toTransform) {
+        beforeIteration();
+        for (int i = 0; i < toTransform.length; i++) {
+            double toAnalyze = toTransform[i];
+            analyzeElement(i, toAnalyze);
+        }
+        afterIteration();
+    }
+
+
+
     public void beforeIteration() {
         maxX = 0;
         maxY = 0;

@@ -14,6 +14,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.marcosdiez.spectrumanalyzer.CalculateStatistics;
 import com.marcosdiez.spectrumanalyzer.R;
 import com.marcosdiez.spectrumanalyzer.widgets.TheScaleImageView;
 import com.marcosdiez.spectrumanalyzer.widgets.TheSpectrumAnalyzerImageView;
@@ -31,6 +32,7 @@ public class SoundRecordAndAnalysisActivity extends Activity {
     public static String TAG = "SoundRecordAndAnalysisActivity";
     final int blockSize = 256;
     private RealDoubleFFT transformer = new RealDoubleFFT(blockSize);
+    private CalculateStatistics statistics = new CalculateStatistics();
     int frequency = 8000;
     int channelConfiguration = AudioFormat.CHANNEL_CONFIGURATION_MONO;
     int audioEncoding = AudioFormat.ENCODING_PCM_16BIT;
@@ -199,7 +201,7 @@ public class SoundRecordAndAnalysisActivity extends Activity {
                 }
 
                 transformer.ft(toTransform);
-                imageViewDisplaySpectrum.plot(toTransform);
+                imageViewDisplaySpectrum.plot(toTransform, statistics);
                 publishProgress(toTransform);
 
                 if (isCancelled())

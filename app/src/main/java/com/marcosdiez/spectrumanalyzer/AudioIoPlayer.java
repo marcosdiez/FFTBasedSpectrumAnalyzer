@@ -37,10 +37,10 @@ public class AudioIoPlayer implements Runnable {
         }
     }
 
-    void playSound(int frequency, int playTimeInMiliseconds) {
-        String msg = "Freq (Hz): " + frequency + " time (ms):" + playTimeInMiliseconds;
+    void playSound(int frequency, int playTimeInMilliseconds) {
+        String msg = "Freq (Hz): " + frequency + " time (ms):" + playTimeInMilliseconds;
         Log.d(TAG, msg);
-        tonePlayer.play(playTimeInMiliseconds, frequency);
+        tonePlayer.play(playTimeInMilliseconds, frequency);
     }
 
     public int getMinFrequencyHz() {
