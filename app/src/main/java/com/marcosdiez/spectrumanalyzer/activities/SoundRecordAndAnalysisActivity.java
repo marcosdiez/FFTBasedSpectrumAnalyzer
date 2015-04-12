@@ -16,9 +16,9 @@ import android.widget.TextView;
 
 import com.marcosdiez.spectrumanalyzer.CalculateStatistics;
 import com.marcosdiez.spectrumanalyzer.R;
+import com.marcosdiez.spectrumanalyzer.TonePlayer;
 import com.marcosdiez.spectrumanalyzer.widgets.TheScaleImageView;
 import com.marcosdiez.spectrumanalyzer.widgets.TheSpectrumAnalyzerImageView;
-import com.marcosdiez.spectrumanalyzer.TonePlayer;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -32,21 +32,17 @@ public class SoundRecordAndAnalysisActivity extends Activity {
     public static String TAG = "SoundRecordAndAnalysisActivity";
     final int blockSize = 256;
     private RealDoubleFFT transformer = new RealDoubleFFT(blockSize);
-    private CalculateStatistics statistics = new CalculateStatistics();
     int frequency = 8000;
     int channelConfiguration = AudioFormat.CHANNEL_CONFIGURATION_MONO;
     int audioEncoding = AudioFormat.ENCODING_PCM_16BIT;
     AudioRecord audioRecord;
     Button startStopButton;
-    Button btn0500hz;
-    Button btn1000hz;
-    Button btn1500hz;
-    Button btn2000hz;
     boolean started = false;
     RecordAudio recordTask = null;
     TheSpectrumAnalyzerImageView imageViewDisplaySpectrum;
     TheScaleImageView imageViewScale;
     TextView textViewMeasuredValue;
+    private CalculateStatistics statistics = new CalculateStatistics();
 
     /**
      * Called when the activity is first created.
@@ -63,52 +59,50 @@ public class SoundRecordAndAnalysisActivity extends Activity {
         textViewMeasuredValue = (TextView) findViewById(R.id.textViewMeasuredValue);
         imageViewDisplaySpectrum = (TheSpectrumAnalyzerImageView) findViewById(R.id.imageViewDisplaySectrum);
         imageViewScale = (TheScaleImageView) findViewById(R.id.theScaleImageView);
-        startStopButton = (Button) findViewById(R.id.startStopButton);
-        btn0500hz = (Button) findViewById(R.id.button500Hz);
-        btn1000hz = (Button) findViewById(R.id.button1kHz);
-        btn1500hz = (Button) findViewById(R.id.button1500Hz);
-        btn2000hz = (Button) findViewById(R.id.button2kHz);
 
-        ((Button) findViewById(R.id.button2500Hz)).setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                playSound(2500);
-            }
-        });
-        ((Button) findViewById(R.id.button3000Hz)).setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                playSound(3000);
-            }
-        });
-        startStopButton.setOnClickListener(new OnClickListener() {
+        startStopButton = getButton(R.id.startStopButton, new OnClickListener() {
             public void onClick(View v) {
                 buttonClicked();
             }
         });
 
-        btn0500hz.setOnClickListener(new OnClickListener() {
+        getButton(R.id.button500Hz, new OnClickListener() {
             public void onClick(View v) {
                 playSound(500);
             }
         });
-
-        btn1000hz.setOnClickListener(new OnClickListener() {
+        getButton(R.id.button1kHz, new OnClickListener() {
             public void onClick(View v) {
                 playSound(1000);
             }
         });
-
-        btn1500hz.setOnClickListener(new OnClickListener() {
+        getButton(R.id.button1500Hz, new OnClickListener() {
             public void onClick(View v) {
                 playSound(1500);
             }
         });
-
-        btn2000hz.setOnClickListener(new OnClickListener() {
+        getButton(R.id.button2kHz, new OnClickListener() {
             public void onClick(View v) {
                 playSound(2000);
             }
         });
+        getButton(R.id.button2500Hz, new OnClickListener() {
+            public void onClick(View v) {
+                playSound(2500);
+            }
+        });
+        getButton(R.id.button3000Hz, new OnClickListener() {
+            public void onClick(View v) {
+                playSound(3000);
+            }
+        });
 
+    }
+
+    private Button getButton(int id, View.OnClickListener c) {
+        Button theButton = (Button) findViewById(id);
+        theButton.setOnClickListener(c);
+        return theButton;
     }
 
     void playSound(int frequency) {
@@ -169,6 +163,49 @@ public class SoundRecordAndAnalysisActivity extends Activity {
 
     private class RecordAudio extends AsyncTask<Void, double[], Void> {
 
+        void helper(boolean started) {
+            //try {
+            int bufferSize = AudioRecord.getMinBufferSize(frequency,
+                    channelConfiguration, audioEncoding);
+
+            audioRecord = new AudioRecord(
+                    MediaRecorder.AudioSource.DEFAULT, frequency,
+                    channelConfiguration, audioEncoding, bufferSize);
+            int bufferReadResult;
+            short[] buffer = new short[blockSize];
+            double[] toTransform = new double[blockSize];
+            try {
+                audioRecord.startRecording();
+            } catch (IllegalStateException e) {
+                Log.e("Recording failed", e.toString());
+
+            }
+            while (started) {
+                bufferReadResult = audioRecord.read(buffer, 0, blockSize);
+                if (isCancelled())
+                    break;
+
+                for (int i = 0; i < blockSize && i < bufferReadResult; i++) {
+                    toTransform[i] = (double) buffer[i] / 32768.0; // signed 16 bit
+                }
+
+                transformer.ft(toTransform);
+                imageViewDisplaySpectrum.plot(toTransform, statistics);
+                publishProgress(toTransform);
+
+                if (isCancelled())
+                    break;
+            }
+
+            try {
+                audioRecord.stop();
+            } catch (IllegalStateException e) {
+                Log.e("Stop failed", e.toString());
+
+            }
+        }
+
+
         @Override
         protected Void doInBackground(Void... params) {
 
@@ -228,7 +265,6 @@ public class SoundRecordAndAnalysisActivity extends Activity {
                 audioRecord.stop();
             } catch (IllegalStateException e) {
                 Log.e("Stop failed", e.toString());
-
             }
             if (recordTask != null) {
                 recordTask.cancel(true);

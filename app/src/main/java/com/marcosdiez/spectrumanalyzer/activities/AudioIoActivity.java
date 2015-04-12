@@ -9,6 +9,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.marcosdiez.spectrumanalyzer.AudioIoPlayer;
+import com.marcosdiez.spectrumanalyzer.CalculateStatistics;
 import com.marcosdiez.spectrumanalyzer.R;
 import com.marcosdiez.spectrumanalyzer.Toaster;
 
@@ -20,9 +21,10 @@ import java.util.concurrent.Executors;
  */
 public class AudioIoActivity extends Activity {
 
-
+    private CalculateStatistics statistics = new CalculateStatistics();
     private static final ExecutorService threadPool = Executors.newCachedThreadPool();
     AudioIoPlayer player = new AudioIoPlayer();
+    TextView txtOutput;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,20 @@ public class AudioIoActivity extends Activity {
         prepareSeeker(R.id.seek_filter, "Filter: ", 100, 3);
         prepareSeeker(R.id.seek_iteration, "Iterations: ", 100, 20);
 
+        txtOutput = (TextView) findViewById(R.id.outputTextView);
+
+        getButton(R.id.button_clear, new View.OnClickListener() {
+            public void onClick(View v) {
+                txtOutput.setText("");
+            }
+        });
+
+        getButton(R.id.button_start_capture, new
+                View.OnClickListener() {
+                    public void onClick(View v) {
+                        analise();
+                    }
+                });
 
         getButton(R.id.button_spectrum_analyzer, new View.OnClickListener() {
             public void onClick(View v) {
@@ -54,6 +70,10 @@ public class AudioIoActivity extends Activity {
                 Toaster.toast("Playing !");
             }
         });
+
+    }
+
+    private void analise(){
 
     }
 
