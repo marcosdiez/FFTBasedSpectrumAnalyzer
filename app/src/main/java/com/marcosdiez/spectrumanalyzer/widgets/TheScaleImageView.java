@@ -1,4 +1,4 @@
-package com.marcosdiez.spectrumanalyzer;
+package com.marcosdiez.spectrumanalyzer.widgets;
 
 import android.content.Context;
 import android.graphics.Bitmap;

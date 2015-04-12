@@ -1,4 +1,4 @@
-package com.marcosdiez.spectrumanalyzer;
+package com.marcosdiez.spectrumanalyzer.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,13 +8,17 @@ import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.marcosdiez.spectrumanalyzer.AudioIoPlayer;
+import com.marcosdiez.spectrumanalyzer.R;
+import com.marcosdiez.spectrumanalyzer.Toaster;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
  * Created by Marcos on 29-Mar-15.
  */
-public class AudioIO extends Activity {
+public class AudioIoActivity extends Activity {
 
 
     private static final ExecutorService threadPool = Executors.newCachedThreadPool();

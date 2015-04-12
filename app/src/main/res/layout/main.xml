@@ -10,13 +10,13 @@
         android:layout_height="wrap_content"
         android:text="" />
 
-    <com.marcosdiez.spectrumanalyzer.TheSpectrumAnalyzerImageView
+    <com.marcosdiez.spectrumanalyzer.widgets.TheSpectrumAnalyzerImageView
         android:id="@+id/imageViewDisplaySectrum"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <com.marcosdiez.spectrumanalyzer.TheScaleImageView
+    <com.marcosdiez.spectrumanalyzer.widgets.TheScaleImageView
         android:id="@+id/theScaleImageView"
         android:layout_width="fill_parent"
         android:layout_height="30px" />

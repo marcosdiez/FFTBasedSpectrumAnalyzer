@@ -1,4 +1,4 @@
-package com.marcosdiez.spectrumanalyzer;
+package com.marcosdiez.spectrumanalyzer.widgets;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,6 +8,8 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.ImageView;
+
+import com.marcosdiez.spectrumanalyzer.CalculateStatistics;
 
 /**
  * Created by Marcos on 09-Mar-15.
