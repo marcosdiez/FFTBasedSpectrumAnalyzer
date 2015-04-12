@@ -3,51 +3,60 @@ package com.marcosdiez.spectrumanalyzer;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
+import android.util.Log;
 
 /**
  * Created by Marcos on 15-Mar-15.
  */
 public class TonePlayer implements Runnable {
-    private int duration = 3; // seconds
+    final private static String TAG = "TonePlayer";
+    private final byte generatedSnd[] = new byte[64000];
+    private int durationInMiliseconds = 3000; // miliseconds
     private int sampleRate = 8000;
     private double freqOfTone = 440; // hz
-    private final byte generatedSnd[] = new byte[64000];
     private double sample[];
     private int numSamples;
+    private int sampleSize;
     private boolean initialized = false;
 
-    public TonePlayer(int duration, int freqOfTone){
-        init(duration, freqOfTone);
+    public TonePlayer() {
+
     }
 
-    public void play(int duration, int freqOfTone){
-        init(duration, freqOfTone);
+    public TonePlayer(int durationInMiliseconds, int freqOfTone) {
+        init(durationInMiliseconds, freqOfTone);
+    }
+
+    public void play(int durationInMiliseconds, int freqOfTone) {
+        init(durationInMiliseconds, freqOfTone);
         play();
     }
 
-    private void init(int duration, int freqOfTone) {
-        this.duration = duration;
+    private void init(int durationInMiliseconds, int freqOfTone) {
+        this.durationInMiliseconds = durationInMiliseconds;
         this.freqOfTone = freqOfTone;
-        numSamples = duration * sampleRate;
+        numSamples = (int) (durationInMiliseconds / 1000.0 * sampleRate);
+        sampleSize = 2 * numSamples;
         sample = new double[numSamples];
 
-        initialized=false;
+        initialized = false;
     }
 
-    public void run(){
+    public void run() {
         play();
     }
 
-    public synchronized void play(){
+    public synchronized void play() {
         prepareSound();
+        Log.d(TAG, "Playing " + freqOfTone + " Hz for " + durationInMiliseconds + " ms");
         replaySound();
     }
 
-    public void prepareSound(){ // int sampleRate, int duration, int freqOfTone, byte[] generatedSnd){
-
+    public void prepareSound() {
+        // int sampleRate, int durationInMiliseconds, int freqOfTone, byte[] generatedSnd){
         // fill out the array
         for (int i = 0; i < numSamples; ++i) {
-            sample[i] = Math.sin(2 * Math.PI * i / (sampleRate/freqOfTone));
+            sample[i] = Math.sin(2 * Math.PI * i / (sampleRate / freqOfTone));
         }
         // convert to 16 bit pcm sound array
         // assumes the sample buffer is normalised.
@@ -59,22 +68,27 @@ public class TonePlayer implements Runnable {
             generatedSnd[idx++] = (byte) (val & 0x00ff);
             generatedSnd[idx++] = (byte) ((val & 0xff00) >>> 8);
         }
-        initialized=true;
+        initialized = true;
     }
 
-    public void replaySound(){
-        if(!initialized){
+    public void replaySound() {
+        if (!initialized) {
             prepareSound();
         }
-        //int sampleRate, int duration, byte[] generatedSnd){
-        int numSamples = duration * sampleRate;
-        int sampleSize = 2 * numSamples;
 
-        final AudioTrack audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC,
+        AudioTrack audioTrack = new AudioTrack(
+                AudioManager.STREAM_MUSIC,
                 sampleRate, AudioFormat.CHANNEL_OUT_MONO,
                 AudioFormat.ENCODING_PCM_16BIT, sampleSize,
                 AudioTrack.MODE_STATIC);
         audioTrack.write(generatedSnd, 0, sampleSize);
         audioTrack.play();
+
+        try {
+            Thread.sleep(durationInMiliseconds);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
     }
 }

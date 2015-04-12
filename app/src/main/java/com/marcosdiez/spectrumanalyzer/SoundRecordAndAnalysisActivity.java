@@ -22,14 +22,14 @@ import ca.uol.aig.fftpack.RealDoubleFFT;
 
 public class SoundRecordAndAnalysisActivity extends Activity {
 
+    private static final ExecutorService threadPool = Executors.newCachedThreadPool();
     public static String TAG = "SoundRecordAndAnalysisActivity";
-
+    final int blockSize = 256;
+    private RealDoubleFFT transformer = new RealDoubleFFT(blockSize);
     int frequency = 8000;
     int channelConfiguration = AudioFormat.CHANNEL_CONFIGURATION_MONO;
     int audioEncoding = AudioFormat.ENCODING_PCM_16BIT;
-
     AudioRecord audioRecord;
-    final int blockSize = 256;
     Button startStopButton;
     Button btn0500hz;
     Button btn1000hz;
@@ -40,9 +40,6 @@ public class SoundRecordAndAnalysisActivity extends Activity {
     TheSpectrumAnalyzerImageView imageViewDisplaySpectrum;
     TheScaleImageView imageViewScale;
     TextView textViewMeasuredValue;
-    private RealDoubleFFT transformer = new RealDoubleFFT(blockSize);
-
-    private static final ExecutorService threadPool = Executors.newCachedThreadPool();
 
     /**
      * Called when the activity is first created.
@@ -107,9 +104,9 @@ public class SoundRecordAndAnalysisActivity extends Activity {
 
     }
 
-    void playSound(int frequency){
-        int playTimeInSeconds=1;
-        threadPool.execute(new TonePlayer(playTimeInSeconds, frequency));
+    void playSound(int frequency) {
+        int playTimeInMiliSeconds = 1000;
+        threadPool.execute(new TonePlayer(playTimeInMiliSeconds, frequency));
     }
 
     public void buttonClicked() {
