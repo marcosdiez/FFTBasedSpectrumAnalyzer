@@ -2,7 +2,6 @@ package com.marcosdiez.spectrumanalyzer.activities;
 
 import android.app.Activity;
 import android.graphics.Color;
-import android.media.AudioFormat;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -22,15 +21,12 @@ import com.marcosdiez.spectrumanalyzer.widgets.TheSpectrumAnalyzerImageView;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import ca.uol.aig.fftpack.RealDoubleFFT;
-
 
 public class SoundRecordAndAnalysisActivity extends Activity {
 
 
     private static final ExecutorService threadPool = Executors.newCachedThreadPool();
     public static String TAG = "SoundRecordAndAnalysisActivity";
-    final int blockSize = 256;
     int frequency = 8000;
     Button startStopButton;
 
@@ -161,11 +157,11 @@ public class SoundRecordAndAnalysisActivity extends Activity {
             ap.stop();
         }
 
-        AudioProcessor ap = new AudioProcessor(frequency, this);
-
         public synchronized boolean getStarted() {
             return ap.getStarted();
         }
+
+        AudioProcessor ap = new AudioProcessor(frequency, this);
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -202,6 +198,8 @@ public class SoundRecordAndAnalysisActivity extends Activity {
             imageViewDisplaySpectrum.plot(toTransform, statistics);
             publishProgress(toTransform);
         }
+
+
     }
 }
 

@@ -3,7 +3,6 @@ package com.marcosdiez.spectrumanalyzer;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import ca.uol.aig.fftpack.RealDoubleFFT;
@@ -22,7 +21,7 @@ public class AudioProcessor {
     private RecordAudioPlotter recordAudioPlotter;
     private AudioRecord audioRecord;
     private int frequency;
-    private boolean started=false;
+    private boolean started = false;
     private CalculateStatistics statistics = new CalculateStatistics();
 
     public AudioProcessor(int frequency, RecordAudioPlotter recordAudioPlotter) {
@@ -40,11 +39,13 @@ public class AudioProcessor {
         }
     }
 
-    public synchronized void stop(){
-        started=false;
+    public synchronized void stop() {
+        started = false;
     }
 
-    public synchronized boolean getStarted(){ return started; }
+    public synchronized boolean getStarted() {
+        return started;
+    }
 
     public void doInBackground() {
         int bufferSize = AudioRecord.getMinBufferSize(frequency,
@@ -61,7 +62,7 @@ public class AudioProcessor {
             Log.e("Recording failed", e.toString());
 
         }
-        started=true;
+        started = true;
         while (started) {
             bufferReadResult = audioRecord.read(buffer, 0, blockSize);
 
@@ -71,7 +72,9 @@ public class AudioProcessor {
 
             transformer.ft(toTransform);
             statistics.calculateStatistics(toTransform);
-            recordAudioPlotter.backgroundThreadPlot(toTransform, statistics);
+            if (recordAudioPlotter != null) {
+                recordAudioPlotter.backgroundThreadPlot(toTransform, statistics);
+            }
         }
         onStop();
     }
