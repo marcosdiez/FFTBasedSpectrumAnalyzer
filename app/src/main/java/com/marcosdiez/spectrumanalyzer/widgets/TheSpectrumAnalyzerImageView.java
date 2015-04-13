@@ -74,7 +74,7 @@ public class TheSpectrumAnalyzerImageView extends ImageView {
         float delta = ((float) width) / ((float) (toTransform.length));
         int center_of_the_graph = height / 2;
 
-        statistics.calculateStatistics(toTransform);
+
 
         for (int i = 0; i < toTransform.length; i++) {
             float x = delta * i;
