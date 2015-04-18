@@ -75,7 +75,6 @@ public class TheSpectrumAnalyzerImageView extends ImageView {
         int center_of_the_graph = height / 2;
 
 
-
         for (int i = 0; i < toTransform.length; i++) {
             float x = delta * i;
             double toAnalyze = toTransform[i];
@@ -83,19 +82,7 @@ public class TheSpectrumAnalyzerImageView extends ImageView {
             canvasDisplaySpectrum.drawLine(x, downy, x, center_of_the_graph, paintSpectrumDisplay);
         }
 
-
-        writeMsg(toTransform.length, statistics);
-    }
-
-
-
-    private void writeMsg(int tl, CalculateStatistics statistics) {
-        double convertFactor = 4000d / (double) (tl);
-        int convertedIndex = (int) ((double) statistics.getLargestX() * convertFactor);
-        msg = "Local: " + convertedIndex + " Hz " + statistics.getLargestY();
-        if (statistics.getLargestY() > .01) {
-            Log.d(TAG, msg);
-        }
+        msg = statistics.createMsg();
     }
 
     private void init() {

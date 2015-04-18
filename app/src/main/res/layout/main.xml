@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical">
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:orientation="vertical">
 
     <TextView
         android:id="@+id/textViewMeasuredValue"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="" />
+        android:text=""/>
 
     <com.marcosdiez.spectrumanalyzer.widgets.TheSpectrumAnalyzerImageView
         android:id="@+id/imageViewDisplaySectrum"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"/>
 
     <com.marcosdiez.spectrumanalyzer.widgets.TheScaleImageView
         android:id="@+id/theScaleImageView"
         android:layout_width="fill_parent"
-        android:layout_height="30px" />
+        android:layout_height="30px"/>
 
     <HorizontalScrollView
         android:id="@+id/scrollView"
@@ -27,58 +27,58 @@
         android:layout_height="wrap_content">
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+                      android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal">
 
             <Button
                 android:id="@+id/startStopButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Start"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"/>
 
             <Button
                 android:id="@+id/button500Hz"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="500 Hz"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"/>
 
             <Button
                 android:id="@+id/button1kHz"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="1k Hz"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"/>
 
             <Button
                 android:id="@+id/button1500Hz"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="1.5k Hz"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"/>
 
             <Button
                 android:id="@+id/button2kHz"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2k Hz"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"/>
 
             <Button
                 android:id="@+id/button2500Hz"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2.5k Hz"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"/>
 
             <Button
                 android:id="@+id/button3000Hz"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="3k Hz"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"/>
 
         </LinearLayout>
     </HorizontalScrollView>

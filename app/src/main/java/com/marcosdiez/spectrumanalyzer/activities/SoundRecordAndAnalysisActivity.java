@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.marcosdiez.spectrumanalyzer.AudioProcessor;
-import com.marcosdiez.spectrumanalyzer.CalculateStatistics;
 import com.marcosdiez.spectrumanalyzer.R;
 import com.marcosdiez.spectrumanalyzer.RecordAudioPlotter;
 import com.marcosdiez.spectrumanalyzer.TonePlayer;
@@ -101,7 +100,6 @@ public class SoundRecordAndAnalysisActivity extends Activity {
     }
 
     public void buttonClicked() {
-
         if (audioProcessorUi != null && audioProcessorUi.getStarted()) {
             stopAnalyzer();
         } else {
@@ -193,8 +191,8 @@ public class SoundRecordAndAnalysisActivity extends Activity {
             ap.onStop();
         }
 
-        public void backgroundThreadPlot(double[] toTransform, CalculateStatistics statistics) {
-            imageViewDisplaySpectrum.plot(toTransform, statistics);
+        public void backgroundThreadPlot(double[] toTransform) {
+            imageViewDisplaySpectrum.plot(toTransform, ap.getStatistics());
             publishProgress(toTransform);
         }
 

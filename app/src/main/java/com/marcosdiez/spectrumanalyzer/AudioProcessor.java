@@ -14,20 +14,38 @@ public class AudioProcessor {
     /*
     this class does not do any UI
      */
-    final int blockSize = 256;
+    public static final int blockSize = 256;
     final private RealDoubleFFT transformer = new RealDoubleFFT(blockSize);
     final int channelConfiguration = AudioFormat.CHANNEL_CONFIGURATION_MONO;
     final int audioEncoding = AudioFormat.ENCODING_PCM_16BIT;
     private RecordAudioPlotter recordAudioPlotter;
     private AudioRecord audioRecord;
-    private int frequency=8000; // Hz
+    private int frequency = 8000; // Hz
     private boolean started = false;
     private CalculateStatistics statistics = new CalculateStatistics();
+
+    public CalculateStatistics getStatistics(){ return statistics; }
 
     public AudioProcessor(RecordAudioPlotter recordAudioPlotter) {
         super();
         this.recordAudioPlotter = recordAudioPlotter;
     }
+
+    public void setSeekerValue(int id, int value) {
+        // guess why we do this ? Java does not have function pointers
+
+        switch (id) {
+            case (R.id.seek_filter):
+                break;
+            case (R.id.seek_iteration):
+                statistics = new CalculateStatistics(value);
+                break;
+            default:
+               // we don't care. really.
+                break;
+        }
+    }
+
 
     public void onStop() {
         stop();
@@ -72,7 +90,7 @@ public class AudioProcessor {
             transformer.ft(toTransform);
             statistics.calculateStatistics(toTransform);
             if (recordAudioPlotter != null) {
-                recordAudioPlotter.backgroundThreadPlot(toTransform, statistics);
+                recordAudioPlotter.backgroundThreadPlot(toTransform);
             }
         }
         onStop();

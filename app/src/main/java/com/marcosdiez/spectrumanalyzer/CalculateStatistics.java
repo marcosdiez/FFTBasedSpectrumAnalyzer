@@ -1,21 +1,36 @@
 package com.marcosdiez.spectrumanalyzer;
 
+import android.util.Log;
+
 /**
  * Created by Marcos on 29-Mar-15.
  */
 public class CalculateStatistics {
 
-    static final int size = 20;
+    int size = 20;
+    double minY = 3;
+
+    static final String TAG = "CalculateStatistics";
+
     int maxX;
     double maxY;
     int currentI = 0;
     int[] lastX;
     double[] lastY;
-    double minY = 3;
     double largestX = 0;
     double largestY = 0;
 
-    public CalculateStatistics() {
+
+    public CalculateStatistics(){
+        init(20);
+    }
+
+    public CalculateStatistics(int size){
+        init(size);
+    }
+
+    void init(int size) {
+        this.size = size;
         lastX = new int[size];
         lastY = new double[size];
         currentI = 0;
@@ -45,7 +60,6 @@ public class CalculateStatistics {
     }
 
 
-
     public void beforeIteration() {
         maxX = 0;
         maxY = 0;
@@ -68,6 +82,17 @@ public class CalculateStatistics {
         }
         currentI = (currentI + 1) % size;
         calculate();
+    }
+
+    String msg = "";
+    public String createMsg() {
+        double convertFactor = 4000d / (double) AudioProcessor.blockSize;
+        int convertedIndex = (int) (getLargestX() * convertFactor);
+        if (getLargestY() > .01) {
+            msg = "Local: " + convertedIndex + " Hz " + getLargestY();
+            Log.d(TAG, msg);
+        }
+        return msg;
     }
 
 

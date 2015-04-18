@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.marcosdiez.spectrumanalyzer.AudioIoPlayer;
 import com.marcosdiez.spectrumanalyzer.AudioProcessor;
-import com.marcosdiez.spectrumanalyzer.CalculateStatistics;
 import com.marcosdiez.spectrumanalyzer.R;
 import com.marcosdiez.spectrumanalyzer.RecordAudioPlotter;
 import com.marcosdiez.spectrumanalyzer.Toaster;
@@ -24,11 +23,11 @@ import java.util.concurrent.Executors;
  */
 public class AudioIoActivity extends Activity {
 
-    private CalculateStatistics statistics = new CalculateStatistics();
     private static final ExecutorService threadPool = Executors.newCachedThreadPool();
     AudioIoPlayer player = new AudioIoPlayer();
     AudioProcessorUi audioProcessorUi = new AudioProcessorUi();
-    TextView txtOutput;
+    TextView outputCapturingTextView;
+    TextView outputGeneratingTextView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,15 +42,16 @@ public class AudioIoActivity extends Activity {
         prepareSeeker(R.id.seek_min_frequency, "Min Freq. (Hz): ", 4000, 500);
         prepareSeeker(R.id.seek_max_frequency, "Max Freq. (Hz): ", 4000, 3000);
         prepareSeeker(R.id.seek_time, "Max Time (Ms): ", 5000, 1000);
-        prepareSeeker(R.id.seek_words, "Words: ", 10, 4);
+        prepareSeeker(R.id.seek_words, "Words: ", 10, 5);
         prepareSeeker(R.id.seek_filter, "Filter: ", 100, 3);
         prepareSeeker(R.id.seek_iteration, "Iterations: ", 100, 20);
 
-        txtOutput = (TextView) findViewById(R.id.outputTextView);
+        outputGeneratingTextView = (TextView) findViewById(R.id.outputGeneratingTextView);
+        outputCapturingTextView = (TextView) findViewById(R.id.outputCapturingTextView);
 
         getButton(R.id.button_clear, new View.OnClickListener() {
             public void onClick(View v) {
-                txtOutput.setText("");
+                outputCapturingTextView.setText("");
             }
         });
 
@@ -77,7 +77,7 @@ public class AudioIoActivity extends Activity {
 
     }
 
-    private void analise(){
+    private void analise() {
         audioProcessorUi.execute();
     }
 
@@ -99,6 +99,8 @@ public class AudioIoActivity extends Activity {
         TextView theName = (TextView) mySeeker.findViewById(R.id.my_seeker_textview_name);
         final TextView theValue = (TextView) mySeeker.findViewById(R.id.my_seeker_textview_value);
         SeekBar theSeekBar = (SeekBar) mySeeker.findViewById(R.id.my_seeker_seekbar);
+
+       
 
         theName.setText(title);
         theSeekBar.setMax(maxValue);
@@ -122,6 +124,7 @@ public class AudioIoActivity extends Activity {
         });
         theSeekBar.setProgress(initialValue);
     }
+
     private class AudioProcessorUi extends AsyncTask<Void, double[], Void> implements RecordAudioPlotter {
 
         public synchronized void stop() {
@@ -149,8 +152,7 @@ public class AudioIoActivity extends Activity {
         @Override
         protected void onProgressUpdate(double[]... values) {
             super.onProgressUpdate(values);
-//            imageViewDisplaySpectrum.invalidate();
-//            textViewMeasuredValue.setText(imageViewDisplaySpectrum.msg);
+            outputCapturingTextView.setText(ap.getStatistics().createMsg());
         }
 
         @Override
@@ -165,8 +167,7 @@ public class AudioIoActivity extends Activity {
             ap.onStop();
         }
 
-        public void backgroundThreadPlot(double[] toTransform, CalculateStatistics statistics) {
-//            imageViewDisplaySpectrum.plot(toTransform, statistics);
+        public void backgroundThreadPlot(double[] toTransform) {
             publishProgress(toTransform);
         }
 
