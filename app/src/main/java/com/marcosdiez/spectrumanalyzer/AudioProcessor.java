@@ -51,7 +51,6 @@ public abstract class AudioProcessor extends AsyncTask<Void, double[], Void> {
         }
     }
 
-
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);

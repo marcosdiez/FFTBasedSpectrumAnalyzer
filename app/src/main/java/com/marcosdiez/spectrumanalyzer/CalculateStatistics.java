@@ -57,7 +57,7 @@ public class CalculateStatistics {
         beforeIteration();
     }
 
-    public void beforeIteration() {
+    private void beforeIteration() {
         maxX = 0;
         maxY = 0;
     }
@@ -79,7 +79,7 @@ public class CalculateStatistics {
         }
     }
 
-    public void afterIteration() {
+    private void afterIteration() {
         if (maxY > minimumAudioVolumeWeConsider) {
             lastY[currentI] = maxY;
             lastX[currentI] = maxX;
