@@ -12,14 +12,11 @@ public class AudioIoPlayer implements Runnable {
     int maxFrequencyHz;
     int timeMs;
     int words;
-    int filter;
-    int iterations;
     TonePlayer tonePlayer = new TonePlayer();
 
     public void dumpState() {
         Log.d(TAG, "Freq(Hz): " + minFrequencyHz + "/" + maxFrequencyHz +
-                " time(Ms): " + timeMs + " words: " + words +
-                " filter :" + filter + " iterations: " + iterations);
+                " time(Ms): " + timeMs + " words: " + words );
     }
 
     public void run() {
@@ -78,22 +75,6 @@ public class AudioIoPlayer implements Runnable {
         this.words = words;
     }
 
-    public int getFilter() {
-        return filter;
-    }
-
-    public void setFilter(int filter) {
-        this.filter = filter;
-    }
-
-    public int getIterations() {
-        return iterations;
-    }
-
-    public void setIterations(int iterations) {
-        this.iterations = iterations;
-    }
-
 
     public void setSeekerValue(int id, int value) {
         // guess why we do this ? Java does not have function pointers
@@ -112,10 +93,8 @@ public class AudioIoPlayer implements Runnable {
                 setWords(value);
                 break;
             case (R.id.seek_filter):
-                setFilter(value);
-                break;
             case (R.id.seek_iteration):
-                setIterations(value);
+                // we the player does not use neither this values
                 break;
             default:
                 Log.d(TAG, "setSeekerValue -> Invalid ID:" + id);
