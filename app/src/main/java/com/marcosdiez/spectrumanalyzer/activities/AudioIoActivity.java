@@ -127,7 +127,7 @@ public class AudioIoActivity extends Activity {
         @Override
         protected void onProgressUpdate(double[]... toTransform) {
             super.onProgressUpdate(toTransform);
-            outputCapturingTextView.setText(super.getStatistics().createMsg());
+            outputCapturingTextView.setText(super.getStatisticsMsg());
         }
 
         @Override

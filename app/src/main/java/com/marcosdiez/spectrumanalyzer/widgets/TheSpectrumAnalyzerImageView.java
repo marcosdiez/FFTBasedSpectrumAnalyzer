@@ -9,8 +9,6 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.ImageView;
 
-import com.marcosdiez.spectrumanalyzer.CalculateStatistics;
-
 /**
  * Created by Marcos on 09-Mar-15.
  */
@@ -68,7 +66,7 @@ public class TheSpectrumAnalyzerImageView extends ImageView {
         initialized = true;
     }
 
-    public void plot(double[] toTransform, CalculateStatistics statistics) {
+    public void plot(double[] toTransform, String msg) {
         paintSpectrumDisplay.setColor(Color.GREEN);
 
         float delta = ((float) width) / ((float) (toTransform.length));
@@ -82,7 +80,7 @@ public class TheSpectrumAnalyzerImageView extends ImageView {
             canvasDisplaySpectrum.drawLine(x, downy, x, center_of_the_graph, paintSpectrumDisplay);
         }
 
-        msg = statistics.createMsg();
+        this.msg = msg;
     }
 
     private void init() {

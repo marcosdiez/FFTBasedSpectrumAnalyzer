@@ -17,7 +17,7 @@ public abstract class AudioProcessor extends AsyncTask<Void, double[], Void> {
      */
     public static final int blockSize = 256;
     final private RealDoubleFFT transformer = new RealDoubleFFT(blockSize);
-    final int channelConfiguration = AudioFormat.CHANNEL_CONFIGURATION_MONO;
+    final int channelConfiguration = AudioFormat.CHANNEL_IN_MONO;
     final int audioEncoding = AudioFormat.ENCODING_PCM_16BIT;
     private AudioRecord audioRecord;
     private int frequency = 8000; // Hz
@@ -25,7 +25,9 @@ public abstract class AudioProcessor extends AsyncTask<Void, double[], Void> {
     private CalculateStatistics statistics = new CalculateStatistics();
     private final static String TAG = "AudioProcessor";
 
-    public CalculateStatistics getStatistics(){ return statistics; }
+    public String getStatisticsMsg(){
+        return statistics.createMsg();
+    }
 
     public AudioProcessor() {
         super();
@@ -41,7 +43,7 @@ public abstract class AudioProcessor extends AsyncTask<Void, double[], Void> {
                 break;
             case (R.id.seek_iteration):
                 Log.d(TAG, "New SeekValue: " + value);
-                statistics.setSize(value);
+                statistics.setNumSamples(value);
                 break;
             default:
                // we don't care. really.

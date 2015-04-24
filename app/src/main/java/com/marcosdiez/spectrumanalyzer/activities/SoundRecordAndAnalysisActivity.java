@@ -156,7 +156,7 @@ public class SoundRecordAndAnalysisActivity extends Activity {
 
         @Override
         public void doInBackgroundLoop(double[] toTransform) {
-            imageViewDisplaySpectrum.plot(toTransform, getStatistics());
+            imageViewDisplaySpectrum.plot(toTransform, getStatisticsMsg());
         }
     }
 }
