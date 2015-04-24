@@ -42,7 +42,7 @@ public class AudioIoActivity extends Activity {
         prepareSeeker(R.id.seek_max_frequency, "Max Freq. (Hz): ", 4000, 3000);
         prepareSeeker(R.id.seek_time, "Max Time (Ms): ", 5000, 1000);
         prepareSeeker(R.id.seek_words, "Words: ", 10, 5);
-        prepareSeeker(R.id.seek_filter, "Filter: ", 100, 3);
+        prepareSeeker(R.id.seek_filter, "Audio Filter: ", CalculateStatistics.maxMinumumAudioVolumeWeConsider, CalculateStatistics.initialMinumumAudioVolumeWeConsider);
         prepareSeeker(R.id.seek_iteration, "Iterations: ", CalculateStatistics.maxSamples, CalculateStatistics.initialNumSamples);
 
         outputGeneratingTextView = (TextView) findViewById(R.id.outputGeneratingTextView);
@@ -129,6 +129,10 @@ public class AudioIoActivity extends Activity {
             super.onProgressUpdate(toTransform);
             outputCapturingTextView.setText(super.getStatistics().createMsg());
         }
+
+        @Override
+        public  void doInBackgroundLoop(double[] toTransform){}
+
     }
 
 }

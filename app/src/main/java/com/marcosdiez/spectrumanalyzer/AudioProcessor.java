@@ -11,7 +11,7 @@ import ca.uol.aig.fftpack.RealDoubleFFT;
 /**
  * Created by Marcos on 12-Apr-15.
  */
-public class AudioProcessor extends AsyncTask<Void, double[], Void> {
+public abstract class AudioProcessor extends AsyncTask<Void, double[], Void> {
     /*
     this class does not do any UI
      */
@@ -36,6 +36,8 @@ public class AudioProcessor extends AsyncTask<Void, double[], Void> {
 
         switch (id) {
             case (R.id.seek_filter):
+                Log.d(TAG, "New FilterValue: " + value);
+                statistics.setInitialMinumumAudioVolumeWeConsider(value);
                 break;
             case (R.id.seek_iteration):
                 Log.d(TAG, "New SeekValue: " + value);
@@ -117,7 +119,5 @@ public class AudioProcessor extends AsyncTask<Void, double[], Void> {
         return null;
     }
 
-    public void doInBackgroundLoop(double[] toTransform){
-
-    }
+    public abstract void doInBackgroundLoop(double[] toTransform);
 }

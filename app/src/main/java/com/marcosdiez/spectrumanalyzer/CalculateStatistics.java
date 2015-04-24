@@ -10,10 +10,11 @@ public class CalculateStatistics {
     public static final int maxSamples = 100;
     public static final int initialNumSamples = 2;
 
-//    public static final int
+    public static final int maxMinumumAudioVolumeWeConsider = 10;
+    public static final int initialMinumumAudioVolumeWeConsider = 3;
 
     int size = initialNumSamples;
-    double minY = 3;
+    double minimumAudioVolumeWeConsider = initialMinumumAudioVolumeWeConsider;
 
     static final String TAG = "CalculateStatistics";
 
@@ -25,6 +26,10 @@ public class CalculateStatistics {
     double largestX = 0;
     double largestY = 0;
 
+
+    void setInitialMinumumAudioVolumeWeConsider(double minimumAudioVolumeWeConsider){
+        this.minimumAudioVolumeWeConsider = minimumAudioVolumeWeConsider;
+    }
 
     void setSize(int size){
         this.size=size;
@@ -73,7 +78,7 @@ public class CalculateStatistics {
     }
 
     public void afterIteration() {
-        if (maxY > minY) {
+        if (maxY > minimumAudioVolumeWeConsider) {
             lastY[currentI] = maxY;
             lastX[currentI] = maxX;
         } else {
