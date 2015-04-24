@@ -3,6 +3,7 @@ package com.marcosdiez.spectrumanalyzer;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import ca.uol.aig.fftpack.RealDoubleFFT;
@@ -10,7 +11,7 @@ import ca.uol.aig.fftpack.RealDoubleFFT;
 /**
  * Created by Marcos on 12-Apr-15.
  */
-public class AudioProcessor {
+public class AudioProcessor extends AsyncTask<Void, double[], Void> {
     /*
     this class does not do any UI
      */
@@ -18,17 +19,16 @@ public class AudioProcessor {
     final private RealDoubleFFT transformer = new RealDoubleFFT(blockSize);
     final int channelConfiguration = AudioFormat.CHANNEL_CONFIGURATION_MONO;
     final int audioEncoding = AudioFormat.ENCODING_PCM_16BIT;
-    private RecordAudioPlotter recordAudioPlotter;
     private AudioRecord audioRecord;
     private int frequency = 8000; // Hz
     private boolean started = false;
     private CalculateStatistics statistics = new CalculateStatistics();
+    private final static String TAG = "AudioProcessor";
 
     public CalculateStatistics getStatistics(){ return statistics; }
 
-    public AudioProcessor(RecordAudioPlotter recordAudioPlotter) {
+    public AudioProcessor() {
         super();
-        this.recordAudioPlotter = recordAudioPlotter;
     }
 
     public void setSeekerValue(int id, int value) {
@@ -38,7 +38,8 @@ public class AudioProcessor {
             case (R.id.seek_filter):
                 break;
             case (R.id.seek_iteration):
-                statistics = new CalculateStatistics(value);
+                Log.d(TAG, "New SeekValue: " + value);
+                statistics.setSize(value);
                 break;
             default:
                // we don't care. really.
@@ -46,6 +47,24 @@ public class AudioProcessor {
         }
     }
 
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+        super.onPostExecute(aVoid);
+        onStop();
+    }
+
+    @Override
+    protected void onCancelled(Void aVoid) {
+        super.onCancelled(aVoid);
+        onStop();
+    }
+
+    @Override
+    protected void onCancelled() {
+        super.onCancelled();
+        onStop();
+    }
 
     public void onStop() {
         stop();
@@ -64,7 +83,8 @@ public class AudioProcessor {
         return started;
     }
 
-    public void doInBackground() {
+    @Override
+    public Void doInBackground(Void... params) {
         int bufferSize = AudioRecord.getMinBufferSize(frequency,
                 channelConfiguration, audioEncoding);
 
@@ -89,10 +109,15 @@ public class AudioProcessor {
 
             transformer.ft(toTransform);
             statistics.calculateStatistics(toTransform);
-            if (recordAudioPlotter != null) {
-                recordAudioPlotter.backgroundThreadPlot(toTransform);
-            }
+            doInBackgroundLoop(toTransform);
+
+            publishProgress(toTransform);
         }
         onStop();
+        return null;
+    }
+
+    public void doInBackgroundLoop(double[] toTransform){
+
     }
 }

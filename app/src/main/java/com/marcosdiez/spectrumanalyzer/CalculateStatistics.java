@@ -7,7 +7,12 @@ import android.util.Log;
  */
 public class CalculateStatistics {
 
-    int size = 20;
+    public static final int maxSamples = 100;
+    public static final int initialNumSamples = 2;
+
+//    public static final int
+
+    int size = initialNumSamples;
     double minY = 3;
 
     static final String TAG = "CalculateStatistics";
@@ -21,18 +26,13 @@ public class CalculateStatistics {
     double largestY = 0;
 
 
-    public CalculateStatistics(){
-        init(20);
+    void setSize(int size){
+        this.size=size;
     }
 
-    public CalculateStatistics(int size){
-        init(size);
-    }
-
-    void init(int size) {
-        this.size = size;
-        lastX = new int[size];
-        lastY = new double[size];
+    public CalculateStatistics() {
+        lastX = new int[maxSamples +1 ];
+        lastY = new double[maxSamples +1 ];
         currentI = 0;
         for (int i = 0; i < size; i++) {
             lastX[i] = 0;

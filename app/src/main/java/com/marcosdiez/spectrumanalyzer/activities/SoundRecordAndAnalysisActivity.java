@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.marcosdiez.spectrumanalyzer.AudioProcessor;
 import com.marcosdiez.spectrumanalyzer.R;
-import com.marcosdiez.spectrumanalyzer.RecordAudioPlotter;
 import com.marcosdiez.spectrumanalyzer.TonePlayer;
 import com.marcosdiez.spectrumanalyzer.widgets.TheScaleImageView;
 import com.marcosdiez.spectrumanalyzer.widgets.TheSpectrumAnalyzerImageView;
@@ -148,55 +147,19 @@ public class SoundRecordAndAnalysisActivity extends Activity {
         stopAnalyzer();
     }
 
-    private class AudioProcessorUi extends AsyncTask<Void, double[], Void> implements RecordAudioPlotter {
-
-        public synchronized void stop() {
-            ap.stop();
-        }
-
-        public synchronized boolean getStarted() {
-            return ap.getStarted();
-        }
-
-        AudioProcessor ap = new AudioProcessor(this);
-
+    private class AudioProcessorUi extends AudioProcessor {
         @Override
-        protected Void doInBackground(Void... params) {
-            ap.doInBackground();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            ap.onStop();
-        }
-
-        @Override
-        protected void onProgressUpdate(double[]... values) {
-            super.onProgressUpdate(values);
+        protected void onProgressUpdate(double[]... toTransform) {
+            super.onProgressUpdate(toTransform);
             imageViewDisplaySpectrum.invalidate();
             textViewMeasuredValue.setText(imageViewDisplaySpectrum.msg);
         }
 
         @Override
-        protected void onCancelled(Void aVoid) {
-            super.onCancelled(aVoid);
-            ap.onStop();
+        public void doInBackgroundLoop(double[] toTransform) {
+            super.doInBackgroundLoop(toTransform);
+            imageViewDisplaySpectrum.plot(toTransform, getStatistics());
         }
-
-        @Override
-        protected void onCancelled() {
-            super.onCancelled();
-            ap.onStop();
-        }
-
-        public void backgroundThreadPlot(double[] toTransform) {
-            imageViewDisplaySpectrum.plot(toTransform, ap.getStatistics());
-            publishProgress(toTransform);
-        }
-
-
     }
 }
 

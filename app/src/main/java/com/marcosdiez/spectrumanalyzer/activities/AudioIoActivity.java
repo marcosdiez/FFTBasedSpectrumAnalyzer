@@ -11,8 +11,8 @@ import android.widget.TextView;
 
 import com.marcosdiez.spectrumanalyzer.AudioIoPlayer;
 import com.marcosdiez.spectrumanalyzer.AudioProcessor;
+import com.marcosdiez.spectrumanalyzer.CalculateStatistics;
 import com.marcosdiez.spectrumanalyzer.R;
-import com.marcosdiez.spectrumanalyzer.RecordAudioPlotter;
 import com.marcosdiez.spectrumanalyzer.Toaster;
 
 import java.util.concurrent.ExecutorService;
@@ -44,7 +44,7 @@ public class AudioIoActivity extends Activity {
         prepareSeeker(R.id.seek_time, "Max Time (Ms): ", 5000, 1000);
         prepareSeeker(R.id.seek_words, "Words: ", 10, 5);
         prepareSeeker(R.id.seek_filter, "Filter: ", 100, 3);
-        prepareSeeker(R.id.seek_iteration, "Iterations: ", 100, 20);
+        prepareSeeker(R.id.seek_iteration, "Iterations: ", CalculateStatistics.maxSamples, CalculateStatistics.initialNumSamples);
 
         outputGeneratingTextView = (TextView) findViewById(R.id.outputGeneratingTextView);
         outputCapturingTextView = (TextView) findViewById(R.id.outputCapturingTextView);
@@ -100,8 +100,6 @@ public class AudioIoActivity extends Activity {
         final TextView theValue = (TextView) mySeeker.findViewById(R.id.my_seeker_textview_value);
         SeekBar theSeekBar = (SeekBar) mySeeker.findViewById(R.id.my_seeker_seekbar);
 
-       
-
         theName.setText(title);
         theSeekBar.setMax(maxValue);
         theSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -111,6 +109,7 @@ public class AudioIoActivity extends Activity {
                 } else {
                     theValue.setText(progress + "");
                     player.setSeekerValue(final_id, progress); // guess which language does not have function pointers ?
+                    audioProcessorUi.setSeekerValue(final_id, progress);
                 }
             }
 
@@ -125,53 +124,12 @@ public class AudioIoActivity extends Activity {
         theSeekBar.setProgress(initialValue);
     }
 
-    private class AudioProcessorUi extends AsyncTask<Void, double[], Void> implements RecordAudioPlotter {
-
-        public synchronized void stop() {
-            ap.stop();
-        }
-
-        public synchronized boolean getStarted() {
-            return ap.getStarted();
-        }
-
-        AudioProcessor ap = new AudioProcessor(this);
-
+    private class AudioProcessorUi extends AudioProcessor {
         @Override
-        protected Void doInBackground(Void... params) {
-            ap.doInBackground();
-            return null;
+        protected void onProgressUpdate(double[]... toTransform) {
+            super.onProgressUpdate(toTransform);
+            outputCapturingTextView.setText(super.getStatistics().createMsg());
         }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            ap.onStop();
-        }
-
-        @Override
-        protected void onProgressUpdate(double[]... values) {
-            super.onProgressUpdate(values);
-            outputCapturingTextView.setText(ap.getStatistics().createMsg());
-        }
-
-        @Override
-        protected void onCancelled(Void aVoid) {
-            super.onCancelled(aVoid);
-            ap.onStop();
-        }
-
-        @Override
-        protected void onCancelled() {
-            super.onCancelled();
-            ap.onStop();
-        }
-
-        public void backgroundThreadPlot(double[] toTransform) {
-            publishProgress(toTransform);
-        }
-
-
     }
 
 }
