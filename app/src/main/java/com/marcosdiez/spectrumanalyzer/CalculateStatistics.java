@@ -7,8 +7,13 @@ import android.util.Log;
  */
 public class CalculateStatistics {
 
+    // X is a factor of frequency
+    // Y is the volume
+
+    public static final int maximumFrequency = 4000;
+
     public static final int maxSamples = 100;
-    public static final int initialNumSamples = 2;
+    public static final int initialNumSamples = 1;
 
     public static final int maxMinumumAudioVolumeWeConsider = 10;
     public static final int initialMinumumAudioVolumeWeConsider = 3;
@@ -113,16 +118,39 @@ public class CalculateStatistics {
     int lastConvertedIndex = 0;
     String msg = "";
 
+
+    public int normalizeIndex(int originalIndex) {
+        int delta = 500;
+
+        int step = delta / 2;
+
+        int returnValue = 0;
+
+
+        while (returnValue < maximumFrequency) {
+            if (originalIndex < step) {
+                return returnValue;
+            }
+            step += delta;
+            returnValue += delta;
+        }
+        return maximumFrequency;
+    }
+
+    double convertFactor = (double) maximumFrequency / (double) AudioProcessor.blockSize;
     public String createMsg() {
-        double convertFactor = 4000d / (double) AudioProcessor.blockSize;
         int convertedIndex = (int) (getLargestX() * convertFactor);
-        if (getLargestY() > .01) {
+        convertedIndex = normalizeIndex(convertedIndex);
+        if (getLargestY() < .5) {
+            convertedIndex = 0;
+        }
+//        if (getLargestY() > .01) {
             if (convertedIndex != lastConvertedIndex) {
                 lastConvertedIndex = convertedIndex;
                 msg = "Local: " + convertedIndex + " Hz " + getLargestY();
                 Log.d(TAG, msg);
             }
-        }
+//        }
         return msg;
     }
 }
