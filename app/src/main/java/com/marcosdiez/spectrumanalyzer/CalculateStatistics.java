@@ -27,11 +27,11 @@ public class CalculateStatistics {
     double largestY = 0;
 
 
-    public void setInitialMinumumAudioVolumeWeConsider(double minimumAudioVolumeWeConsider){
+    public void setInitialMinumumAudioVolumeWeConsider(double minimumAudioVolumeWeConsider) {
         this.minimumAudioVolumeWeConsider = minimumAudioVolumeWeConsider;
     }
 
-    public void setNumSamples(int numSamples){
+    public void setNumSamples(int numSamples) {
         this.numSamples = numSamples;
     }
 
@@ -46,14 +46,13 @@ public class CalculateStatistics {
     //boilerplate ends here
 
     public CalculateStatistics() {
-        lastX = new int[maxSamples +1 ];
-        lastY = new double[maxSamples +1 ];
+        lastX = new int[maxSamples + 1];
+        lastY = new double[maxSamples + 1];
         currentI = 0;
         for (int i = 0; i < maxSamples; i++) {
             lastX[i] = 0;
             lastY[i] = 0;
         }
-
         beforeIteration();
     }
 
@@ -67,16 +66,12 @@ public class CalculateStatistics {
         beforeIteration();
         for (int i = 0; i < toTransform.length; i++) {
             double toAnalyze = toTransform[i];
-            analyzeElement(i, toAnalyze);
+            if (toAnalyze > maxY) {
+                maxX = i;
+                maxY = toAnalyze;
+            }
         }
         afterIteration();
-    }
-
-    private void analyzeElement(int x, double y) {
-        if (y > maxY) {
-            maxX = x;
-            maxY = y;
-        }
     }
 
     private void afterIteration() {
@@ -115,13 +110,18 @@ public class CalculateStatistics {
     }
 
 
+    int lastConvertedIndex = 0;
     String msg = "";
+
     public String createMsg() {
         double convertFactor = 4000d / (double) AudioProcessor.blockSize;
         int convertedIndex = (int) (getLargestX() * convertFactor);
         if (getLargestY() > .01) {
-            msg = "Local: " + convertedIndex + " Hz " + getLargestY();
-            Log.d(TAG, msg);
+            if (convertedIndex != lastConvertedIndex) {
+                lastConvertedIndex = convertedIndex;
+                msg = "Local: " + convertedIndex + " Hz " + getLargestY();
+                Log.d(TAG, msg);
+            }
         }
         return msg;
     }
