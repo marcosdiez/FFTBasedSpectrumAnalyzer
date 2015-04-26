@@ -119,7 +119,7 @@ public class CalculateStatistics {
     String msg = "";
 
 
-    public int normalizeIndex(int originalIndex) {
+    public static int normalizeIndex(int originalIndex) {
         int delta = 500;
 
         int step = delta / 2;
