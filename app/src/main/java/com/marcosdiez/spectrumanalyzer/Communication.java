@@ -33,7 +33,7 @@ public class Communication {
                         String encodedString = i + "" + j + "" + k;
                         Character letter = alphabet.charAt(counter);
 
-                        System.out.println("Adding " + letter + " <--> " + encodedString);
+                        // System.out.println("Adding " + letter + " <--> " + encodedString);
 
                         letterToEncoded.put(letter, encodedString);
                         encodedToLetter.put(encodedString, letter);
