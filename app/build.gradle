@@ -20,6 +20,12 @@ android {
         }
     }
 
+    tasks.withType(Test) {
+        testLogging {
+            events 'passed'
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -27,7 +33,8 @@ android {
         }
     }
 
-    dependencies{
+    dependencies {
         testCompile 'junit:junit:4.12'
     }
+
 }
