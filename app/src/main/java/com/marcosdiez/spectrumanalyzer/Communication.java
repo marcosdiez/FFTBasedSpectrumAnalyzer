@@ -13,6 +13,10 @@ public class Communication {
     static HashMap<String, Character> encodedToLetter = null;
 
     public static void init() {
+        /*
+            we must map our letters to sequences of words (numbers)
+            this numbers can not ever repeat.
+         */
         if (letterToEncoded != null) {
             return;
         }
@@ -29,7 +33,7 @@ public class Communication {
                         String encodedString = i + "" + j + "" + k;
                         Character letter = alphabet.charAt(counter);
 
-                        // System.out.println("Adding " + letter + " <--> " + encodedString);
+                        System.out.println("Adding " + letter + " <--> " + encodedString);
 
                         letterToEncoded.put(letter, encodedString);
                         encodedToLetter.put(encodedString, letter);
