@@ -32,15 +32,16 @@ public class MainActivity extends Activity {
 
         GpsStuff.getMyGpsStuff().refreshLocation();
 
+        final SaveToDatabase std = new SaveToDatabase();
         getButton(R.id.buttonSensorDisable, new View.OnClickListener() {
             public void onClick(View v) {
-                new SaveToDatabase().insertSensorIsDisabled();
+                std.insertSensorIsDisabled();
             }
         });
 
         getButton(R.id.buttonSensorEnabled, new View.OnClickListener() {
             public void onClick(View v) {
-                new SaveToDatabase().insertSensorIsEnabled();
+                std.insertSensorIsEnabled();
             }
         });
 

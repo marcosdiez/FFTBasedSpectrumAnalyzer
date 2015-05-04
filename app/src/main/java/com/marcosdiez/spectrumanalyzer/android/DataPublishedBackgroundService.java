@@ -34,7 +34,7 @@ public class DataPublishedBackgroundService extends Service {
 
         void sleeper(int seconds) {
             try {
-                Thread.sleep(seconds * 1000 );
+                Thread.sleep(seconds * 1000);
             } catch (InterruptedException e) {
             }
         }
@@ -42,6 +42,7 @@ public class DataPublishedBackgroundService extends Service {
         @Override
         public void handleMessage(Message msg) {
             SendToServer serverSender = new SendToServer();
+            Globals.there_is_data_to_be_sent = true;
             while (true) {
                 serverSender.publishData();
                 sleeper(Settings.seconds_to_sleep_between_publish_attempt);

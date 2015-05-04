@@ -12,7 +12,7 @@ public class Settings {
     public static int server_port = 8080;
     public static String server_path = "ScadaBR/httpds";
 
-    public static int seconds_to_sleep_between_publish_attempt = 10;
+    public static int seconds_to_sleep_between_publish_attempt = 5;
 
     public static String server_header = server_protocol + "://" + server + ":" + server_port + "/" + server_path;
 }

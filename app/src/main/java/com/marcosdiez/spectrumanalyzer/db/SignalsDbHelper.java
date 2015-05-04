@@ -31,15 +31,15 @@ public class SignalsDbHelper extends SQLiteOpenHelper {
 
             "CREATE TABLE '" + SIGNALS_DATA_TABLE_NAME + "' " +
                     "(" +
-                    " '" + SIGNALS_ROW_ID + "' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL " +
+                    "  '" + SIGNALS_ROW_ID + "' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL " +
                     ", '" + SIGNALS_ROW_EVENT_NAME + "' TEXT NOT NULL" +
                     ", '" + SIGNALS_ROW_EVENT_VALUE + "' TEXT NOT NULL" +
                     ", '" + SIGNALS_ROW_TIMESTAMP_EVENT_RECEIVED + "' INTEGER NOT NULL default '0'" +
                     ", '" + SIGNALS_ROW_LAT + "' REAL NOT NULL default '0'" +
                     ", '" + SIGNALS_ROW_LNG + "' REAL NOT NULL default '0'" +
                     ", '" + SIGNALS_ROW_BATTERY_LEVEL + "' REAL NOT NULL default '0'" +
-                    ", '" + SIGNALS_ROW_IS_CHARGING + "' BOOLEAN NOT NULL default 0 CHECK (" + SIGNALS_ROW_IS_CHARGING + "  IN (0,1) )" +
-                    ", '" + SIGNALS_ROW_SENT_TO_SERVER + "' BOOLEAN NOT NULL default 0 CHECK (" + SIGNALS_ROW_SENT_TO_SERVER + "  IN (0,1) )" +
+                    ", '" + SIGNALS_ROW_IS_CHARGING + "' BOOLEAN NOT NULL default '0'" + //  CHECK (" + SIGNALS_ROW_IS_CHARGING + "  IN (0,1) )" +
+                    ", '" + SIGNALS_ROW_SENT_TO_SERVER + "' BOOLEAN NOT NULL default '0'" + //   CHECK (" + SIGNALS_ROW_SENT_TO_SERVER + "  IN (0,1) )" +
 //                    "',timestamp_sent_to_server' INTEGER NOT NULL default '0'" +
                     ");";
 

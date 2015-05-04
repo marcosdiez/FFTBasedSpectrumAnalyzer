@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.marcosdiez.spectrumanalyzer.Globals;
 import com.marcosdiez.spectrumanalyzer.android.PowerInformation;
 import com.marcosdiez.spectrumanalyzer.db.DatabaseManager;
 import com.marcosdiez.spectrumanalyzer.db.SignalsDbHelper;
@@ -17,12 +16,11 @@ public class SaveToDatabase {
     private static final String TAG = "XB-SignalParser";
 
     public void insertSensorIsEnabled() {
-        insertEvent("porta", 0);
-
+        insertEvent("porta", 1);
     }
 
     public void insertSensorIsDisabled() {
-        insertEvent("porta", 1);
+        insertEvent("porta", 0);
     }
 
     private void insertEvent(String theEventName, int eventValue) {
@@ -63,7 +61,6 @@ public class SaveToDatabase {
                 values
         );
         DatabaseManager.getInstance().closeDatabase();
-        Globals.there_is_data_to_be_sent = true;
     }
 
 }

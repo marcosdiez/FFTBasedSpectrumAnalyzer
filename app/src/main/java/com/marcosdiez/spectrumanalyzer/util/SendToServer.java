@@ -10,10 +10,6 @@ import com.marcosdiez.spectrumanalyzer.Settings;
 import com.marcosdiez.spectrumanalyzer.db.DatabaseManager;
 import com.marcosdiez.spectrumanalyzer.db.SignalsDbHelper;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
-
 
 /**
  * Created by Marcos on 17-Jan-15.
@@ -43,35 +39,26 @@ public class SendToServer {
 
     private void sendCursorDataToServer(SQLiteDatabase db, Cursor queryCursor, int numRows) {
         queryCursor.moveToFirst();
+        int sentCounter=0;
         while (queryCursor.isAfterLast() == false) {
             if (Globals.offline) {
                 Log.d(TAG, "Aborting sending " + numRows + "rows to the server.");
                 return;
             }
-            publish(queryCursor);
-            updateDb(db, queryCursor);
+            if(publish(queryCursor)) {
+                sentCounter++;
+                updateDb(db, queryCursor);
+            }
             queryCursor.moveToNext();
         }
-        Log.d(TAG, "The " + numRows + " were sucessfully sent to the server.");
+        Log.d(TAG, "I sent " + sentCounter + " of " + numRows + " to the server.");
     }
 
-    private void publish(Cursor queryCursor) {
-        String output = generateServerUrl(queryCursor);
-        Log.d(TAG, "ServerURL: [" + output + "]");
-    }
-
-    private String getAndroidId() {
-        return android.provider.Settings.Secure.getString(Globals.getContext().getContentResolver(),
-                android.provider.Settings.Secure.ANDROID_ID);
-    }
-
-    public static String epochToDate(long timestamp) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-        Date theDate = new Date(timestamp*1000);
-        String dateString = dateFormat.format(theDate);
-
-        return dateString;
+    private boolean publish(Cursor queryCursor) {
+        String url = generateServerUrl(queryCursor);
+        boolean result = Misc.makeHttpRequest(url);
+        Log.d(TAG, "ServerURL: " + result + " [" + url + "]");
+        return result;
     }
 
     private String generateServerUrl(Cursor queryCursor) {
@@ -80,13 +67,13 @@ public class SendToServer {
         output.append(Settings.server_header);
 
         // event_name = event_value
-        output.append("?__device=" + getAndroidId());
-        output.append("&" + queryCursor.getString(0) + "=" + queryCursor.getString(1));
-        output.append("&__time=" + epochToDate(queryCursor.getLong(2)));
-        output.append("&lat=" + queryCursor.getDouble(3));
-        output.append("&long=" + queryCursor.getDouble(4));
-        output.append("&batt=" + queryCursor.getInt(5));
-        output.append("&charging=" + queryCursor.getInt(6));
+        output.append("?__device=" + Misc.getAndroidId());
+        output.append("&" + queryCursor.getString(1) + "=" + queryCursor.getString(2));
+        output.append("&__time=" + Misc.epochToDate(queryCursor.getLong(3)));
+        output.append("&lat=" + queryCursor.getDouble(4));
+        output.append("&long=" + queryCursor.getDouble(5));
+        output.append("&batt=" + queryCursor.getInt(6));
+        output.append("&charging=" + queryCursor.getInt(7));
 
         String outputUrl = output.toString();
         return outputUrl;
@@ -95,6 +82,7 @@ public class SendToServer {
     private Cursor queryForNonPublishedItems(SQLiteDatabase db) {
 
         String[] db_FROM = {
+                SignalsDbHelper.SIGNALS_ROW_ID, // needed to later mark as viewed
                 SignalsDbHelper.SIGNALS_ROW_EVENT_NAME,
                 SignalsDbHelper.SIGNALS_ROW_EVENT_VALUE,
                 SignalsDbHelper.SIGNALS_ROW_TIMESTAMP_EVENT_RECEIVED,
