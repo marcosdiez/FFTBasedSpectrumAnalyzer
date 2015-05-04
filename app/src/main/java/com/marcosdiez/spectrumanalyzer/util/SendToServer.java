@@ -11,6 +11,8 @@ import com.marcosdiez.spectrumanalyzer.db.DatabaseManager;
 import com.marcosdiez.spectrumanalyzer.db.SignalsDbHelper;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 
 
 /**
@@ -63,9 +65,12 @@ public class SendToServer {
                 android.provider.Settings.Secure.ANDROID_ID);
     }
 
-    private String formatTimeStamp(int timestamp) {
+    public static String epochToDate(long timestamp) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-        String dateString = dateFormat.format(timestamp);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Date theDate = new Date(timestamp*1000);
+        String dateString = dateFormat.format(theDate);
+
         return dateString;
     }
 
@@ -77,7 +82,7 @@ public class SendToServer {
         // event_name = event_value
         output.append("?__device=" + getAndroidId());
         output.append("&" + queryCursor.getString(0) + "=" + queryCursor.getString(1));
-        output.append("&__time=" + formatTimeStamp(queryCursor.getInt(2)));
+        output.append("&__time=" + epochToDate(queryCursor.getLong(2)));
         output.append("&lat=" + queryCursor.getDouble(3));
         output.append("&long=" + queryCursor.getDouble(4));
         output.append("&batt=" + queryCursor.getInt(5));

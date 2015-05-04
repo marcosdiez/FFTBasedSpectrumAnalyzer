@@ -16,11 +16,6 @@ import com.marcosdiez.spectrumanalyzer.db.SignalsDbHelper;
 public class SaveToDatabase {
     private static final String TAG = "XB-SignalParser";
 
-//    public void parse(String msg) {
-//        Log.d(TAG, "SingalParse.parse [" + msg + "]: TODO");
-//    }
-
-
     public void insertSensorIsEnabled() {
         insertEvent("porta", 0);
 
