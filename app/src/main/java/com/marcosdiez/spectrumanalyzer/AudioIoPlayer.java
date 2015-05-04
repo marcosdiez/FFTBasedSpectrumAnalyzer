@@ -5,9 +5,8 @@ import android.util.Log;
 /**
  * Created by Marcos on 29-Mar-15.
  */
-public class AudioIoPlayer implements Runnable {
+public class AudioIoPlayer implements Runnable, Communication.Beeper {
     final static String TAG = "AudioIoPlayer";
-    // private static final ExecutorService threadPool = Executors.newCachedThreadPool();
     int minFrequencyHz;
     int maxFrequencyHz;
     int timeMs;
@@ -16,7 +15,7 @@ public class AudioIoPlayer implements Runnable {
 
     public void dumpState() {
         Log.d(TAG, "Freq(Hz): " + minFrequencyHz + "/" + maxFrequencyHz +
-                " time(Ms): " + timeMs + " words: " + words );
+                " time(Ms): " + timeMs + " words: " + words);
     }
 
     public void run() {
@@ -25,13 +24,33 @@ public class AudioIoPlayer implements Runnable {
 
     public void send() {
         dumpState();
+
+        Communication.player("hello;", this);
+//        int delta = Math.abs(maxFrequencyHz - minFrequencyHz);
+//        int frequencyIncrement = delta / words;
+//        int frequency = minFrequencyHz;
+//        for (int i = 0; i < words; i++) {
+//            playSound(frequency, timeMs);
+//            frequency += frequencyIncrement;
+//        }
+    }
+
+    public void beepChar(char c) {
         int delta = Math.abs(maxFrequencyHz - minFrequencyHz);
         int frequencyIncrement = delta / words;
-        int frequency = minFrequencyHz;
-        for (int i = 0; i < words; i++) {
-            playSound(frequency, timeMs);
-            frequency += frequencyIncrement;
-        }
+
+        int beep_value = Integer.parseInt(""+c);
+
+        int frequency = minFrequencyHz + frequencyIncrement * beep_value;
+        playSound(frequency, timeMs);
+    }
+
+    public void beepWordSeparator() {
+        playSound(100, timeMs);
+//        try {
+//            Thread.sleep(timeMs);
+//        } catch (InterruptedException e) {
+//        }
     }
 
     void playSound(int frequency, int playTimeInMilliseconds) {
@@ -103,4 +122,6 @@ public class AudioIoPlayer implements Runnable {
                 break;
         }
     }
+
+
 }

@@ -15,7 +15,50 @@ public class Communication {
     public static void init() {
         /*
             we must map our letters to sequences of words (numbers)
-            this numbers can not ever repeat.
+            this numbers can not ever repeat or else our detection algorithm breaks
+            (because java is not real time.
+
+            so for now we have this:
+
+            Adding ; <--> 010
+            Adding   <--> 012
+            Adding 1 <--> 013
+            Adding 2 <--> 014
+            Adding 3 <--> 020
+            Adding 4 <--> 021
+            Adding 5 <--> 023
+            Adding 6 <--> 024
+            Adding 7 <--> 030
+            Adding 8 <--> 031
+            Adding 9 <--> 032
+            Adding . <--> 034
+            Adding a <--> 040
+            Adding b <--> 041
+            Adding c <--> 042
+            Adding d <--> 043
+            Adding e <--> 101
+            Adding f <--> 102
+            Adding g <--> 103
+            Adding h <--> 104
+            Adding i <--> 120
+            Adding j <--> 121
+            Adding k <--> 123
+            Adding l <--> 124
+            Adding m <--> 130
+            Adding n <--> 131
+            Adding o <--> 132
+            Adding p <--> 134
+            Adding q <--> 140
+            Adding r <--> 141
+            Adding s <--> 142
+            Adding t <--> 143
+            Adding u <--> 201
+            Adding v <--> 202
+            Adding w <--> 203
+            Adding y <--> 204
+            Adding x <--> 210
+            Adding z <--> 212
+
          */
         if (letterToEncoded != null) {
             return;
@@ -33,7 +76,7 @@ public class Communication {
                         String encodedString = i + "" + j + "" + k;
                         Character letter = alphabet.charAt(counter);
 
-                        // System.out.println("Adding " + letter + " <--> " + encodedString);
+                        System.out.println("Adding " + letter + " <--> " + encodedString);
 
                         letterToEncoded.put(letter, encodedString);
                         encodedToLetter.put(encodedString, letter);

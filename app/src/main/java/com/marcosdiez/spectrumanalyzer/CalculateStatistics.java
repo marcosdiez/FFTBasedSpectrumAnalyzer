@@ -2,6 +2,9 @@ package com.marcosdiez.spectrumanalyzer;
 
 import android.util.Log;
 
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+
 /**
  * Created by Marcos on 29-Mar-15.
  */
@@ -16,7 +19,7 @@ public class CalculateStatistics {
     public static final int initialNumSamples = 1;
 
     public static final int maxMinumumAudioVolumeWeConsider = 10;
-    public static final int initialMinumumAudioVolumeWeConsider = 3;
+    public static final int initialMinumumAudioVolumeWeConsider = 2;
 
     int numSamples = initialNumSamples;
     double minimumAudioVolumeWeConsider = initialMinumumAudioVolumeWeConsider;
@@ -31,6 +34,7 @@ public class CalculateStatistics {
     double largestX = 0;
     double largestY = 0;
 
+    BlockingQueue q = new ArrayBlockingQueue(100);
 
     public void setInitialMinumumAudioVolumeWeConsider(double minimumAudioVolumeWeConsider) {
         this.minimumAudioVolumeWeConsider = minimumAudioVolumeWeConsider;
@@ -112,6 +116,27 @@ public class CalculateStatistics {
 
         largestX = localLargestX / (double) n;
         largestY = localLargestY / (double) n;
+
+        if(largestY > minimumAudioVolumeWeConsider){
+            int convertedIndex = (int) (getLargestX() * convertFactor);
+            convertedIndex = normalizeIndex(convertedIndex);
+            if(convertedIndex != lastConvertedIndex){
+                lastConvertedIndex = convertedIndex;
+                msg = "mLocal: " + convertedIndex + " Hz " + getLargestY() + " z:" + zeroRepeating;
+                Log.d(TAG, msg);
+            }
+        }
+
+
+
+//        if(convertedIndex != lastConvertedIndex &&  largestY > minimumAudioVolumeWeConsider){
+//            int convertedIndex = (int) (getLargestX() * convertFactor);
+//            convertedIndex = normalizeIndex(convertedIndex);
+//            lastLargestX = largestX;
+//            msg = "Local: " + convertedIndex + " Hz " + getLargestY() + " z:" + zeroRepeating;
+//            Log.d(TAG, msg);
+//            // q.add(convertedIndex);
+//        }
     }
 
 
@@ -126,7 +151,6 @@ public class CalculateStatistics {
 
         int returnValue = 0;
 
-
         while (returnValue < maximumFrequency) {
             if (originalIndex < step) {
                 return returnValue;
@@ -138,19 +162,30 @@ public class CalculateStatistics {
     }
 
     double convertFactor = (double) maximumFrequency / (double) AudioProcessor.blockSize;
+
+    int zeroRepeating = 0;
+
     public String createMsg() {
-        int convertedIndex = (int) (getLargestX() * convertFactor);
-        convertedIndex = normalizeIndex(convertedIndex);
-        if (getLargestY() < .5) {
-            convertedIndex = 0;
-        }
-//        if (getLargestY() > .01) {
-            if (convertedIndex != lastConvertedIndex) {
-                lastConvertedIndex = convertedIndex;
-                msg = "Local: " + convertedIndex + " Hz " + getLargestY();
-                Log.d(TAG, msg);
-            }
+        return "";
+        //int convertedIndex = (int) q.take();
+
+
+
+//        if (getLargestY() < .5) {
+//            zeroRepeating++;
+//            return msg;
 //        }
-        return msg;
+//
+//        int convertedIndex = (int) (getLargestX() * convertFactor);
+//        convertedIndex = normalizeIndex(convertedIndex);
+//
+//        if (convertedIndex != lastConvertedIndex) {
+//            lastConvertedIndex = convertedIndex;
+//            msg = "Local: " + convertedIndex + " Hz " + getLargestY() + " z:" + zeroRepeating;
+//            Log.d(TAG, msg);
+//            zeroRepeating = 0;
+//        }
+//
+//        return msg;
     }
 }

@@ -1,8 +1,1 @@
-local.properties
-import-summary.txt
-app/build
-.gradle
-.idea/workspace.xml
-.idea/libraries
-.DS_Store
-build
+*.iml
