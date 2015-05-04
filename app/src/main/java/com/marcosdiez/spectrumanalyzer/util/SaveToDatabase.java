@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.marcosdiez.spectrumanalyzer.Globals;
 import com.marcosdiez.spectrumanalyzer.db.DatabaseManager;
 import com.marcosdiez.spectrumanalyzer.db.SignalsDbHelper;
 
@@ -11,14 +12,28 @@ import com.marcosdiez.spectrumanalyzer.db.SignalsDbHelper;
 /**
  * Created by Marcos on 17-Jan-15.
  */
-public class SignalParser {
+public class SaveToDatabase {
     private static final String TAG = "XB-SignalParser";
 
-    public void parse(String msg) {
-        Log.d(TAG, "SingalParse.parse [" + msg + "]: TODO");
+//    public void parse(String msg) {
+//        Log.d(TAG, "SingalParse.parse [" + msg + "]: TODO");
+//    }
+
+
+    public void insertSensorIsEnabled(){
+        insertEvent("porta", 0);
+
     }
 
-    public void insertEvent(String theEventName, String eventValue) {
+    public void insertSensorIsDisabled(){
+        insertEvent("porta", 1);
+    }
+
+    private void insertEvent(String theEventName, int eventValue){
+        insertEvent(theEventName, eventValue + "");
+    }
+
+    private void insertEvent(String theEventName, String eventValue) {
         long unixTime = System.currentTimeMillis() / 1000L;
         double lat = GpsStuff.getMyGpsStuff().lat;
         double lng = GpsStuff.getMyGpsStuff().lng;
@@ -32,10 +47,11 @@ public class SignalParser {
         values.put(SignalsDbHelper.SIGNALS_ROW_SENT_TO_SERVER, false);
 
         Log.d(TAG, "event_name=[" + theEventName + "] event_value=[" + eventValue + "] lat=[" + lat + "] lng=[" + lng + "]");
-        saveEvent(values);
+        saveEventInTheDatabase(values);
+        Globals.there_is_data_to_be_sent=true;
     }
 
-    private void saveEvent(ContentValues values) {
+    private void saveEventInTheDatabase(ContentValues values) {
         Log.d(TAG, "saveEvent");
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         db.insert(SignalsDbHelper.SIGNALS_DATA_TABLE_NAME,

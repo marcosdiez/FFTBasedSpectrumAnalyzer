@@ -23,8 +23,6 @@ public class NetworkStateReceiver extends BroadcastReceiver {
         } else {
             Log.d(TAG, "We are connected again. Let's send data to the server.");
             // do something()
-
-
         }
     }
 }

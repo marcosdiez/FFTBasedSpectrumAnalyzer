@@ -56,19 +56,6 @@ public class SendToServer {
         Log.d(TAG, "ServerURL: [" + output + "]");
     }
 
-    private void updateDb(SQLiteDatabase db, Cursor queryCursor) {
-        int row_id = queryCursor.getInt(0);
-
-        ContentValues values = new ContentValues();
-        values.put(SignalsDbHelper.SIGNALS_ROW_SENT_TO_SERVER, true);
-
-        // updating row
-        String where = SignalsDbHelper.SIGNALS_ROW_ID + "=?";
-        String[] whereValues = new String[]{String.valueOf(row_id)};
-
-        db.update(SignalsDbHelper.SIGNALS_DATA_TABLE_NAME, values, where, whereValues);
-    }
-
     private String generateServerUrl(Cursor queryCursor) {
         StringBuilder output = new StringBuilder(500);
 
@@ -81,6 +68,19 @@ public class SendToServer {
         output.append("&lng=" + queryCursor.getDouble(5));
         String outputUrl = output.toString();
         return outputUrl;
+    }
+
+    private void updateDb(SQLiteDatabase db, Cursor queryCursor) {
+        int row_id = queryCursor.getInt(0);
+
+        ContentValues values = new ContentValues();
+        values.put(SignalsDbHelper.SIGNALS_ROW_SENT_TO_SERVER, true);
+
+        // updating row
+        String where = SignalsDbHelper.SIGNALS_ROW_ID + "=?";
+        String[] whereValues = new String[]{String.valueOf(row_id)};
+
+        db.update(SignalsDbHelper.SIGNALS_DATA_TABLE_NAME, values, where, whereValues);
     }
 
     private Cursor queryForNonPublishedItems(SQLiteDatabase db) {

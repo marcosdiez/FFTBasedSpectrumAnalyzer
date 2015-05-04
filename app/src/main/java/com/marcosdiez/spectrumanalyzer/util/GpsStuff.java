@@ -187,7 +187,6 @@ public class GpsStuff implements LocationListener {
         return result[0];
     }
 
-    @Override
     public void onLocationChanged(Location loc) {
         if (useGps) {
             lat = loc.getLatitude();
@@ -196,15 +195,12 @@ public class GpsStuff implements LocationListener {
         }
     }
 
-    @Override
     public void onProviderDisabled(String provider) {
     }
 
-    @Override
     public void onProviderEnabled(String provider) {
     }
 
-    @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
     }
 }

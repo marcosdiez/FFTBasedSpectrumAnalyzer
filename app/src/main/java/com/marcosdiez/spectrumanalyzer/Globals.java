@@ -13,9 +13,7 @@ public class Globals {
     public static boolean offline = false;
     public static boolean there_is_data_to_be_sent = false;
 
-
     private static Context context = null;
-
 
     public static Context getContext() {
         if (context == null) {
