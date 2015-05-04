@@ -10,6 +10,8 @@ import com.marcosdiez.spectrumanalyzer.Settings;
 import com.marcosdiez.spectrumanalyzer.db.DatabaseManager;
 import com.marcosdiez.spectrumanalyzer.db.SignalsDbHelper;
 
+import java.text.SimpleDateFormat;
+
 
 /**
  * Created by Marcos on 17-Jan-15.
@@ -18,7 +20,7 @@ public class SendToServer {
     private static final String TAG = "XB-SendToServer";
 
     public synchronized void publishData() {
-        if(!Globals.there_is_data_to_be_sent){
+        if (!Globals.there_is_data_to_be_sent) {
             Log.d(TAG, "There is no data to be sent... bailing.");
             return;
         }
@@ -56,18 +58,54 @@ public class SendToServer {
         Log.d(TAG, "ServerURL: [" + output + "]");
     }
 
+    private String getAndroidId() {
+        return android.provider.Settings.Secure.getString(Globals.getContext().getContentResolver(),
+                android.provider.Settings.Secure.ANDROID_ID);
+    }
+
+    private String formatTimeStamp(int timestamp) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        String dateString = dateFormat.format(timestamp);
+        return dateString;
+    }
+
     private String generateServerUrl(Cursor queryCursor) {
         StringBuilder output = new StringBuilder(500);
 
         output.append(Settings.server_header);
-        output.append("?id=" + queryCursor.getInt(0));
-        output.append("&event_name=" + queryCursor.getString(1));
-        output.append("&event_value=" + queryCursor.getString(2));
-        output.append("&timestamp_event=" + queryCursor.getInt(3));
-        output.append("&lat=" + queryCursor.getDouble(4));
-        output.append("&lng=" + queryCursor.getDouble(5));
+
+        // event_name = event_value
+        output.append("?__device=" + getAndroidId());
+        output.append("&" + queryCursor.getString(0) + "=" + queryCursor.getString(1));
+        output.append("&__time=" + formatTimeStamp(queryCursor.getInt(2)));
+        output.append("&lat=" + queryCursor.getDouble(3));
+        output.append("&long=" + queryCursor.getDouble(4));
+        output.append("&batt=" + queryCursor.getInt(5));
+        output.append("&charging=" + queryCursor.getInt(6));
+
         String outputUrl = output.toString();
         return outputUrl;
+    }
+
+    private Cursor queryForNonPublishedItems(SQLiteDatabase db) {
+
+        String[] db_FROM = {
+                SignalsDbHelper.SIGNALS_ROW_EVENT_NAME,
+                SignalsDbHelper.SIGNALS_ROW_EVENT_VALUE,
+                SignalsDbHelper.SIGNALS_ROW_TIMESTAMP_EVENT_RECEIVED,
+                SignalsDbHelper.SIGNALS_ROW_LAT,
+                SignalsDbHelper.SIGNALS_ROW_LNG,
+                SignalsDbHelper.SIGNALS_ROW_BATTERY_LEVEL,
+                SignalsDbHelper.SIGNALS_ROW_IS_CHARGING
+        };
+
+        String where = "sent_to_server=?";
+        String[] whereArgs = new String[]{"0"};
+
+        String sortOrder = "id ASC";
+
+        Cursor queryCursor = db.query(SignalsDbHelper.SIGNALS_DATA_TABLE_NAME, db_FROM, where, whereArgs, null, null, sortOrder);
+        return queryCursor;
     }
 
     private void updateDb(SQLiteDatabase db, Cursor queryCursor) {
@@ -81,17 +119,5 @@ public class SendToServer {
         String[] whereValues = new String[]{String.valueOf(row_id)};
 
         db.update(SignalsDbHelper.SIGNALS_DATA_TABLE_NAME, values, where, whereValues);
-    }
-
-    private Cursor queryForNonPublishedItems(SQLiteDatabase db) {
-        String[] db_FROM = {"id", "event_name", "event_value", "timestamp_event_received", "lat", "lng"};
-
-        String where = "sent_to_server=?";
-        String[] whereArgs = new String[]{"0"};
-
-        String sortOrder = "id ASC";
-
-        Cursor queryCursor = db.query(SignalsDbHelper.SIGNALS_DATA_TABLE_NAME, db_FROM, where, whereArgs, null, null, sortOrder);
-        return queryCursor;
     }
 }

@@ -19,7 +19,11 @@ public class SignalsDbHelper extends SQLiteOpenHelper {
     public static final String SIGNALS_ROW_EVENT_VALUE = "event_value";
     public static final String SIGNALS_ROW_TIMESTAMP_EVENT_RECEIVED = "timestamp_event_received";
     public static final String SIGNALS_ROW_LAT = "lat";
-    public static final String SIGNALS_ROW_LNG = "lng";
+    public static final String SIGNALS_ROW_LNG = "long";
+    public static final String SIGNALS_ROW_BATTERY_LEVEL = "batt";
+    public static final String SIGNALS_ROW_IS_CHARGING = "charging";
+
+
     public static final String SIGNALS_ROW_SENT_TO_SERVER = "sent_to_server";
 
 
@@ -33,9 +37,12 @@ public class SignalsDbHelper extends SQLiteOpenHelper {
                     ", '" + SIGNALS_ROW_TIMESTAMP_EVENT_RECEIVED + "' INTEGER NOT NULL default '0'" +
                     ", '" + SIGNALS_ROW_LAT + "' REAL NOT NULL default '0'" +
                     ", '" + SIGNALS_ROW_LNG + "' REAL NOT NULL default '0'" +
-                    ", '" + SIGNALS_ROW_SENT_TO_SERVER + "' BOOLEAN NOT NULL default 0 CHECK (sent_to_server  IN (0,1) )" +
+                    ", '" + SIGNALS_ROW_BATTERY_LEVEL + "' REAL NOT NULL default '0'" +
+                    ", '" + SIGNALS_ROW_IS_CHARGING + "' BOOLEAN NOT NULL default 0 CHECK (" + SIGNALS_ROW_IS_CHARGING + "  IN (0,1) )" +
+                    ", '" + SIGNALS_ROW_SENT_TO_SERVER + "' BOOLEAN NOT NULL default 0 CHECK (" + SIGNALS_ROW_SENT_TO_SERVER + "  IN (0,1) )" +
 //                    "',timestamp_sent_to_server' INTEGER NOT NULL default '0'" +
                     ");";
+
     private static final String TAG = "XB-SignalsDbHelper";
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "signals.sqlite3";

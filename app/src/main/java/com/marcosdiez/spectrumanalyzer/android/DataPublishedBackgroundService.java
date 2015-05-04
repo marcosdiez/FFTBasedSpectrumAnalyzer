@@ -34,7 +34,7 @@ public class DataPublishedBackgroundService extends Service {
 
         void sleeper(int seconds) {
             try {
-                Thread.sleep(seconds * 1000 * 1000);
+                Thread.sleep(seconds * 1000 );
             } catch (InterruptedException e) {
             }
         }
