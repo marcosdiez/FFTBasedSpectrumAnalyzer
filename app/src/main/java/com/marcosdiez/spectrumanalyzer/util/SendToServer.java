@@ -39,13 +39,13 @@ public class SendToServer {
 
     private void sendCursorDataToServer(SQLiteDatabase db, Cursor queryCursor, int numRows) {
         queryCursor.moveToFirst();
-        int sentCounter=0;
+        int sentCounter = 0;
         while (queryCursor.isAfterLast() == false) {
             if (Globals.offline) {
                 Log.d(TAG, "Aborting sending " + numRows + "rows to the server.");
                 return;
             }
-            if(publish(queryCursor)) {
+            if (publish(queryCursor)) {
                 sentCounter++;
                 updateDb(db, queryCursor);
             }
@@ -56,9 +56,14 @@ public class SendToServer {
 
     private boolean publish(Cursor queryCursor) {
         String url = generateServerUrl(queryCursor);
-        boolean result = Misc.makeHttpRequest(url);
-        Log.d(TAG, "ServerURL: " + result + " [" + url + "]");
-        return result;
+        if (Settings.working_for_real) {
+            boolean result = Misc.makeHttpRequest(url);
+            Log.d(TAG, "ServerURL: " + result + " [" + url + "]");
+            return result;
+        } else {
+            Log.d(TAG, "ServerURL: WE_ARE_OFFLINE [" + url + "]");
+            return true;
+        }
     }
 
     private String generateServerUrl(Cursor queryCursor) {

@@ -1,7 +1,6 @@
 package com.marcosdiez.spectrumanalyzer.activities;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -9,7 +8,6 @@ import android.widget.Button;
 
 import com.marcosdiez.spectrumanalyzer.Globals;
 import com.marcosdiez.spectrumanalyzer.R;
-import com.marcosdiez.spectrumanalyzer.android.DataPublishedBackgroundService;
 import com.marcosdiez.spectrumanalyzer.util.GpsStuff;
 import com.marcosdiez.spectrumanalyzer.util.SaveToDatabase;
 
@@ -62,11 +60,11 @@ public class MainActivity extends Activity {
 //
 //        SendToServer xx = new SendToServer();
 //        xx.publishData();
-        Log.d(TAG, "now the background service");
+//        Log.d(TAG, "now the background service");
+////
+//        Intent intent = new Intent(this, DataPublishedBackgroundService.class);
+//        startService(intent);
 //
-        Intent intent = new Intent(this, DataPublishedBackgroundService.class);
-        startService(intent);
-
         Log.d(TAG, "Done");
     }
 

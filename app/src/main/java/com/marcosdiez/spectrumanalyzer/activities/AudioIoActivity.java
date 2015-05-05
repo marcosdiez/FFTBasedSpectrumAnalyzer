@@ -41,7 +41,7 @@ public class AudioIoActivity extends Activity {
         prepareSeeker(R.id.seek_min_frequency, "Min Freq. (Hz): ", 4000, 500);
         prepareSeeker(R.id.seek_max_frequency, "Max Freq. (Hz): ", 4000, 3000);
         prepareSeeker(R.id.seek_time, "Max Time (Ms): ", 5000, 1000);
-        prepareSeeker(R.id.seek_words, "Words: ", 10, 5);
+        prepareSeeker(R.id.seek_words, "Words: ", 10, 2);
         prepareSeeker(R.id.seek_filter, "Audio Filter: ", CalculateStatistics.maxMinumumAudioVolumeWeConsider, CalculateStatistics.initialMinumumAudioVolumeWeConsider);
         prepareSeeker(R.id.seek_iteration, "Iterations: ", CalculateStatistics.maxSamples, CalculateStatistics.initialNumSamples);
 
@@ -78,6 +78,7 @@ public class AudioIoActivity extends Activity {
 
     private void analise() {
         audioProcessorUi.execute();
+        Toaster.toast("Audio Processor running in Background");
     }
 
     private Button getButton(int id, View.OnClickListener c) {

@@ -22,7 +22,6 @@ public class DataPublishedBackgroundService extends Service {
     public DataPublishedBackgroundService() {
     }
 
-    //    public class HelloService extends Service {
     private Looper mServiceLooper;
     private ServiceHandler mServiceHandler;
 
