@@ -14,34 +14,15 @@ public class CalculateStatistics {
 
     static final String TAG = "XB-CalculateStatistics";
 
-    int maxX;
-    double maxY;
-    int currentI = 0;
-    int[] lastX;
-    double[] lastY;
-    double largestX = 0;
-    double largestY = 0;
+    int maxX = 0;
+    double maxY = 0;
 
     // BlockingQueue q = new ArrayBlockingQueue(100);
 
-    public double getLargestX() {
-        return largestX;
-    }
-
-    public double getLargestY() {
-        return largestY;
-    }
 
     //boilerplate ends here
 
     public CalculateStatistics() {
-        lastX = new int[Globals.num_samples_max + 1];
-        lastY = new double[Globals.num_samples_max + 1];
-        currentI = 0;
-        for (int i = 0; i < Globals.num_samples_max; i++) {
-            lastX[i] = 0;
-            lastY[i] = 0;
-        }
         beforeIteration();
     }
 
@@ -65,49 +46,15 @@ public class CalculateStatistics {
 
     private void afterIteration() {
         if (maxY > Globals.minumum_audio_volume_to_be_considered) {
-            lastY[currentI] = maxY;
-            lastX[currentI] = maxX;
-        } else {
-            lastY[currentI] = 0;
-            lastX[currentI] = 0;
-        }
-        currentI = (currentI + 1) % Globals.num_samples;
-        calculate();
-    }
-
-    private void calculate() {
-        double localLargestY = 0;
-        int localLargestX = 0;
-
-        int n = 0;
-
-        for (int i = 0; i < Globals.num_samples; i++) {
-            double thisY = lastY[i];
-            double thisX = lastX[i];
-
-            if (thisY > 0) {
-                n++;
-                localLargestX += thisX;
-                localLargestY += thisY;
-            }
-
-        }
-
-
-        largestX = localLargestX / (double) n;
-        largestY = localLargestY / (double) n;
-
-        if (largestY > Globals.minumum_audio_volume_to_be_considered) {
-            int unConvertedIndex = (int) (getLargestX() * convertFactor);
+            int unConvertedIndex = (int) (maxX * convertFactor);
             int convertedIndex = normalizeIndex(unConvertedIndex);
             if (convertedIndex != lastConvertedIndex) {
                 lastConvertedIndex = convertedIndex;
-                msg = "mLocal: " + convertedIndex + "/" + unConvertedIndex + " Hz " + getLargestY() + " z:" + number_of_occurences;
+                msg = "mLocal: " + convertedIndex + "/" + unConvertedIndex + " Hz " + maxY + " last_z:" + number_of_occurrences;
                 Log.d(TAG, msg);
-                number_of_occurences = 0;
-            }
-            else{
-                number_of_occurences++;
+                number_of_occurrences = 0;
+            } else {
+                number_of_occurrences++;
             }
         }
 
@@ -116,7 +63,7 @@ public class CalculateStatistics {
 //            int convertedIndex = (int) (getLargestX() * convertFactor);
 //            convertedIndex = normalizeIndex(convertedIndex);
 //            lastLargestX = largestX;
-//            msg = "Local: " + convertedIndex + " Hz " + getLargestY() + " z:" + number_of_occurences;
+//            msg = "Local: " + convertedIndex + " Hz " + getLargestY() + " z:" + number_of_occurrences;
 //            Log.d(TAG, msg);
 //            // q.add(convertedIndex);
 //        }
@@ -141,7 +88,7 @@ public class CalculateStatistics {
         int step = delta / 2;
 
         while (returnValue < Globals.max_frequency) {
-            if(originalIndex < step){
+            if (originalIndex < step) {
                 return returnValue;
             }
 
@@ -153,10 +100,9 @@ public class CalculateStatistics {
     }
 
 
+    final double convertFactor = (double) Globals.frequency_limit / (double) AudioProcessor.blockSize;
 
-    double convertFactor = (double) Globals.frequency_limit / (double) AudioProcessor.blockSize;
-
-    int number_of_occurences = 0;
+    int number_of_occurrences = 0;
 
     public String createMsg() {
         return msg;
@@ -171,7 +117,7 @@ public class CalculateStatistics {
 //        }
 
 //        if (getLargestY() < .5) {
-//            number_of_occurences++;
+//            number_of_occurrences++;
 //            return msg;
 //        }
 //
@@ -180,9 +126,9 @@ public class CalculateStatistics {
 //
 //        if (convertedIndex != lastConvertedIndex) {
 //            lastConvertedIndex = convertedIndex;
-//            msg = "Local: " + convertedIndex + " Hz " + getLargestY() + " z:" + number_of_occurences;
+//            msg = "Local: " + convertedIndex + " Hz " + getLargestY() + " z:" + number_of_occurrences;
 //            Log.d(TAG, msg);
-//            number_of_occurences = 0;
+//            number_of_occurrences = 0;
 //        }
 //
 //        return msg;
