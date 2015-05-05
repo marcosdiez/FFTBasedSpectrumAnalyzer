@@ -1,4 +1,4 @@
-package com.marcosdiez.spectrumanalyzer.android;
+package com.marcosdiez.spectrumanalyzer.util;
 
 import android.content.Intent;
 import android.content.IntentFilter;

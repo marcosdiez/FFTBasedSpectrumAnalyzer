@@ -1,6 +1,7 @@
 package com.marcosdiez.spectrumanalyzer.util;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import com.marcosdiez.spectrumanalyzer.Globals;
 
@@ -61,5 +62,10 @@ public class Misc {
     public static String getAndroidId() {
         return android.provider.Settings.Secure.getString(Globals.getContext().getContentResolver(),
                 android.provider.Settings.Secure.ANDROID_ID);
+    }
+
+    public static void toast(String message) {
+        Toast currentToast = Toast.makeText(Globals.getContext(), message, Toast.LENGTH_SHORT);
+        currentToast.show();
     }
 }

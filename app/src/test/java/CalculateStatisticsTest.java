@@ -1,4 +1,4 @@
-import com.marcosdiez.spectrumanalyzer.CalculateStatistics;
+import com.marcosdiez.spectrumanalyzer.audio.CalculateStatistics;
 
 import org.junit.Test;
 

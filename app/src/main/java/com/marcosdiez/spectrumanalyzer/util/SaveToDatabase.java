@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.marcosdiez.spectrumanalyzer.android.PowerInformation;
 import com.marcosdiez.spectrumanalyzer.db.DatabaseManager;
 import com.marcosdiez.spectrumanalyzer.db.SignalsDbHelper;
 

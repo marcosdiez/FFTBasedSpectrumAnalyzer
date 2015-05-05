@@ -1,4 +1,4 @@
-package com.marcosdiez.spectrumanalyzer;
+package com.marcosdiez.spectrumanalyzer.audio;
 
 import android.util.Log;
 
@@ -117,16 +117,15 @@ public class CalculateStatistics {
         largestX = localLargestX / (double) n;
         largestY = localLargestY / (double) n;
 
-        if(largestY > minimumAudioVolumeWeConsider){
+        if (largestY > minimumAudioVolumeWeConsider) {
             int convertedIndex = (int) (getLargestX() * convertFactor);
             convertedIndex = normalizeIndex(convertedIndex);
-            if(convertedIndex != lastConvertedIndex){
+            if (convertedIndex != lastConvertedIndex) {
                 lastConvertedIndex = convertedIndex;
                 msg = "mLocal: " + convertedIndex + " Hz " + getLargestY() + " z:" + zeroRepeating;
                 Log.d(TAG, msg);
             }
         }
-
 
 
 //        if(convertedIndex != lastConvertedIndex &&  largestY > minimumAudioVolumeWeConsider){
@@ -166,10 +165,16 @@ public class CalculateStatistics {
     int zeroRepeating = 0;
 
     public String createMsg() {
-        return "";
+        return msg;
+
         //int convertedIndex = (int) q.take();
-
-
+//
+//        int convertedIndex = (int) (getLargestX() * convertFactor);
+//        convertedIndex = normalizeIndex(convertedIndex);
+//        if (convertedIndex != lastConvertedIndex) {
+//            lastConvertedIndex = convertedIndex;
+//            msg = "Conv: " + convertedIndex + " Hz";
+//        }
 
 //        if (getLargestY() < .5) {
 //            zeroRepeating++;

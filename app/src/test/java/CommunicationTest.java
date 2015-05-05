@@ -1,8 +1,6 @@
-import com.marcosdiez.spectrumanalyzer.Communication;
+import com.marcosdiez.spectrumanalyzer.audio.Communication;
 
 import org.junit.Test;
-
-import dalvik.annotation.TestTargetClass;
 
 import static org.junit.Assert.assertEquals;
 

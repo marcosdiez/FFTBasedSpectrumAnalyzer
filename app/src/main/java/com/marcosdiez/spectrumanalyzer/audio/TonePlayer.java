@@ -1,4 +1,4 @@
-package com.marcosdiez.spectrumanalyzer;
+package com.marcosdiez.spectrumanalyzer.audio;
 
 import android.media.AudioFormat;
 import android.media.AudioManager;

@@ -8,11 +8,12 @@ import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.marcosdiez.spectrumanalyzer.AudioIoPlayer;
-import com.marcosdiez.spectrumanalyzer.AudioProcessor;
-import com.marcosdiez.spectrumanalyzer.CalculateStatistics;
+import com.marcosdiez.spectrumanalyzer.Globals;
 import com.marcosdiez.spectrumanalyzer.R;
-import com.marcosdiez.spectrumanalyzer.Toaster;
+import com.marcosdiez.spectrumanalyzer.audio.AudioIoPlayer;
+import com.marcosdiez.spectrumanalyzer.audio.AudioProcessor;
+import com.marcosdiez.spectrumanalyzer.audio.CalculateStatistics;
+import com.marcosdiez.spectrumanalyzer.util.Misc;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -31,7 +32,7 @@ public class AudioIoActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Toaster.init(getApplicationContext());
+        Globals.setContext(getApplicationContext());
         prepareUi();
     }
 
@@ -70,7 +71,7 @@ public class AudioIoActivity extends Activity {
         getButton(R.id.button_send_text, new View.OnClickListener() {
             public void onClick(View v) {
                 threadPool.execute(player);
-                Toaster.toast("Playing !");
+                Misc.toast("Playing !");
             }
         });
 
@@ -78,7 +79,7 @@ public class AudioIoActivity extends Activity {
 
     private void analise() {
         audioProcessorUi.execute();
-        Toaster.toast("Audio Processor running in Background");
+        Misc.toast("Audio Processor running in Background");
     }
 
     private Button getButton(int id, View.OnClickListener c) {

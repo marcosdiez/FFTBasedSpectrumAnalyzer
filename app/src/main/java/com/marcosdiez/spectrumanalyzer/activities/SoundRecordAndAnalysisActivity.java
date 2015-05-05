@@ -9,9 +9,9 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.marcosdiez.spectrumanalyzer.AudioProcessor;
+import com.marcosdiez.spectrumanalyzer.audio.AudioProcessor;
 import com.marcosdiez.spectrumanalyzer.R;
-import com.marcosdiez.spectrumanalyzer.TonePlayer;
+import com.marcosdiez.spectrumanalyzer.audio.TonePlayer;
 import com.marcosdiez.spectrumanalyzer.widgets.TheScaleImageView;
 import com.marcosdiez.spectrumanalyzer.widgets.TheSpectrumAnalyzerImageView;
 
