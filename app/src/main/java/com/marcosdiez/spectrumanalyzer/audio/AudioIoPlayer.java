@@ -24,12 +24,11 @@ public class AudioIoPlayer implements Runnable, Communication.Beeper {
         dumpState();
 
        // Communication.player("hello;", this);
-        int delta = Math.abs(Globals.max_frequency - Globals.min_frequency);
-        int frequencyIncrement = delta / Globals.words;
+        int delta = Math.abs(Globals.max_frequency - Globals.min_frequency) / Globals.words;
         int frequency = Globals.min_frequency;
-        for (int i = 0; i < Globals.words; i++) {
+        for (int i = 0; i <= Globals.words; i++) {
             playSound(frequency, Globals.time_of_generated_sound);
-            frequency += frequencyIncrement;
+            frequency += delta;
         }
     }
 

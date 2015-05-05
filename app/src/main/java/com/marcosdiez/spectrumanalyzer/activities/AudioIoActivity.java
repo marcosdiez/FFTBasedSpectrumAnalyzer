@@ -55,6 +55,7 @@ public class AudioIoActivity extends Activity {
             }
         });
 
+
         getButton(R.id.button_spectrum_analyzer, new View.OnClickListener() {
             public void onClick(View v) {
                 loadSpectrumAnalyzer();

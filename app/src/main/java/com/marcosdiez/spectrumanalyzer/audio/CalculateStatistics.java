@@ -98,11 +98,11 @@ public class CalculateStatistics {
         largestY = localLargestY / (double) n;
 
         if (largestY > Globals.minumum_audio_volume_to_be_considered) {
-            int convertedIndex = (int) (getLargestX() * convertFactor);
-            convertedIndex = normalizeIndex(convertedIndex);
+            int unConvertedIndex = (int) (getLargestX() * convertFactor);
+            int convertedIndex = normalizeIndex(unConvertedIndex);
             if (convertedIndex != lastConvertedIndex) {
                 lastConvertedIndex = convertedIndex;
-                msg = "mLocal: " + convertedIndex + " Hz " + getLargestY() + " z:" + zeroRepeating;
+                msg = "mLocal: " + convertedIndex + "/" + unConvertedIndex + " Hz " + getLargestY() + " z:" + zeroRepeating;
                 Log.d(TAG, msg);
             }
         }
@@ -122,21 +122,46 @@ public class CalculateStatistics {
     int lastConvertedIndex = 0;
     String msg = "";
 
+//    int delta = Math.abs(Globals.max_frequency - Globals.min_frequency);
+//    int frequencyIncrement = delta / Globals.words;
+//    int frequency = Globals.min_frequency;
+//    for (int i = 0; i <= Globals.words; i++) {
+//        playSound(frequency, Globals.time_of_generated_sound);
+//        frequency += frequencyIncrement;
+//    }
+//
 
     public static int normalizeIndex(int originalIndex) {
-        int delta = (Globals.max_frequency - Globals.min_frequency) / Globals.words;
-        int step = delta / 2;
         int returnValue = 0;
+        int delta = Math.abs(Globals.max_frequency - Globals.min_frequency) / Globals.words;
+        int step = delta / 2;
 
-        while (returnValue < Globals.frequency_limit) {
-            if (originalIndex < step) {
+        while (returnValue < Globals.max_frequency) {
+            if(originalIndex < step){
                 return returnValue;
             }
-            step += delta;
+
             returnValue += delta;
+            step += delta;
+
         }
-        return Globals.frequency_limit;
+        return Globals.max_frequency;
     }
+
+//
+//
+//        int step = delta / 2;
+//        int returnValue = Globals.min_frequency;
+//
+//        while (returnValue < Globals.frequency_limit) {
+//            if (originalIndex < step) {
+//                return returnValue;
+//            }
+//            step += delta;
+//            returnValue += delta;
+//        }
+//        return Globals.frequency_limit;
+//    }
 
     double convertFactor = (double) Globals.frequency_limit / (double) AudioProcessor.blockSize;
 
