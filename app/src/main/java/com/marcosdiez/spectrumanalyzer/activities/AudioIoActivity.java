@@ -43,8 +43,8 @@ public class AudioIoActivity extends Activity {
         prepareSeeker(R.id.seek_max_frequency, "Max Freq. (Hz): ", Globals.frequency_limit, Globals.max_frequency);
         prepareSeeker(R.id.seek_time, "Max Time (Ms): ", Globals.time_of_generated_sound_max, Globals.time_of_generated_sound);
         prepareSeeker(R.id.seek_words, "Words: ", Globals.words_max, Globals.words);
-        prepareSeeker(R.id.seek_filter, "Audio Filter: ", Globals.minumum_audio_volume_to_be_considered_max, Globals.minumum_audio_volume_to_be_considered);
-        prepareSeeker(R.id.seek_iteration, "Iterations: ", Globals.num_samples_max, Globals.num_samples);
+        prepareSeeker(R.id.seek_filter, "Volume Filter: ", Globals.minumum_audio_volume_to_be_considered_max, Globals.minumum_audio_volume_to_be_considered);
+        prepareSeeker(R.id.seek_iteration, "Num Samples: ", Globals.num_samples_max, Globals.num_samples);
 
         outputGeneratingTextView = (TextView) findViewById(R.id.outputGeneratingTextView);
         outputCapturingTextView = (TextView) findViewById(R.id.outputCapturingTextView);
@@ -143,10 +143,16 @@ public class AudioIoActivity extends Activity {
     }
 
     private class AudioProcessorUi extends AudioProcessor {
+        String lastMsg = "";
+
         @Override
         protected void onProgressUpdate(double[]... toTransform) {
             super.onProgressUpdate(toTransform);
-            outputCapturingTextView.setText(super.getStatisticsMsg());
+            String msg = super.getStatisticsMsg();
+            if (msg != lastMsg) {
+                lastMsg = msg;
+                outputCapturingTextView.setText(msg);
+            }
         }
 
         @Override

@@ -5,40 +5,43 @@ import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.util.Log;
 
+import com.marcosdiez.spectrumanalyzer.Globals;
+
 /**
  * Created by Marcos on 15-Mar-15.
  */
 public class TonePlayer implements Runnable {
     final private static String TAG = "XB-TonePlayer";
-    private final byte generatedSnd[] = new byte[64000];
-    private int durationInMiliseconds = 3000; // miliseconds
-    private int sampleRate = 8000;
+
+    private final int sampleRate = Globals.frequency_limit * 2;
+    private final int maxSamples = (int) (Globals.time_of_generated_sound_max / 1000.0 * sampleRate);
+    private final double[] sample = new double[maxSamples];
+    private final byte generatedSnd[] = new byte[maxSamples * 2];
+
+    private int durationInMilliseconds = 3000; // miliseconds
     private double freqOfTone = 440; // hz
-    private double sample[];
     private int numSamples;
     private int sampleSize;
     private boolean initialized = false;
 
     public TonePlayer() {
-
     }
 
-    public TonePlayer(int durationInMiliseconds, int freqOfTone) {
-        init(durationInMiliseconds, freqOfTone);
+    public TonePlayer(int durationInMilliseconds, int freqOfTone) {
+        init(durationInMilliseconds, freqOfTone);
     }
 
-    public void play(int durationInMiliseconds, int freqOfTone) {
-        init(durationInMiliseconds, freqOfTone);
+
+    public void play(int durationInMilliseconds, int freqOfTone) {
+        init(durationInMilliseconds, freqOfTone);
         play();
     }
 
-    private void init(int durationInMiliseconds, int freqOfTone) {
-        this.durationInMiliseconds = durationInMiliseconds;
+    private void init(int durationInMilliseconds, int freqOfTone) {
+        this.durationInMilliseconds = durationInMilliseconds;
         this.freqOfTone = freqOfTone;
-        numSamples = (int) (durationInMiliseconds / 1000.0 * sampleRate);
+        numSamples = (int) ((this.durationInMilliseconds / 1000.0) * sampleRate);
         sampleSize = 2 * numSamples;
-        sample = new double[numSamples];
-
         initialized = false;
     }
 
@@ -48,12 +51,12 @@ public class TonePlayer implements Runnable {
 
     public synchronized void play() {
         prepareSound();
-        Log.d(TAG, "Playing " + freqOfTone + " Hz for " + durationInMiliseconds + " ms");
+        Log.d(TAG, "Playing " + freqOfTone + " Hz for " + durationInMilliseconds + " ms");
         replaySound();
     }
 
     public void prepareSound() {
-        // int sampleRate, int durationInMiliseconds, int freqOfTone, byte[] generatedSnd){
+        // int sampleRate, int durationInMilliseconds, int freqOfTone, byte[] generatedSnd){
         // fill out the array
         for (int i = 0; i < numSamples; ++i) {
             sample[i] = Math.sin(2 * Math.PI * i / (sampleRate / freqOfTone));
@@ -61,7 +64,9 @@ public class TonePlayer implements Runnable {
         // convert to 16 bit pcm sound array
         // assumes the sample buffer is normalised.
         int idx = 0;
-        for (final double dVal : sample) {
+        for (int sample_idx = 0; sample_idx < numSamples; sample_idx++) {
+            final double dVal = sample[sample_idx];
+            //for (final double dVal : sample) {
             // scale to maximum amplitude
             final short val = (short) ((dVal * 32767));
             // in 16 bit wav PCM, first byte is the low order byte
@@ -85,7 +90,7 @@ public class TonePlayer implements Runnable {
         audioTrack.play();
 
         try {
-            Thread.sleep(durationInMiliseconds);
+            Thread.sleep(durationInMilliseconds);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

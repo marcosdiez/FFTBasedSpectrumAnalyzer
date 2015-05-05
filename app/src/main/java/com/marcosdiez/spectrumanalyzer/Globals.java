@@ -25,7 +25,7 @@ public class Globals {
     public static final int words_max = 10;
 
     public static int num_samples = 1;
-    public static final int num_samples_max = 100;
+    public static final int num_samples_max = 15;
 
 
     public static int minumum_audio_volume_to_be_considered = 2; // no unity
