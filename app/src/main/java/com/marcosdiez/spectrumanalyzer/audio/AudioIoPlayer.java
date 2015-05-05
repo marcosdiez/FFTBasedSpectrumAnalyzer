@@ -48,7 +48,7 @@ public class AudioIoPlayer implements Runnable, Communication.Beeper {
 
     void playSound(int frequency, int playTimeInMilliseconds) {
         String msg = "Freq (Hz): " + frequency + " time (ms):" + playTimeInMilliseconds;
-        Log.d(TAG, msg);
+        // Log.d(TAG, msg);
         tonePlayer.play(playTimeInMilliseconds, frequency);
     }
 

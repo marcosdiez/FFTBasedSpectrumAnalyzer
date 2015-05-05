@@ -102,8 +102,12 @@ public class CalculateStatistics {
             int convertedIndex = normalizeIndex(unConvertedIndex);
             if (convertedIndex != lastConvertedIndex) {
                 lastConvertedIndex = convertedIndex;
-                msg = "mLocal: " + convertedIndex + "/" + unConvertedIndex + " Hz " + getLargestY() + " z:" + zeroRepeating;
+                msg = "mLocal: " + convertedIndex + "/" + unConvertedIndex + " Hz " + getLargestY() + " z:" + number_of_occurences;
                 Log.d(TAG, msg);
+                number_of_occurences = 0;
+            }
+            else{
+                number_of_occurences++;
             }
         }
 
@@ -112,7 +116,7 @@ public class CalculateStatistics {
 //            int convertedIndex = (int) (getLargestX() * convertFactor);
 //            convertedIndex = normalizeIndex(convertedIndex);
 //            lastLargestX = largestX;
-//            msg = "Local: " + convertedIndex + " Hz " + getLargestY() + " z:" + zeroRepeating;
+//            msg = "Local: " + convertedIndex + " Hz " + getLargestY() + " z:" + number_of_occurences;
 //            Log.d(TAG, msg);
 //            // q.add(convertedIndex);
 //        }
@@ -148,24 +152,11 @@ public class CalculateStatistics {
         return Globals.max_frequency;
     }
 
-//
-//
-//        int step = delta / 2;
-//        int returnValue = Globals.min_frequency;
-//
-//        while (returnValue < Globals.frequency_limit) {
-//            if (originalIndex < step) {
-//                return returnValue;
-//            }
-//            step += delta;
-//            returnValue += delta;
-//        }
-//        return Globals.frequency_limit;
-//    }
+
 
     double convertFactor = (double) Globals.frequency_limit / (double) AudioProcessor.blockSize;
 
-    int zeroRepeating = 0;
+    int number_of_occurences = 0;
 
     public String createMsg() {
         return msg;
@@ -180,7 +171,7 @@ public class CalculateStatistics {
 //        }
 
 //        if (getLargestY() < .5) {
-//            zeroRepeating++;
+//            number_of_occurences++;
 //            return msg;
 //        }
 //
@@ -189,9 +180,9 @@ public class CalculateStatistics {
 //
 //        if (convertedIndex != lastConvertedIndex) {
 //            lastConvertedIndex = convertedIndex;
-//            msg = "Local: " + convertedIndex + " Hz " + getLargestY() + " z:" + zeroRepeating;
+//            msg = "Local: " + convertedIndex + " Hz " + getLargestY() + " z:" + number_of_occurences;
 //            Log.d(TAG, msg);
-//            zeroRepeating = 0;
+//            number_of_occurences = 0;
 //        }
 //
 //        return msg;
