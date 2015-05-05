@@ -6,7 +6,7 @@ import android.media.MediaRecorder;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.marcosdiez.spectrumanalyzer.R;
+import com.marcosdiez.spectrumanalyzer.Globals;
 
 import ca.uol.aig.fftpack.RealDoubleFFT;
 
@@ -22,7 +22,7 @@ public abstract class AudioProcessor extends AsyncTask<Void, double[], Void> {
     final int channelConfiguration = AudioFormat.CHANNEL_IN_MONO;
     final int audioEncoding = AudioFormat.ENCODING_PCM_16BIT;
     private AudioRecord audioRecord;
-    private int frequency = 8000; // Hz
+    private final int frequency = Globals.frequency_limit * 2;
     private boolean started = false;
     private CalculateStatistics statistics = new CalculateStatistics();
     private final static String TAG = "AudioProcessor";
@@ -33,24 +33,6 @@ public abstract class AudioProcessor extends AsyncTask<Void, double[], Void> {
 
     public AudioProcessor() {
         super();
-    }
-
-    public void setSeekerValue(int id, int value) {
-        // guess why we do this ? Java does not have function pointers
-
-        switch (id) {
-            case (R.id.seek_filter):
-                Log.d(TAG, "New FilterValue: " + value);
-                statistics.setInitialMinumumAudioVolumeWeConsider(value);
-                break;
-            case (R.id.seek_iteration):
-                Log.d(TAG, "New SeekValue: " + value);
-                statistics.setNumSamples(value);
-                break;
-            default:
-               // we don't care. really.
-                break;
-        }
     }
 
     @Override

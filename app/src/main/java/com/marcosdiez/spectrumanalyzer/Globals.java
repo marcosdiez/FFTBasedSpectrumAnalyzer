@@ -15,6 +15,28 @@ public class Globals {
 
     private static Context context = null;
 
+    public static final int frequency_limit = 4000; // Hz
+    public static int min_frequency = 500;    // Hz
+    public static int max_frequency = 3000;   // Hz
+    public static int time_of_generated_sound = 1000; // ms - miliseconds
+    public static final int time_of_generated_sound_max = 5000; // ms - miliseconds
+
+    public static int words = 5;
+    public static final int words_max = 10;
+
+    public static int num_samples = 1;
+    public static final int num_samples_max = 100;
+
+
+    public static int minumum_audio_volume_to_be_considered = 2; // no unity
+    public static final int minumum_audio_volume_to_be_considered_max = 10; // no unity
+
+
+
+
+
+    // boilerplate
+
     public static Context getContext() {
         if (context == null) {
             throw new NullPointerException("Context");

@@ -12,7 +12,6 @@ import com.marcosdiez.spectrumanalyzer.Globals;
 import com.marcosdiez.spectrumanalyzer.R;
 import com.marcosdiez.spectrumanalyzer.audio.AudioIoPlayer;
 import com.marcosdiez.spectrumanalyzer.audio.AudioProcessor;
-import com.marcosdiez.spectrumanalyzer.audio.CalculateStatistics;
 import com.marcosdiez.spectrumanalyzer.util.Misc;
 
 import java.util.concurrent.ExecutorService;
@@ -39,12 +38,12 @@ public class AudioIoActivity extends Activity {
     protected void prepareUi() {
         setContentView(R.layout.audio_io);
 
-        prepareSeeker(R.id.seek_min_frequency, "Min Freq. (Hz): ", 4000, 500);
-        prepareSeeker(R.id.seek_max_frequency, "Max Freq. (Hz): ", 4000, 3000);
-        prepareSeeker(R.id.seek_time, "Max Time (Ms): ", 5000, 1000);
-        prepareSeeker(R.id.seek_words, "Words: ", 10, 2);
-        prepareSeeker(R.id.seek_filter, "Audio Filter: ", CalculateStatistics.maxMinumumAudioVolumeWeConsider, CalculateStatistics.initialMinumumAudioVolumeWeConsider);
-        prepareSeeker(R.id.seek_iteration, "Iterations: ", CalculateStatistics.maxSamples, CalculateStatistics.initialNumSamples);
+        prepareSeeker(R.id.seek_min_frequency, "Min Freq. (Hz): ", Globals.frequency_limit, Globals.min_frequency);
+        prepareSeeker(R.id.seek_max_frequency, "Max Freq. (Hz): ", Globals.frequency_limit, Globals.max_frequency);
+        prepareSeeker(R.id.seek_time, "Max Time (Ms): ", Globals.time_of_generated_sound_max, Globals.time_of_generated_sound);
+        prepareSeeker(R.id.seek_words, "Words: ", Globals.words_max, Globals.words);
+        prepareSeeker(R.id.seek_filter, "Audio Filter: ", Globals.minumum_audio_volume_to_be_considered_max, Globals.minumum_audio_volume_to_be_considered);
+        prepareSeeker(R.id.seek_iteration, "Iterations: ", Globals.num_samples_max, Globals.num_samples);
 
         outputGeneratingTextView = (TextView) findViewById(R.id.outputGeneratingTextView);
         outputCapturingTextView = (TextView) findViewById(R.id.outputCapturingTextView);
@@ -108,9 +107,33 @@ public class AudioIoActivity extends Activity {
                 if (progress == 0) {
                     seekBar.setProgress(1);
                 } else {
+                    updateGlobalVariable(progress);
                     theValue.setText(progress + "");
-                    player.setSeekerValue(final_id, progress); // guess which language does not have function pointers ?
-                    audioProcessorUi.setSeekerValue(final_id, progress);
+                }
+            }
+
+            private void updateGlobalVariable(int progress) {
+                switch (final_id) {
+                    case R.id.seek_min_frequency:
+                        Globals.min_frequency = progress;
+                        break;
+                    case R.id.seek_max_frequency:
+                        Globals.max_frequency = progress;
+                        break;
+                    case R.id.seek_time:
+                        Globals.time_of_generated_sound = progress;
+                        break;
+                    case R.id.seek_words:
+                        Globals.words = progress;
+                        break;
+                    case R.id.seek_filter:
+                        Globals.minumum_audio_volume_to_be_considered = progress;
+                        break;
+                    case R.id.seek_iteration:
+                        Globals.num_samples = progress;
+                        break;
+                    default:
+                        break;
                 }
             }
 
@@ -133,7 +156,8 @@ public class AudioIoActivity extends Activity {
         }
 
         @Override
-        public  void doInBackgroundLoop(double[] toTransform){}
+        public void doInBackgroundLoop(double[] toTransform) {
+        }
 
     }
 

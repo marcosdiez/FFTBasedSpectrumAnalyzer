@@ -2,27 +2,15 @@ package com.marcosdiez.spectrumanalyzer.audio;
 
 import android.util.Log;
 
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
+import com.marcosdiez.spectrumanalyzer.Globals;
 
 /**
  * Created by Marcos on 29-Mar-15.
  */
 public class CalculateStatistics {
 
-    // X is a factor of frequency
-    // Y is the volume
-
-    public static final int maximumFrequency = 4000;
-
-    public static final int maxSamples = 100;
-    public static final int initialNumSamples = 1;
-
-    public static final int maxMinumumAudioVolumeWeConsider = 10;
-    public static final int initialMinumumAudioVolumeWeConsider = 2;
-
-    int numSamples = initialNumSamples;
-    double minimumAudioVolumeWeConsider = initialMinumumAudioVolumeWeConsider;
+    // X is a factor of frequency, in some wierd unity.
+    // Y is the volume, in some wierd unity
 
     static final String TAG = "CalculateStatistics";
 
@@ -34,15 +22,7 @@ public class CalculateStatistics {
     double largestX = 0;
     double largestY = 0;
 
-    BlockingQueue q = new ArrayBlockingQueue(100);
-
-    public void setInitialMinumumAudioVolumeWeConsider(double minimumAudioVolumeWeConsider) {
-        this.minimumAudioVolumeWeConsider = minimumAudioVolumeWeConsider;
-    }
-
-    public void setNumSamples(int numSamples) {
-        this.numSamples = numSamples;
-    }
+    // BlockingQueue q = new ArrayBlockingQueue(100);
 
     public double getLargestX() {
         return largestX;
@@ -55,10 +35,10 @@ public class CalculateStatistics {
     //boilerplate ends here
 
     public CalculateStatistics() {
-        lastX = new int[maxSamples + 1];
-        lastY = new double[maxSamples + 1];
+        lastX = new int[Globals.num_samples_max + 1];
+        lastY = new double[Globals.num_samples_max + 1];
         currentI = 0;
-        for (int i = 0; i < maxSamples; i++) {
+        for (int i = 0; i < Globals.num_samples_max; i++) {
             lastX[i] = 0;
             lastY[i] = 0;
         }
@@ -84,14 +64,14 @@ public class CalculateStatistics {
     }
 
     private void afterIteration() {
-        if (maxY > minimumAudioVolumeWeConsider) {
+        if (maxY > Globals.minumum_audio_volume_to_be_considered) {
             lastY[currentI] = maxY;
             lastX[currentI] = maxX;
         } else {
             lastY[currentI] = 0;
             lastX[currentI] = 0;
         }
-        currentI = (currentI + 1) % numSamples;
+        currentI = (currentI + 1) % Globals.num_samples;
         calculate();
     }
 
@@ -101,7 +81,7 @@ public class CalculateStatistics {
 
         int n = 0;
 
-        for (int i = 0; i < numSamples; i++) {
+        for (int i = 0; i < Globals.num_samples; i++) {
             double thisY = lastY[i];
             double thisX = lastX[i];
 
@@ -117,7 +97,7 @@ public class CalculateStatistics {
         largestX = localLargestX / (double) n;
         largestY = localLargestY / (double) n;
 
-        if (largestY > minimumAudioVolumeWeConsider) {
+        if (largestY > Globals.minumum_audio_volume_to_be_considered) {
             int convertedIndex = (int) (getLargestX() * convertFactor);
             convertedIndex = normalizeIndex(convertedIndex);
             if (convertedIndex != lastConvertedIndex) {
@@ -144,23 +124,21 @@ public class CalculateStatistics {
 
 
     public static int normalizeIndex(int originalIndex) {
-        int delta = 500;
-
+        int delta = (Globals.max_frequency - Globals.min_frequency) / Globals.words;
         int step = delta / 2;
-
         int returnValue = 0;
 
-        while (returnValue < maximumFrequency) {
+        while (returnValue < Globals.frequency_limit) {
             if (originalIndex < step) {
                 return returnValue;
             }
             step += delta;
             returnValue += delta;
         }
-        return maximumFrequency;
+        return Globals.frequency_limit;
     }
 
-    double convertFactor = (double) maximumFrequency / (double) AudioProcessor.blockSize;
+    double convertFactor = (double) Globals.frequency_limit / (double) AudioProcessor.blockSize;
 
     int zeroRepeating = 0;
 
