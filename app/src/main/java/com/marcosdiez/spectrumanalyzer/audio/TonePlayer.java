@@ -9,7 +9,7 @@ import android.util.Log;
  * Created by Marcos on 15-Mar-15.
  */
 public class TonePlayer implements Runnable {
-    final private static String TAG = "TonePlayer";
+    final private static String TAG = "XB-TonePlayer";
     private final byte generatedSnd[] = new byte[64000];
     private int durationInMiliseconds = 3000; // miliseconds
     private int sampleRate = 8000;

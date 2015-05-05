@@ -12,7 +12,7 @@ public class CalculateStatistics {
     // X is a factor of frequency, in some wierd unity.
     // Y is the volume, in some wierd unity
 
-    static final String TAG = "CalculateStatistics";
+    static final String TAG = "XB-CalculateStatistics";
 
     int maxX;
     double maxY;

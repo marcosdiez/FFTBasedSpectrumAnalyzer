@@ -33,6 +33,7 @@ public class AudioIoActivity extends Activity {
         super.onCreate(savedInstanceState);
         Globals.setContext(getApplicationContext());
         prepareUi();
+        analise();
     }
 
     protected void prepareUi() {
@@ -53,13 +54,6 @@ public class AudioIoActivity extends Activity {
                 outputCapturingTextView.setText("");
             }
         });
-
-        getButton(R.id.button_start_capture, new
-                View.OnClickListener() {
-                    public void onClick(View v) {
-                        analise();
-                    }
-                });
 
         getButton(R.id.button_spectrum_analyzer, new View.OnClickListener() {
             public void onClick(View v) {
@@ -138,7 +132,6 @@ public class AudioIoActivity extends Activity {
             }
 
             public void onStartTrackingTouch(SeekBar seekBar) {
-
             }
 
             public void onStopTrackingTouch(SeekBar seekBar) {

@@ -23,7 +23,7 @@ public class SoundRecordAndAnalysisActivity extends Activity {
 
 
     private static final ExecutorService threadPool = Executors.newCachedThreadPool();
-    public static String TAG = "SoundRecordAndAnalysisActivity";
+    public static String TAG = "XB-SoundRecordAndAnalysisActivity";
     Button startStopButton;
 
     TheSpectrumAnalyzerImageView imageViewDisplaySpectrum;

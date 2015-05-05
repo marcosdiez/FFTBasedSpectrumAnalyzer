@@ -1,5 +1,7 @@
 package com.marcosdiez.spectrumanalyzer.audio;
 
+import com.marcosdiez.spectrumanalyzer.Globals;
+
 import java.util.HashMap;
 
 /**
@@ -7,7 +9,6 @@ import java.util.HashMap;
  */
 public class Communication {
     public static final String alphabet = "; 123456789.abcdefghijklmnopqrstuvwyxz";
-    public static int numWords = 5;  // new base size
 
     static HashMap<Character, String> letterToEncoded = null;
     static HashMap<String, Character> encodedToLetter = null;
@@ -69,9 +70,9 @@ public class Communication {
         encodedToLetter = new HashMap<String, Character>(dictionarySize);
 
         int counter = 0;
-        for (int i = 0; i < numWords; i++) {
-            for (int j = 0; j < numWords; j++) {
-                for (int k = 0; k < numWords; k++) {
+        for (int i = 0; i < Globals.words; i++) {
+            for (int j = 0; j < Globals.words; j++) {
+                for (int k = 0; k < Globals.words; k++) {
                     if (i != j && j != k) {
                         String encodedString = i + "" + j + "" + k;
                         Character letter = alphabet.charAt(counter);

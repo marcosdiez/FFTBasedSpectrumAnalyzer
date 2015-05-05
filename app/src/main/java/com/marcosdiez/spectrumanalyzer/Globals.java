@@ -21,7 +21,7 @@ public class Globals {
     public static int time_of_generated_sound = 1000; // ms - miliseconds
     public static final int time_of_generated_sound_max = 5000; // ms - miliseconds
 
-    public static int words = 5;
+    public static int words = 2;
     public static final int words_max = 10;
 
     public static int num_samples = 1;

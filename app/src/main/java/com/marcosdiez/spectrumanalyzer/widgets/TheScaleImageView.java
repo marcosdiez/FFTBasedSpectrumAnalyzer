@@ -13,7 +13,7 @@ import android.widget.ImageView;
  * Created by Marcos on 09-Mar-15.
  */
 public class TheScaleImageView extends ImageView {
-    public static String TAG = "TheScaleImageView";
+    public static String TAG = "XB-TheScaleImageView";
     Paint paintScaleDisplay;
     Bitmap bitmapScale;
     Canvas canvasScale;

@@ -13,7 +13,7 @@ import android.widget.ImageView;
  * Created by Marcos on 09-Mar-15.
  */
 public class TheSpectrumAnalyzerImageView extends ImageView {
-    public static String TAG = "TheSpectrumAnalyzerImageView";
+    public static String TAG = "XB-TheSpectrumAnalyzerImageView";
     public final int maxAge = 100;
     public Bitmap bitmapDisplaySpectrum = null;
     public Canvas canvasDisplaySpectrum = null;

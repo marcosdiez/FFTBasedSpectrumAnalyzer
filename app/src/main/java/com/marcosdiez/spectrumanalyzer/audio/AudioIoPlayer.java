@@ -8,7 +8,7 @@ import com.marcosdiez.spectrumanalyzer.Globals;
  * Created by Marcos on 29-Mar-15.
  */
 public class AudioIoPlayer implements Runnable, Communication.Beeper {
-    final static String TAG = "AudioIoPlayer";
+    final static String TAG = "XB-AudioIoPlayer";
     TonePlayer tonePlayer = new TonePlayer();
 
     public void dumpState() {
@@ -23,14 +23,14 @@ public class AudioIoPlayer implements Runnable, Communication.Beeper {
     public void send() {
         dumpState();
 
-        Communication.player("hello;", this);
-//        int delta = Math.abs(maxFrequencyHz - minFrequencyHz);
-//        int frequencyIncrement = delta / words;
-//        int frequency = minFrequencyHz;
-//        for (int i = 0; i < words; i++) {
-//            playSound(frequency, timeMs);
-//            frequency += frequencyIncrement;
-//        }
+       // Communication.player("hello;", this);
+        int delta = Math.abs(Globals.max_frequency - Globals.min_frequency);
+        int frequencyIncrement = delta / Globals.words;
+        int frequency = Globals.min_frequency;
+        for (int i = 0; i < Globals.words; i++) {
+            playSound(frequency, Globals.time_of_generated_sound);
+            frequency += frequencyIncrement;
+        }
     }
 
     public void beepChar(char c) {

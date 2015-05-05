@@ -25,7 +25,7 @@ public abstract class AudioProcessor extends AsyncTask<Void, double[], Void> {
     private final int frequency = Globals.frequency_limit * 2;
     private boolean started = false;
     private CalculateStatistics statistics = new CalculateStatistics();
-    private final static String TAG = "AudioProcessor";
+    private final static String TAG = "XB-AudioProcessor";
 
     public String getStatisticsMsg(){
         return statistics.createMsg();
