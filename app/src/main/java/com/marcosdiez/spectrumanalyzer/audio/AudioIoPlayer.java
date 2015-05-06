@@ -23,7 +23,7 @@ public class AudioIoPlayer implements Runnable, Communication.Beeper {
     public void send() {
         dumpState();
 
-       // Communication.player("hello;", this);
+        // Communication.player("hello;", this);
         int delta = Math.abs(Globals.max_frequency - Globals.min_frequency) / Globals.words;
         int frequency = Globals.min_frequency;
         for (int i = 0; i <= Globals.words; i++) {
@@ -36,7 +36,7 @@ public class AudioIoPlayer implements Runnable, Communication.Beeper {
         int delta = Math.abs(Globals.max_frequency - Globals.min_frequency);
         int frequencyIncrement = delta / Globals.words;
 
-        int beep_value = Integer.parseInt(""+c);
+        int beep_value = Integer.parseInt("" + c);
 
         int frequency = Globals.min_frequency + frequencyIncrement * beep_value;
         playSound(frequency, Globals.time_of_generated_sound);
@@ -46,12 +46,9 @@ public class AudioIoPlayer implements Runnable, Communication.Beeper {
         playSound(100, Globals.time_of_generated_sound);
     }
 
-    void playSound(int frequency, int playTimeInMilliseconds) {
-        String msg = "Freq (Hz): " + frequency + " time (ms):" + playTimeInMilliseconds;
-        // Log.d(TAG, msg);
+    private void playSound(int frequency, int playTimeInMilliseconds) {
         tonePlayer.play(playTimeInMilliseconds, frequency);
     }
-
 
 
 }

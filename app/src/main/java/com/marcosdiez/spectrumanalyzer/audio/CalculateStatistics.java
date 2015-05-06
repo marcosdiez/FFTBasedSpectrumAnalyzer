@@ -62,30 +62,38 @@ public class CalculateStatistics {
                 lastConvertedIndex = convertedIndex;
                 lastNumberOfOccurrences = number_of_occurrences;
                 number_of_occurrences = 0;
+                msg = "XX: " + convertedIndex + "/" + unConvertedIndex + " Hz " + ((int) maxY) +
+                        " last:" + lastNumberOfOccurrences + "/" + secondLastConvertedIndex;
+                Log.d(TAG, msg);
             } else {
                 number_of_occurrences++;
-                if (number_of_occurrences == Globals.num_samples) {
-                    msg = "mLocal: " + convertedIndex + "/" + unConvertedIndex + " Hz " + ((int) maxY) +
-                            " last:" + lastNumberOfOccurrences + "/" + secondLastConvertedIndex;
-                    Log.d(TAG, msg);
-                }
+//                if (number_of_occurrences == Globals.num_samples) {
+//                }
             }
         }
     }
 
 
     public static int normalizeIndex(int originalIndex) {
-        int returnValue = 0;
         int delta = Math.abs(Globals.max_frequency - Globals.min_frequency) / Globals.words;
-        int step = delta / 2;
 
-        while (returnValue < Globals.max_frequency) {
-            if (originalIndex < step) {
+        int lowerLimit = Globals.min_frequency - delta / 2;
+        int upperLimit = lowerLimit + delta;
+
+
+        if (originalIndex < lowerLimit) {
+            return 0;
+        }
+
+        int returnValue = Globals.min_frequency;
+
+        while (returnValue <= Globals.max_frequency) {
+            if (originalIndex < upperLimit) {
                 return returnValue;
             }
 
             returnValue += delta;
-            step += delta;
+            upperLimit += delta;
 
         }
         return Globals.max_frequency;
