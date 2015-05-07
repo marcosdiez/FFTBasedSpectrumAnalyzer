@@ -23,8 +23,7 @@ public class BootReceiver extends BroadcastReceiver {
                 Log.d(TAG, "DataPublishedBackgroundService.onReceive -> DISABLED");
                 return;
             }
-            Intent serviceIntent = new Intent(context, DataPublishedBackgroundService.class);
-            context.startService(serviceIntent);
+            DataPublishedBackgroundService.startMeAsAService(context);
             Log.d(TAG, "Service Started!");
         } else {
             Log.e(TAG, "Received unexpected intent " + intent.toString());

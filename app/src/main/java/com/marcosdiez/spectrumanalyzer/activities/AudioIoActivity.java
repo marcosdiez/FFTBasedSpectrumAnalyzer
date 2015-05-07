@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.marcosdiez.spectrumanalyzer.Globals;
 import com.marcosdiez.spectrumanalyzer.R;
+import com.marcosdiez.spectrumanalyzer.android.DataPublishedBackgroundService;
 import com.marcosdiez.spectrumanalyzer.audio.AudioIoPlayer;
 import com.marcosdiez.spectrumanalyzer.audio.AudioProcessor;
 import com.marcosdiez.spectrumanalyzer.util.Misc;
@@ -27,12 +28,13 @@ public class AudioIoActivity extends Activity {
     AudioIoPlayer player = new AudioIoPlayer();
     AudioProcessorUi audioProcessorUi = new AudioProcessorUi();
     TextView outputCapturingTextView;
-    TextView outputGeneratingTextView;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Globals.setContext(getApplicationContext());
+        DataPublishedBackgroundService.startMeAsAService(this);
         prepareUi();
         analise();
     }
@@ -55,9 +57,8 @@ public class AudioIoActivity extends Activity {
         prepareSeeker(R.id.seek_time, "Max Time (Ms): ", Globals.time_of_generated_sound_max, Globals.time_of_generated_sound);
         prepareSeeker(R.id.seek_words, "Words: ", Globals.words_max, Globals.words);
         prepareSeeker(R.id.seek_filter, "Volume Filter: ", Globals.minumum_audio_volume_to_be_considered_max, Globals.minumum_audio_volume_to_be_considered);
-//        prepareSeeker(R.id.seek_iteration, "Num Samples: ", Globals.num_samples_max, Globals.num_samples);
+        prepareSeeker(R.id.seek_iteration, "Num Samples to send data: ", Globals.num_samples_max, Globals.num_samples);
 
-        outputGeneratingTextView = (TextView) findViewById(R.id.outputGeneratingTextView);
         outputCapturingTextView = (TextView) findViewById(R.id.outputCapturingTextView);
 
 
@@ -115,6 +116,7 @@ public class AudioIoActivity extends Activity {
         theName.setText(title);
         theSeekBar.setMax(maxValue);
         theSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (final_id != R.id.seek_filter && progress == 0) {
                     seekBar.setProgress(1);
@@ -169,6 +171,10 @@ public class AudioIoActivity extends Activity {
             if (msg != lastMsg) {
                 lastMsg = msg;
                 outputCapturingTextView.setText(msg);
+            }
+            if (Globals.toastMsg != null) {
+                Misc.toast(Globals.toastMsg);
+                Globals.toastMsg = null;
             }
         }
 

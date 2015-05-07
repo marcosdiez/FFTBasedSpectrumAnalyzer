@@ -3,6 +3,7 @@ package com.marcosdiez.spectrumanalyzer.audio;
 import android.util.Log;
 
 import com.marcosdiez.spectrumanalyzer.Globals;
+import com.marcosdiez.spectrumanalyzer.util.SaveToDatabase;
 
 /**
  * Created by Marcos on 29-Mar-15.
@@ -17,6 +18,7 @@ public class CalculateStatistics {
     int maxX = 0;
     double maxY = 0;
 
+    SaveToDatabase saveToDatabase = new SaveToDatabase();
     // BlockingQueue q = new ArrayBlockingQueue(100);
 
 
@@ -65,12 +67,14 @@ public class CalculateStatistics {
                 msg = "XX: " + convertedIndex + "/" + unConvertedIndex + " Hz, volume:" + ((int) maxY) +
                         ", last freq:" +
                         secondLastConvertedIndex + " Hz " + lastNumberOfOccurrences + " times";
-
                 Log.d(TAG, msg);
             } else {
                 number_of_occurrences++;
-//                if (number_of_occurrences == Globals.num_samples) {
-//                }
+                if (number_of_occurrences == Globals.num_samples && convertedIndex != 0) {
+                    saveToDatabase.sendAudioFrequency(convertedIndex);
+                    Globals.toastMsg = Globals.num_samples + " samples! Sending Signal of " + convertedIndex + " Hz.";
+                }
+
             }
         }
     }

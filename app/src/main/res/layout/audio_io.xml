@@ -39,11 +39,11 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"/>
 
-        <!--<include-->
-            <!--android:id="@+id/seek_iteration"-->
-            <!--layout="@layout/my_seeker"-->
-            <!--android:layout_width="fill_parent"-->
-            <!--android:layout_height="wrap_content"/>-->
+        <include
+            android:id="@+id/seek_iteration"
+            layout="@layout/my_seeker"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"/>
 
 
         <HorizontalScrollView
@@ -96,27 +96,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Generating:"/>
-
-
-            <TextView
-                android:id="@+id/outputGeneratingTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="Capturing:"/>
-
 
             <TextView
                 android:id="@+id/outputCapturingTextView"

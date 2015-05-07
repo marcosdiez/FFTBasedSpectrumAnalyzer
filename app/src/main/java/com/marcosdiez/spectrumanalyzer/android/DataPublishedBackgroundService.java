@@ -1,6 +1,7 @@
 package com.marcosdiez.spectrumanalyzer.android;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -18,6 +19,12 @@ import com.marcosdiez.spectrumanalyzer.util.SendToServer;
 
 public class DataPublishedBackgroundService extends Service {
     private static String TAG = "XB-DataPublishedBackgroundService";
+
+    public static void startMeAsAService(Context packageContext)    {
+        Intent serviceIntent = new Intent(packageContext, DataPublishedBackgroundService.class);
+        packageContext.startService(serviceIntent);
+    }
+
 
     public DataPublishedBackgroundService() {
     }

@@ -13,13 +13,18 @@ import com.marcosdiez.spectrumanalyzer.db.SignalsDbHelper;
  */
 public class SaveToDatabase {
     private static final String TAG = "XB-SignalParser";
+    public static final String PORTA = "porta";
+
+    public void sendAudioFrequency(int value){
+        insertEvent(PORTA, value);
+    }
 
     public void insertSensorIsEnabled() {
-        insertEvent("porta", 1);
+        insertEvent(PORTA, 1);
     }
 
     public void insertSensorIsDisabled() {
-        insertEvent("porta", 0);
+        insertEvent(PORTA, 0);
     }
 
     private void insertEvent(String theEventName, int eventValue) {
