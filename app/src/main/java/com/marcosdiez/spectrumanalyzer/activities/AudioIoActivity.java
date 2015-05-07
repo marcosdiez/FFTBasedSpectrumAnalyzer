@@ -2,6 +2,7 @@ package com.marcosdiez.spectrumanalyzer.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -36,6 +37,16 @@ public class AudioIoActivity extends Activity {
         analise();
     }
 
+    private String getVersion() {
+        try {
+            return getPackageManager()
+                    .getPackageInfo(getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            return "";
+        }
+    }
+
+
     protected void prepareUi() {
         setContentView(R.layout.audio_io);
 
@@ -44,10 +55,22 @@ public class AudioIoActivity extends Activity {
         prepareSeeker(R.id.seek_time, "Max Time (Ms): ", Globals.time_of_generated_sound_max, Globals.time_of_generated_sound);
         prepareSeeker(R.id.seek_words, "Words: ", Globals.words_max, Globals.words);
         prepareSeeker(R.id.seek_filter, "Volume Filter: ", Globals.minumum_audio_volume_to_be_considered_max, Globals.minumum_audio_volume_to_be_considered);
-        prepareSeeker(R.id.seek_iteration, "Num Samples: ", Globals.num_samples_max, Globals.num_samples);
+//        prepareSeeker(R.id.seek_iteration, "Num Samples: ", Globals.num_samples_max, Globals.num_samples);
 
         outputGeneratingTextView = (TextView) findViewById(R.id.outputGeneratingTextView);
         outputCapturingTextView = (TextView) findViewById(R.id.outputCapturingTextView);
+
+
+        ((TextView) findViewById(R.id.txt_version)).setText(" v" + getVersion());
+
+
+        getButton(R.id.button_send_text, new View.OnClickListener() {
+            public void onClick(View v) {
+                threadPool.execute(player);
+                Misc.toast("Playing !");
+            }
+        });
+
 
         getButton(R.id.button_clear, new View.OnClickListener() {
             public void onClick(View v) {
@@ -56,18 +79,12 @@ public class AudioIoActivity extends Activity {
         });
 
 
-        getButton(R.id.button_spectrum_analyzer, new View.OnClickListener() {
-            public void onClick(View v) {
-                loadSpectrumAnalyzer();
-            }
-        });
+//        getButton(R.id.button_spectrum_analyzer, new View.OnClickListener() {
+//            public void onClick(View v) {
+//                loadSpectrumAnalyzer();
+//            }
+//        });
 
-        getButton(R.id.button_send_text, new View.OnClickListener() {
-            public void onClick(View v) {
-                threadPool.execute(player);
-                Misc.toast("Playing !");
-            }
-        });
 
     }
 
@@ -99,7 +116,7 @@ public class AudioIoActivity extends Activity {
         theSeekBar.setMax(maxValue);
         theSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (progress == 0) {
+                if (final_id != R.id.seek_filter && progress == 0) {
                     seekBar.setProgress(1);
                 } else {
                     updateGlobalVariable(progress);
@@ -124,9 +141,9 @@ public class AudioIoActivity extends Activity {
                     case R.id.seek_filter:
                         Globals.minumum_audio_volume_to_be_considered = progress;
                         break;
-                    case R.id.seek_iteration:
-                        Globals.num_samples = progress;
-                        break;
+//                    case R.id.seek_iteration:
+//                        Globals.num_samples = progress;
+//                        break;
                     default:
                         break;
                 }

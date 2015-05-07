@@ -62,8 +62,10 @@ public class CalculateStatistics {
                 lastConvertedIndex = convertedIndex;
                 lastNumberOfOccurrences = number_of_occurrences;
                 number_of_occurrences = 0;
-                msg = "XX: " + convertedIndex + "/" + unConvertedIndex + " Hz " + ((int) maxY) +
-                        " last:" + lastNumberOfOccurrences + "/" + secondLastConvertedIndex;
+                msg = "XX: " + convertedIndex + "/" + unConvertedIndex + " Hz, volume:" + ((int) maxY) +
+                        ", last freq:" +
+                        secondLastConvertedIndex + " Hz " + lastNumberOfOccurrences + " times";
+
                 Log.d(TAG, msg);
             } else {
                 number_of_occurrences++;

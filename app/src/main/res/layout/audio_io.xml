@@ -39,11 +39,11 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"/>
 
-        <include
-            android:id="@+id/seek_iteration"
-            layout="@layout/my_seeker"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"/>
+        <!--<include-->
+            <!--android:id="@+id/seek_iteration"-->
+            <!--layout="@layout/my_seeker"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="wrap_content"/>-->
 
 
         <HorizontalScrollView
@@ -55,12 +55,12 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/button_spectrum_analyzer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Spectrum Analyzer"
-                    android:textAllCaps="false"/>
+                <!--<Button-->
+                    <!--android:id="@+id/button_spectrum_analyzer"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Spectrum Analyzer"-->
+                    <!--android:textAllCaps="false"/>-->
 
 
 
@@ -77,16 +77,16 @@
                     android:layout_height="wrap_content"
                     android:text="Clear"
                     android:textAllCaps="false"/>
+
+                <TextView
+                    android:id="@+id/txt_version"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""/>
+
+
             </LinearLayout>
         </HorizontalScrollView>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="From the range of [minFreq] to [maxFreq] Hz, we will [words] different notes for [MaxTime] milliseconds."/>
-
-
-
 
         <LinearLayout
             android:orientation="horizontal"
