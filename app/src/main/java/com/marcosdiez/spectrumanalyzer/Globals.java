@@ -21,13 +21,13 @@ public class Globals {
     public static int time_of_generated_sound = 1000; // ms - miliseconds
     public static final int time_of_generated_sound_max = 5000; // ms - miliseconds
 
-    public static int words = 4;
+    public static int words = 5;
     public static final int words_max = 10;
 
     public static int num_samples = 50;
     public static final int num_samples_max = 100;
 
-    public static int minumum_audio_volume_to_be_considered = 0; // no unity
+    public static int minumum_audio_volume_to_be_considered = 2; // no unity
     public static final int minumum_audio_volume_to_be_considered_max = 10; // no unity
 
 
@@ -52,7 +52,13 @@ public class Globals {
     }
 
 
-// private static GoogleApiClient googleApiClient = null;
+    public static String getPublicWritableFolder() {
+        return Environment.getExternalStorageDirectory() + "/Android/data/" +
+                Globals.getContext().getPackageName();
+    }
+
+
+    // private static GoogleApiClient googleApiClient = null;
 //    public synchronized static GoogleApiClient getGoogleApiClient(){
 //        if(googleApiClient == null){
 //            googleApiClient = new GoogleApiClient.Builder(getContext())
@@ -63,10 +69,4 @@ public class Globals {
 //        }
 //        return googleApiClient;
 //    }
-
-
-    public static String getPublicWritableFolder() {
-        return Environment.getExternalStorageDirectory() + "/Android/data/" +
-                Globals.getContext().getPackageName();
-    }
 }

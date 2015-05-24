@@ -14,8 +14,8 @@ public class CalculateStatisticsTest {
         assertEquals(0, CalculateStatistics.normalizeIndex(100));
         assertEquals(Globals.max_frequency, CalculateStatistics.normalizeIndex(333333));
         assertEquals(Globals.max_frequency, Globals.max_frequency);
-        assertEquals(500, CalculateStatistics.normalizeIndex(400));
-        assertEquals(500, CalculateStatistics.normalizeIndex(298));
+        assertEquals(0, CalculateStatistics.normalizeIndex(400));
+        assertEquals(0, CalculateStatistics.normalizeIndex(298));
         assertEquals(2000, CalculateStatistics.normalizeIndex(2222));
         assertEquals(3000, CalculateStatistics.normalizeIndex(2800));
         assertEquals(2500, CalculateStatistics.normalizeIndex(2700));

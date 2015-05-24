@@ -23,8 +23,8 @@ public class CommunicationTest {
 //    }
 
     @Test
-    public void testTranslation(){
-        for(int i = 0 ; i < Communication.alphabet.length(); i++ ){
+    public void testTranslation() {
+        for (int i = 0; i < Communication.alphabet.length(); i++) {
             char c = Communication.alphabet.charAt(i);
             String newLetter = Communication.toNewBase(c);
             // System.out.println("----" + c + " -- " + newLetter + " -- ");
@@ -34,18 +34,48 @@ public class CommunicationTest {
     }
 
     @Test
-    public void testPlayer(){
+    public void testPlayer() {
         // this does not test anything but it's nice to see the results
         // since I don't know yet how many words I will have, verifying the values make no sense
         // to see the output,
         // gradle testDebug -i
 
-        String testString = "the book is on the table 22z.";
-        TestBeeper t = new TestBeeper();
+        String testString = "the book is on the table 2.247z;";
+        TestBeeper myTestBeeper = new TestBeeper();
         System.out.println("-------------------A-");
-        Communication.player(testString, t);
+        Communication.player(testString, myTestBeeper);
         System.out.println("-------------------B-");
     }
+
+    @Test
+    public void testBidiretionalCommunication() {
+        String testString = "the book is on the table 2.247z;";
+        TestBidirectionalCommunication beeper = new TestBidirectionalCommunication();
+        Communication.player(testString, beeper);
+        String resultString = beeper.getOutput();
+        assertEquals(testString, resultString);
+    }
+
+
+    public class TestBidirectionalCommunication implements Communication.Beeper {
+
+        StringBuffer word = new StringBuffer(10);
+        StringBuffer output = new StringBuffer(500);
+
+        public String getOutput() {
+            return output.toString();
+        }
+
+        public void beepChar(char c) {
+            word.append(c);
+        }
+
+        public void beepWordSeparator() {
+            output.append(Communication.toLetter(word.toString()));
+            word.setLength(0);
+        }
+    }
+
 
     public class TestBeeper implements Communication.Beeper {
         public void beepChar(char c) {
@@ -53,7 +83,7 @@ public class CommunicationTest {
         }
 
         public void beepWordSeparator() {
-            System.out.println("!");
+            System.out.print(" ");
         }
     }
 

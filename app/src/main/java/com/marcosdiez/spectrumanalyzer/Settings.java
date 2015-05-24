@@ -15,10 +15,7 @@ public class Settings {
 
     public static final int seconds_to_sleep_between_publish_attempt = 5;
 
-    public static final boolean working_for_real = true
-
-
-            ;
+    public static final boolean working_for_real = true;
 
     public static final String server_header = server_protocol + "://" + server + ":" + server_port + "/" + server_path;
 }

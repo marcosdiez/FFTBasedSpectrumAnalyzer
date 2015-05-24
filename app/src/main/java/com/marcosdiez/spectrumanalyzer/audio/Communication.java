@@ -100,7 +100,11 @@ public class Communication {
 
     public static String toNewBase(char letter) {
         init();
-        return letterToEncoded.get(letter);
+        String result = letterToEncoded.get(letter);
+        if (result == null) {
+            throw new IllegalArgumentException("can't convert [" + letter + "]");
+        }
+        return result;
     }
 
     public static char toLetter(String fromBase) {
