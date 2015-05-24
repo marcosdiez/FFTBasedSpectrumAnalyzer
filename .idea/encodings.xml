@@ -3,6 +3,6 @@
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/marcosdiez/spectrumanalyzer/audio/AsciiAndSmallAscii.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/marcosdiez/spectrumanalyzer/audio/CalculateStatistics.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/marcosdiez/spectrumanalyzer/audio/Communication.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/marcosdiez/spectrumanalyzer/audio/Player/Communication.java" charset="UTF-8" />
   </component>
 </project>

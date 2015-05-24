@@ -1,39 +1,41 @@
-package com.marcosdiez.spectrumanalyzer.audio;
+package com.marcosdiez.spectrumanalyzer.text;
+
+import android.util.Log;
 
 import com.marcosdiez.spectrumanalyzer.Globals;
-import com.marcosdiez.spectrumanalyzer.text.AsciiAndSmallAscii;
-import com.marcosdiez.spectrumanalyzer.text.SmallAsciiAndFrequencies;
+import com.marcosdiez.spectrumanalyzer.audio.Beeper;
 
 /**
  * Created by Marcos on 24-May-15.
  */
-public class Interpreter implements Communication.Beeper {
-
+public class Interpreter implements Beeper {
+    private static String TAG = "XB-Interpreted";
     private StringBuffer smallAsciiWord = new StringBuffer(10);
     private StringBuffer output = new StringBuffer(500);
-    private long lastInputTimeStamp = 0;
 
-    public synchronized String getOutput() {
-        return output.toString();
+    private String output_cache = "";
+
+    public String getOutput() {
+        return output_cache;
     }
 
     public synchronized void clearOutput() {
         output.setLength(0);
+        output_cache = "";
     }
-
 
     private synchronized void outputAppender(char letter) {
         output.append(letter);
+        output_cache = output.toString();
     }
 
-    public void processFrequency(int frequnecy) {
-        //clearBufferIfIdleForTooLong();
-        if( frequnecy == Globals.max_frequency){
+    public void processFrequency(int frequency) {
+        if (frequency == Globals.max_frequency) {
             clearWord();
             return;
         }
 
-        char letterOfASmallAsciiWord = SmallAsciiAndFrequencies.toSmallAscii(frequnecy);
+        char letterOfASmallAsciiWord = SmallAsciiAndFrequencies.toSmallAscii(frequency);
         smallAsciiWord.append(letterOfASmallAsciiWord);
 
         if (smallAsciiWord.length() == Globals.smallascii_words_per_character) {
@@ -44,16 +46,9 @@ public class Interpreter implements Communication.Beeper {
                 theLetter = '*';
             }
             outputAppender(theLetter);
-        }
-    }
 
-    private void clearBufferIfIdleForTooLong() {
-        long now = System.currentTimeMillis();
-        long delta = now - lastInputTimeStamp;
-        if (delta > Globals.miliseconds_between_beeps_for_end_of_message) {
-            clearWord();
+            Log.d(TAG, getOutput());
         }
-        lastInputTimeStamp = now;
     }
 
     private void clearWord() {

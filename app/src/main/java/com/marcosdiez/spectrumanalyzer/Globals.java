@@ -3,7 +3,7 @@ package com.marcosdiez.spectrumanalyzer;
 import android.content.Context;
 import android.os.Environment;
 
-import com.marcosdiez.spectrumanalyzer.audio.Interpreter;
+import com.marcosdiez.spectrumanalyzer.text.Interpreter;
 
 //import com.google.android.gms.common.api.GoogleApiClient;
 //import com.google.android.gms.location.LocationServices;

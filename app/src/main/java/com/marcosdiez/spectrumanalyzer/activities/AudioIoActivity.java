@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -12,8 +13,8 @@ import android.widget.TextView;
 import com.marcosdiez.spectrumanalyzer.Globals;
 import com.marcosdiez.spectrumanalyzer.R;
 import com.marcosdiez.spectrumanalyzer.android.DataPublishedBackgroundService;
-import com.marcosdiez.spectrumanalyzer.audio.Player.AudioIoPlayer;
 import com.marcosdiez.spectrumanalyzer.audio.Listener.AudioProcessor;
+import com.marcosdiez.spectrumanalyzer.audio.Player.AudioIoPlayer;
 import com.marcosdiez.spectrumanalyzer.util.Misc;
 
 import java.util.concurrent.ExecutorService;
@@ -51,6 +52,7 @@ public class AudioIoActivity extends Activity {
 
 
     protected void prepareUi() {
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.audio_io);
 
         prepareSeeker(R.id.seek_min_frequency, "Min Freq. (Hz): ", Globals.frequency_limit, Globals.min_frequency);
@@ -196,11 +198,10 @@ public class AudioIoActivity extends Activity {
         protected void onProgressUpdate(double[]... toTransform) {
             super.onProgressUpdate(toTransform);
             String msg = super.getStatisticsMsg();
+            outputReceivedTextView.setText(Globals.interpreter.getOutput());
             if (msg != lastMsg) {
                 lastMsg = msg;
                 outputCapturingTextView.setText(msg);
-                outputReceivedTextView.setText(Globals.interpreter.getOutput());
-
             }
             if (Globals.toastMsg != null) {
                 Misc.toast(Globals.toastMsg);

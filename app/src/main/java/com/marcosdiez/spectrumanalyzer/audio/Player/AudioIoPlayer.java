@@ -3,7 +3,6 @@ package com.marcosdiez.spectrumanalyzer.audio.Player;
 import android.util.Log;
 
 import com.marcosdiez.spectrumanalyzer.Globals;
-import com.marcosdiez.spectrumanalyzer.audio.Communication;
 
 /**
  * Created by Marcos on 29-Mar-15.

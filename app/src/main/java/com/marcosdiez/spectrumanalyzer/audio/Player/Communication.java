@@ -1,6 +1,7 @@
-package com.marcosdiez.spectrumanalyzer.audio;
+package com.marcosdiez.spectrumanalyzer.audio.Player;
 
 import com.marcosdiez.spectrumanalyzer.Globals;
+import com.marcosdiez.spectrumanalyzer.audio.Beeper;
 import com.marcosdiez.spectrumanalyzer.text.AsciiAndSmallAscii;
 import com.marcosdiez.spectrumanalyzer.text.SmallAsciiAndFrequencies;
 
@@ -33,8 +34,5 @@ public class Communication {
         }
     }
 
-    public interface Beeper {
-        void processFrequency(int frequency);
-    }
 
 }

@@ -6,13 +6,13 @@ import android.media.AudioTrack;
 import android.util.Log;
 
 import com.marcosdiez.spectrumanalyzer.Globals;
-import com.marcosdiez.spectrumanalyzer.audio.Communication;
+import com.marcosdiez.spectrumanalyzer.audio.Beeper;
 import com.marcosdiez.spectrumanalyzer.text.SmallAsciiAndFrequencies;
 
 /**
  * Created by Marcos on 15-Mar-15.
  */
-public class TonePlayer implements Communication.Beeper {
+public class TonePlayer implements Beeper {
     final private static String TAG = "XB-TonePlayer";
 
     private final int sampleRate = Globals.frequency_limit * 2;
@@ -36,7 +36,6 @@ public class TonePlayer implements Communication.Beeper {
         int word = SmallAsciiAndFrequencies.toSmallAscii(frequency) - ((int) '0');
         Log.d(TAG, "Freq: " + frequency + " word: " + word);
         playWord(word);
-//        playWord(5);
     }
 
     public synchronized void playWord(int word) {

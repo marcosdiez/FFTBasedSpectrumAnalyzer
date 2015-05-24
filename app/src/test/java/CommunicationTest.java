@@ -1,6 +1,6 @@
 import com.marcosdiez.spectrumanalyzer.text.AsciiAndSmallAscii;
-import com.marcosdiez.spectrumanalyzer.audio.Communication;
-import com.marcosdiez.spectrumanalyzer.audio.Interpreter;
+import com.marcosdiez.spectrumanalyzer.audio.Player.Communication;
+import com.marcosdiez.spectrumanalyzer.text.Interpreter;
 import com.marcosdiez.spectrumanalyzer.text.SmallAsciiAndFrequencies;
 import com.marcosdiez.spectrumanalyzer.Globals;
 import org.junit.Test;
