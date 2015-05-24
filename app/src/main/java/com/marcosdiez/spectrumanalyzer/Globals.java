@@ -15,6 +15,7 @@ public class Globals {
 
     private static Context context = null;
 
+    public static final long miliseconds_between_for_end_of_message=2000;
     public static final int frequency_limit = 4000; // Hz
     public static int min_frequency = 1000;    // Hz
     public static int max_frequency = 3000;   // Hz

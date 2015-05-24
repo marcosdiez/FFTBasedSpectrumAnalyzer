@@ -109,15 +109,19 @@ public class Communication {
 
     public static char toLetter(String fromBase) {
         init();
-        return encodedToLetter.get(fromBase);
+        Character result = encodedToLetter.get(fromBase);
+        if (result == null) {
+            throw new IllegalArgumentException("can't convert [" + fromBase + "]");
+        }
+        return result;
     }
 
-    public static void player(String sentence, Beeper b) {
+    public static void player(String sentence, Beeper beeper) {
         int size = sentence.length();
         for (int i = 0; i < size; i++) {
             char c = sentence.charAt(i);
             String newBase = toNewBase(c);
-            playerHelper(newBase, b);
+            playerHelper(newBase, beeper);
         }
     }
 

@@ -1,4 +1,5 @@
 import com.marcosdiez.spectrumanalyzer.audio.Communication;
+import com.marcosdiez.spectrumanalyzer.audio.Interpreter;
 
 import org.junit.Test;
 
@@ -48,34 +49,13 @@ public class CommunicationTest {
     }
 
     @Test
-    public void testBidiretionalCommunication() {
+    public void testInterpreter() {
         String testString = "the book is on the table 2.247z;";
-        TestBidirectionalCommunication beeper = new TestBidirectionalCommunication();
+        Interpreter beeper = new Interpreter();
         Communication.player(testString, beeper);
         String resultString = beeper.getOutput();
         assertEquals(testString, resultString);
     }
-
-
-    public class TestBidirectionalCommunication implements Communication.Beeper {
-
-        StringBuffer word = new StringBuffer(10);
-        StringBuffer output = new StringBuffer(500);
-
-        public String getOutput() {
-            return output.toString();
-        }
-
-        public void beepChar(char c) {
-            word.append(c);
-        }
-
-        public void beepWordSeparator() {
-            output.append(Communication.toLetter(word.toString()));
-            word.setLength(0);
-        }
-    }
-
 
     public class TestBeeper implements Communication.Beeper {
         public void beepChar(char c) {

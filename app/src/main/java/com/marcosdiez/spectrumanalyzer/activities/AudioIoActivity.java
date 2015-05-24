@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.marcosdiez.spectrumanalyzer.Globals;
 import com.marcosdiez.spectrumanalyzer.R;
+import com.marcosdiez.spectrumanalyzer.Settings;
 import com.marcosdiez.spectrumanalyzer.android.DataPublishedBackgroundService;
 import com.marcosdiez.spectrumanalyzer.audio.AudioIoPlayer;
 import com.marcosdiez.spectrumanalyzer.audio.AudioProcessor;
@@ -63,6 +64,8 @@ public class AudioIoActivity extends Activity {
 
 
         ((TextView) findViewById(R.id.txt_version)).setText(" v" + getVersion());
+        String workingForReal = (Settings.working_for_real ? "true" : "false");
+        ((TextView) findViewById(R.id.workingForReal)).setText("Working for Real: " + workingForReal );
 
 
         getButton(R.id.button_send_text, new View.OnClickListener() {

@@ -49,9 +49,11 @@ public class DataPublishedBackgroundService extends Service {
         public void handleMessage(Message msg) {
             SendToServer serverSender = new SendToServer();
             Globals.there_is_data_to_be_sent = true;
-            while (true) {
-                serverSender.publishData();
-                sleeper(Settings.seconds_to_sleep_between_publish_attempt);
+            if(Settings.working_for_real) {
+                while (true) {
+                    serverSender.publishData();
+                    sleeper(Settings.seconds_to_sleep_between_publish_attempt);
+                }
             }
 //                // Stop the service using the startId, so that we don't stop
 //                // the service in the middle of handling another job
