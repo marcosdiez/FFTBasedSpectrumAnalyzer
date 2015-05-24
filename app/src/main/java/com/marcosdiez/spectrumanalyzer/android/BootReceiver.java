@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.marcosdiez.spectrumanalyzer.Settings;
+import com.marcosdiez.spectrumanalyzer.Globals;
 
 /**
  * Created by Marcos on 05-May-15.
@@ -19,7 +19,7 @@ public class BootReceiver extends BroadcastReceiver {
         // just make sure we are getting the right intent (better safe than sorry)
         if ("android.intent.action.BOOT_COMPLETED".equals(intent.getAction())) {
             Log.d(TAG, "DataPublishedBackgroundService.onReceive");
-            if(!Settings.working_for_real){
+            if(!Globals.working_for_real){
                 Log.d(TAG, "DataPublishedBackgroundService.onReceive -> DISABLED");
                 return;
             }

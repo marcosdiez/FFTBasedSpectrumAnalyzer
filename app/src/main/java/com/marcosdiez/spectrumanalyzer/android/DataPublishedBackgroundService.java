@@ -13,7 +13,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.marcosdiez.spectrumanalyzer.Globals;
-import com.marcosdiez.spectrumanalyzer.Settings;
 import com.marcosdiez.spectrumanalyzer.util.SendToServer;
 
 
@@ -49,10 +48,10 @@ public class DataPublishedBackgroundService extends Service {
         public void handleMessage(Message msg) {
             SendToServer serverSender = new SendToServer();
             Globals.there_is_data_to_be_sent = true;
-            if(Settings.working_for_real) {
+            if(Globals.working_for_real) {
                 while (true) {
                     serverSender.publishData();
-                    sleeper(Settings.seconds_to_sleep_between_publish_attempt);
+                    sleeper(Globals.seconds_to_sleep_between_publish_attempt);
                 }
             }
 //                // Stop the service using the startId, so that we don't stop

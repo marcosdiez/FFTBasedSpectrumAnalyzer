@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.marcosdiez.spectrumanalyzer.Globals;
-import com.marcosdiez.spectrumanalyzer.Settings;
 import com.marcosdiez.spectrumanalyzer.db.DatabaseManager;
 import com.marcosdiez.spectrumanalyzer.db.SignalsDbHelper;
 
@@ -56,7 +55,7 @@ public class SendToServer {
 
     private boolean publish(Cursor queryCursor) {
         String url = generateServerUrl(queryCursor);
-        if (Settings.working_for_real) {
+        if (Globals.working_for_real) {
             boolean result = Misc.makeHttpRequest(url);
             Log.d(TAG, "ServerURL: " + result + " [" + url + "]");
             return result;
@@ -69,7 +68,7 @@ public class SendToServer {
     private String generateServerUrl(Cursor queryCursor) {
         StringBuilder output = new StringBuilder(500);
 
-        output.append(Settings.server_header);
+        output.append(Globals.server_header);
 
         // event_name = event_value
         output.append("?__device=" + Misc.getAndroidId());
