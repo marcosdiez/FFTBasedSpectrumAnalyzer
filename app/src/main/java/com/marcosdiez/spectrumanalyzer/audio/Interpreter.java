@@ -27,7 +27,11 @@ public class Interpreter implements Communication.Beeper {
     }
 
     public void processFrequency(int frequnecy) {
-        clearBufferIfIdleForTooLong();
+        //clearBufferIfIdleForTooLong();
+        if( frequnecy == Globals.max_frequency){
+            clearWord();
+            return;
+        }
 
         char letterOfASmallAsciiWord = SmallAsciiAndFrequencies.toSmallAscii(frequnecy);
         smallAsciiWord.append(letterOfASmallAsciiWord);
@@ -40,7 +44,6 @@ public class Interpreter implements Communication.Beeper {
                 theLetter = '*';
             }
             outputAppender(theLetter);
-            clearWord();
         }
     }
 

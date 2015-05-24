@@ -12,8 +12,8 @@ import android.widget.TextView;
 import com.marcosdiez.spectrumanalyzer.Globals;
 import com.marcosdiez.spectrumanalyzer.R;
 import com.marcosdiez.spectrumanalyzer.android.DataPublishedBackgroundService;
-import com.marcosdiez.spectrumanalyzer.audio.AudioIoPlayer;
-import com.marcosdiez.spectrumanalyzer.audio.AudioProcessor;
+import com.marcosdiez.spectrumanalyzer.audio.Player.AudioIoPlayer;
+import com.marcosdiez.spectrumanalyzer.audio.Listener.AudioProcessor;
 import com.marcosdiez.spectrumanalyzer.util.Misc;
 
 import java.util.concurrent.ExecutorService;
@@ -85,9 +85,17 @@ public class AudioIoActivity extends Activity {
             }
         });
 
-        getButton(R.id.button_elefante, new View.OnClickListener() {
+        getButton(R.id.button_hoje, new View.OnClickListener() {
             public void onClick(View v) {
                 player.setMessage("hoje");
+                threadPool.execute(player);
+            }
+        });
+
+
+        getButton(R.id.button_elefante, new View.OnClickListener() {
+            public void onClick(View v) {
+                player.setMessage("elefante");
                 threadPool.execute(player);
             }
         });

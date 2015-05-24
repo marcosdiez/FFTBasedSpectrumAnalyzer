@@ -79,6 +79,13 @@
                     android:textAllCaps="false"/>
 
                 <Button
+                    android:id="@+id/button_hoje"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hoje"
+                    android:textAllCaps="false"/>
+
+                <Button
                     android:id="@+id/button_elefante"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

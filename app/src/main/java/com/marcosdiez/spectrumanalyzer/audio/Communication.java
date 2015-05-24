@@ -1,5 +1,6 @@
 package com.marcosdiez.spectrumanalyzer.audio;
 
+import com.marcosdiez.spectrumanalyzer.Globals;
 import com.marcosdiez.spectrumanalyzer.text.AsciiAndSmallAscii;
 import com.marcosdiez.spectrumanalyzer.text.SmallAsciiAndFrequencies;
 
@@ -24,6 +25,7 @@ public class Communication {
 
     private static void playerHelper(String smallAsciiWord, Beeper b) {
         int size = smallAsciiWord.length();
+        b.processFrequency(Globals.max_frequency);
         for (int i = 0; i < size; i++) {
             char letterOfASmallAsciiWord = smallAsciiWord.charAt(i);
             int frequency = SmallAsciiAndFrequencies.toFrequency(letterOfASmallAsciiWord);

@@ -1,4 +1,4 @@
-package com.marcosdiez.spectrumanalyzer.audio;
+package com.marcosdiez.spectrumanalyzer.audio.Listener;
 
 import android.media.AudioFormat;
 import android.media.AudioRecord;
@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.marcosdiez.spectrumanalyzer.Globals;
+import com.marcosdiez.spectrumanalyzer.audio.CalculateStatistics;
 
 import ca.uol.aig.fftpack.RealDoubleFFT;
 

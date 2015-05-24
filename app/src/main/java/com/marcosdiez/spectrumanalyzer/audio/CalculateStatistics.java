@@ -3,6 +3,8 @@ package com.marcosdiez.spectrumanalyzer.audio;
 import android.util.Log;
 
 import com.marcosdiez.spectrumanalyzer.Globals;
+import com.marcosdiez.spectrumanalyzer.audio.Listener.AudioProcessor;
+import com.marcosdiez.spectrumanalyzer.text.SmallAsciiAndFrequencies;
 import com.marcosdiez.spectrumanalyzer.util.SaveToDatabase;
 
 /**
@@ -64,7 +66,7 @@ public class CalculateStatistics {
                 lastConvertedIndex = convertedIndex;
                 lastNumberOfOccurrences = number_of_occurrences;
                 number_of_occurrences = 0;
-                msg = "XX: " + convertedIndex + "/" + unConvertedIndex + " Hz, volume:" + ((int) maxY) +
+                msg = "XX: " + convertedIndex + "/" + unConvertedIndex + " Hz [" + SmallAsciiAndFrequencies.toSmallAsciiNoException(convertedIndex) + "], volume:" + ((int) maxY) +
                         ", last freq:" +
                         secondLastConvertedIndex + " Hz " + lastNumberOfOccurrences + " times";
                 Log.d(TAG, msg);
