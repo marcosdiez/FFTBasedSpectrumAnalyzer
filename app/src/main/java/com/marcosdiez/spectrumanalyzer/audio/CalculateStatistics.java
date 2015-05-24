@@ -71,9 +71,11 @@ public class CalculateStatistics {
             } else {
                 number_of_occurrences++;
                 if (number_of_occurrences == Globals.num_samples && convertedIndex != 0) {
+                    Globals.interpreter.processFrequency(convertedIndex);
+
 //                        Globals.interpreter.
-                    saveToDatabase.sendAudioFrequency(convertedIndex);
-                    Globals.toastMsg = Globals.num_samples + " samples! Sending Signal of " + convertedIndex + " Hz.";
+//                    saveToDatabase.sendAudioFrequency(convertedIndex);
+//                    Globals.toastMsg = Globals.num_samples + " samples! Sending Signal of " + convertedIndex + " Hz.";
                 }
 
             }

@@ -94,7 +94,7 @@ public class SoundRecordAndAnalysisActivity extends Activity {
 
     void playSound(int frequency) {
         int playTimeInMiliSeconds = 1000;
-        threadPool.execute(new TonePlayer(playTimeInMiliSeconds, frequency));
+        threadPool.execute(new TonePlayer(frequency, playTimeInMiliSeconds));
     }
 
     public void buttonClicked() {

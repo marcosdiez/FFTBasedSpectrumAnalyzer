@@ -28,6 +28,7 @@ public class AudioIoActivity extends Activity {
     AudioIoPlayer player = new AudioIoPlayer();
     AudioProcessorUi audioProcessorUi = new AudioProcessorUi();
     TextView outputCapturingTextView;
+    TextView outputReceivedTextView;
 
 
     @Override
@@ -60,15 +61,16 @@ public class AudioIoActivity extends Activity {
         prepareSeeker(R.id.seek_iteration, "Num Samples to send data: ", Globals.num_samples_max, Globals.num_samples);
 
         outputCapturingTextView = (TextView) findViewById(R.id.outputCapturingTextView);
-
+        outputReceivedTextView = (TextView) findViewById(R.id.outputReceivedTextView);
 
         ((TextView) findViewById(R.id.txt_version)).setText(" v" + getVersion());
         String workingForReal = (Globals.working_for_real ? "true" : "false");
-        ((TextView) findViewById(R.id.workingForReal)).setText("Working for Real: " + workingForReal );
+        ((TextView) findViewById(R.id.workingForReal)).setText("Working for Real: " + workingForReal);
 
 
         getButton(R.id.button_send_text, new View.OnClickListener() {
             public void onClick(View v) {
+                player.setMessage(null);
                 threadPool.execute(player);
                 Misc.toast("Playing !");
             }
@@ -78,6 +80,22 @@ public class AudioIoActivity extends Activity {
         getButton(R.id.button_clear, new View.OnClickListener() {
             public void onClick(View v) {
                 outputCapturingTextView.setText("");
+                Globals.interpreter.clearOutput();
+                outputReceivedTextView.setText("");
+            }
+        });
+
+        getButton(R.id.button_elefante, new View.OnClickListener() {
+            public void onClick(View v) {
+                player.setMessage("hoje");
+                threadPool.execute(player);
+            }
+        });
+
+        getButton(R.id.button_table, new View.OnClickListener() {
+            public void onClick(View v) {
+                player.setMessage("The Book Is On The Table");
+                threadPool.execute(player);
             }
         });
 
@@ -173,6 +191,8 @@ public class AudioIoActivity extends Activity {
             if (msg != lastMsg) {
                 lastMsg = msg;
                 outputCapturingTextView.setText(msg);
+                outputReceivedTextView.setText(Globals.interpreter.getOutput());
+
             }
             if (Globals.toastMsg != null) {
                 Misc.toast(Globals.toastMsg);

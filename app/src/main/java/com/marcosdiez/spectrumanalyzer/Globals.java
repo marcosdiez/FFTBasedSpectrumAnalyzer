@@ -43,9 +43,9 @@ public class Globals {
 
     public static int words = 5;
     public static final int words_max = 10;
-    public static int words_per_character = 3; // this should be automatic
+    public static int smallascii_words_per_character = 3; // this should be automatic
 
-    public static int num_samples = 10;
+    public static int num_samples = 4;
     public static final int num_samples_max = 100;
 
     public static int minumum_audio_volume_to_be_considered = 2; // no unity

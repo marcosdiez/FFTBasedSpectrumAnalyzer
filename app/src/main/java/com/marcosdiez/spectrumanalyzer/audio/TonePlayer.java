@@ -3,20 +3,23 @@ package com.marcosdiez.spectrumanalyzer.audio;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
-import android.util.Log;
 
 import com.marcosdiez.spectrumanalyzer.Globals;
 
 /**
  * Created by Marcos on 15-Mar-15.
  */
-public class TonePlayer implements Runnable {
+public class TonePlayer implements Runnable , Communication.Beeper {
     final private static String TAG = "XB-TonePlayer";
 
     private final int sampleRate = Globals.frequency_limit * 2;
     private final int maxSamples = (int) (Globals.time_of_generated_sound_max / 1000.0 * sampleRate);
     private final double[] sample = new double[maxSamples];
     private final byte generatedSnd[] = new byte[maxSamples * 2];
+
+
+
+
 
     private int durationInMilliseconds = 3000; // miliseconds
     private double freqOfTone = 440; // hz
@@ -27,17 +30,20 @@ public class TonePlayer implements Runnable {
     public TonePlayer() {
     }
 
-    public TonePlayer(int durationInMilliseconds, int freqOfTone) {
-        init(durationInMilliseconds, freqOfTone);
+    public TonePlayer(int freqOfTone, int durationInMilliseconds) {
+        init(freqOfTone, durationInMilliseconds);
     }
 
+    public void processFrequency(int freqOfTone){
+        play(freqOfTone, Globals.time_of_generated_sound);
+    }
 
-    public void play(int durationInMilliseconds, int freqOfTone) {
-        init(durationInMilliseconds, freqOfTone);
+    public void play(int freqOfTone, int durationInMilliseconds) {
+        init(freqOfTone, durationInMilliseconds);
         play();
     }
 
-    private void init(int durationInMilliseconds, int freqOfTone) {
+    private void init(int freqOfTone, int durationInMilliseconds) {
         this.durationInMilliseconds = durationInMilliseconds;
         this.freqOfTone = freqOfTone;
         numSamples = (int) ((this.durationInMilliseconds / 1000.0) * sampleRate);
@@ -51,7 +57,7 @@ public class TonePlayer implements Runnable {
 
     public synchronized void play() {
         prepareSound();
-        Log.d(TAG, "Playing " + freqOfTone + " Hz for " + durationInMilliseconds + " ms");
+        // Log.d(TAG, "Playing " + freqOfTone + " Hz for " + durationInMilliseconds + " ms");
         replaySound();
     }
 

@@ -7,9 +7,14 @@ import com.marcosdiez.spectrumanalyzer.Globals;
 /**
  * Created by Marcos on 29-Mar-15.
  */
-public class AudioIoPlayer implements Runnable, Communication.Beeper {
+public class AudioIoPlayer implements Runnable {
     final static String TAG = "XB-AudioIoPlayer";
     TonePlayer tonePlayer = new TonePlayer();
+    String message = null;
+
+    public void setMessage(String msg) {
+        this.message = msg;
+    }
 
     public void dumpState() {
         Log.d(TAG, "Freq(Hz): " + Globals.min_frequency + "/" + Globals.max_frequency +
@@ -17,38 +22,23 @@ public class AudioIoPlayer implements Runnable, Communication.Beeper {
     }
 
     public void run() {
-        send();
+        if (message == null) {
+            sendAllBeep();
+        } else {
+            Communication.player(message, tonePlayer);
+        }
     }
 
-    public void send() {
+    public void sendAllBeep() {
         dumpState();
 
         // Communication.player("hello;", this);
         int delta = Math.abs(Globals.max_frequency - Globals.min_frequency) / Globals.words;
         int frequency = Globals.min_frequency;
         for (int i = 0; i <= Globals.words; i++) {
-            playSound(frequency, Globals.time_of_generated_sound);
+            tonePlayer.processFrequency(frequency);
             frequency += delta;
         }
     }
-
-    public void beepChar(char c) {
-        int delta = Math.abs(Globals.max_frequency - Globals.min_frequency);
-        int frequencyIncrement = delta / Globals.words;
-
-        int beep_value = Integer.parseInt("" + c);
-
-        int frequency = Globals.min_frequency + frequencyIncrement * beep_value;
-        playSound(frequency, Globals.time_of_generated_sound);
-    }
-
-    public void beepWordSeparator() {
-        playSound(100, Globals.time_of_generated_sound);
-    }
-
-    private void playSound(int frequency, int playTimeInMilliseconds) {
-        tonePlayer.play(playTimeInMilliseconds, frequency);
-    }
-
 
 }
