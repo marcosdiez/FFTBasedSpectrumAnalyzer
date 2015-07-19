@@ -15,6 +15,7 @@ import com.marcosdiez.spectrumanalyzer.R;
 import com.marcosdiez.spectrumanalyzer.android.DataPublishedBackgroundService;
 import com.marcosdiez.spectrumanalyzer.audio.Listener.AudioProcessor;
 import com.marcosdiez.spectrumanalyzer.audio.Player.AudioIoPlayer;
+import com.marcosdiez.spectrumanalyzer.audio.Player.TonePlayer;
 import com.marcosdiez.spectrumanalyzer.util.Misc;
 
 import java.util.concurrent.ExecutorService;
@@ -109,7 +110,15 @@ public class AudioIoActivity extends Activity {
             }
         });
 
-
+        getButton(R.id.button_play_stuff, new View.OnClickListener() {
+                public void onClick(View v) {
+                TonePlayer t = new TonePlayer();
+                for (int i = 100; i < 4000; i += 100) {
+                    t.playFrequency(i);
+                }
+                }
+            }
+        );
 //        getButton(R.id.button_spectrum_analyzer, new View.OnClickListener() {
 //            public void onClick(View v) {
 //                loadSpectrumAnalyzer();

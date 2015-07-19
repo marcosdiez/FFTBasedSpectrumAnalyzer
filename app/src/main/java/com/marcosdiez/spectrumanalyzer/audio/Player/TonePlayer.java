@@ -38,9 +38,19 @@ public class TonePlayer implements Beeper {
         playWord(word);
     }
 
-    public synchronized void playWord(int word) {
+    public void playFrequency(int frequency){
+        byte audioData[] = new byte[maxSamples * 2];
+        fillAudioData(frequency, audioData);
+        playByteArray(audioData);
+    }
 
-        audioTrack.write(generatedSnd[word], 0, sampleSize);
+    public void playWord(int word) {
+        byte[] audioData =  generatedSnd[word];
+        playByteArray(audioData);
+    }
+
+    private synchronized void playByteArray(byte[] audioData) {
+        audioTrack.write(audioData, 0, sampleSize);
         audioTrack.reloadStaticData();
         audioTrack.play();
 
@@ -53,34 +63,58 @@ public class TonePlayer implements Beeper {
     }
 
     public void loadGeneratedSound() {
-        double[] sample = new double[maxSamples];
-
         int delta = Math.abs(Globals.max_frequency - Globals.min_frequency) / Globals.words;
         int frequency = Globals.min_frequency;
 
         for (int word_num = 0; word_num <= Globals.words; word_num++) {
+            byte[] currentAudioData = generatedSnd[word_num];
             Log.d(TAG, "init: word: " + word_num + ", freq: " + frequency + " Hz");
-            // int sampleRate, int durationInMilliseconds, int freqOfTone, byte[] generatedSnd){
-            // fill out the array
-            for (int i = 0; i < numSamples; ++i) {
-                sample[i] = Math.sin(2 * Math.PI * (double) i / ((double) sampleRate / (double) frequency));
-            }
-            // convert to 16 bit pcm sound array
-            // assumes the sample buffer is normalised.
-            int idx = 0;
-            for (int sample_idx = 0; sample_idx < numSamples; sample_idx++) {
-                final double dVal = sample[sample_idx];
-                //for (final double dVal : sample) {
-                // scale to maximum amplitude
-                final short val = (short) ((dVal * 32767));
-                // in 16 bit wav PCM, first byte is the low order byte
-                generatedSnd[word_num][idx++] = (byte) (val & 0x00ff);
-                generatedSnd[word_num][idx++] = (byte) ((val & 0xff00) >>> 8);
-            }
-
+            fillAudioData(frequency, currentAudioData);
             frequency += delta;
         }
     }
+
+    private void fillAudioData(double frequency, byte[] output) {
+
+        // int sampleRate, int durationInMilliseconds, int freqOfTone, byte[] generatedSnd){
+        // fill out the array
+        for (int i = 0; i < numSamples; ++i) {
+            double audioSample = Math.sin(2 * Math.PI * (double) i / ((double) sampleRate / frequency));
+
+            swapSampleEndianess(output, i, audioSample);
+        }
+    }
+
+    private void swapSampleEndianess(byte[] output, int i, double audioSample) {
+        // convert to 16 bit pcm sound array
+        // assumes the sample buffer is normalised.
+
+        final short val = (short) ((audioSample * 32767));
+        // in 16 bit wav PCM, first byte is the low order byte
+        output[2*i] = (byte) (val & 0x00ff);
+        output[2*i+1] = (byte) ((val & 0xff00) >>> 8);
+    }
+
+//    private void fillAudioData2(double frequency, byte[] output) {
+//        double[] sample = new double[maxSamples];
+//        // int sampleRate, int durationInMilliseconds, int freqOfTone, byte[] generatedSnd){
+//        // fill out the array
+//        for (int i = 0; i < numSamples; ++i) {
+//            sample[i] = Math.sin(2 * Math.PI * (double) i / ((double) sampleRate / frequency));
+//        }
+//        // convert to 16 bit pcm sound array
+//        // assumes the sample buffer is normalised.
+//        int idx = 0;
+//        for (int sample_idx = 0; sample_idx < numSamples; sample_idx++) {
+//            final double dVal = sample[sample_idx];
+//            //for (final double dVal : sample) {
+//            // scale to maximum amplitude
+//            final short val = (short) ((dVal * 32767));
+//            // in 16 bit wav PCM, first byte is the low order byte
+//            output[idx++] = (byte) (val & 0x00ff);
+//            output[idx++] = (byte) ((val & 0xff00) >>> 8);
+//        }
+//    }
     //    private int durationInMilliseconds = 3000; // miliseconds
 //    private int numSamples;
 //    private int sampleSize;

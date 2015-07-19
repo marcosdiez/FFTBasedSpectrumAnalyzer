@@ -99,6 +99,14 @@
                     android:text="The Book Is On the TABLE!"
                     android:textAllCaps="false"/>
 
+
+                <Button
+                    android:id="@+id/button_play_stuff"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Play Stuff"
+                    android:textAllCaps="false"/>
+
                 <TextView
                     android:id="@+id/txt_version"
                     android:layout_width="wrap_content"
