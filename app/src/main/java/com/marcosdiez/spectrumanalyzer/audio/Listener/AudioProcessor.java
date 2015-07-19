@@ -18,7 +18,7 @@ public abstract class AudioProcessor extends AsyncTask<Void, double[], Void> {
     /*
     this class does not do any UI
      */
-    public static final int blockSize = 256;
+    public static final int blockSize = 32;
     final private RealDoubleFFT transformer = new RealDoubleFFT(blockSize);
     final int channelConfiguration = AudioFormat.CHANNEL_IN_MONO;
     final int audioEncoding = AudioFormat.ENCODING_PCM_16BIT;
