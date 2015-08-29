@@ -27,7 +27,6 @@ public class SoundRecordAndAnalysisActivity extends Activity {
 
     private static final ExecutorService threadPool = Executors.newCachedThreadPool();
     public static String TAG = "SoundRecordAndAnalysisActivity";
-    int frequency = 8000;
     Button startStopButton;
 
     TheSpectrumAnalyzerImageView imageViewDisplaySpectrum;
@@ -161,7 +160,7 @@ public class SoundRecordAndAnalysisActivity extends Activity {
             return ap.getStarted();
         }
 
-        AudioProcessor ap = new AudioProcessor(frequency, this);
+        AudioProcessor ap = new AudioProcessor(this);
 
         @Override
         protected Void doInBackground(Void... params) {

@@ -2,6 +2,7 @@ package com.marcosdiez.spectrumanalyzer.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,8 +10,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.marcosdiez.spectrumanalyzer.AudioIoPlayer;
+import com.marcosdiez.spectrumanalyzer.AudioProcessor;
 import com.marcosdiez.spectrumanalyzer.CalculateStatistics;
 import com.marcosdiez.spectrumanalyzer.R;
+import com.marcosdiez.spectrumanalyzer.RecordAudioPlotter;
 import com.marcosdiez.spectrumanalyzer.Toaster;
 
 import java.util.concurrent.ExecutorService;
@@ -24,6 +27,7 @@ public class AudioIoActivity extends Activity {
     private CalculateStatistics statistics = new CalculateStatistics();
     private static final ExecutorService threadPool = Executors.newCachedThreadPool();
     AudioIoPlayer player = new AudioIoPlayer();
+    AudioProcessorUi audioProcessorUi = new AudioProcessorUi();
     TextView txtOutput;
 
     @Override
@@ -74,7 +78,7 @@ public class AudioIoActivity extends Activity {
     }
 
     private void analise(){
-
+        audioProcessorUi.execute();
     }
 
     private Button getButton(int id, View.OnClickListener c) {
@@ -117,6 +121,56 @@ public class AudioIoActivity extends Activity {
             }
         });
         theSeekBar.setProgress(initialValue);
+    }
+    private class AudioProcessorUi extends AsyncTask<Void, double[], Void> implements RecordAudioPlotter {
+
+        public synchronized void stop() {
+            ap.stop();
+        }
+
+        public synchronized boolean getStarted() {
+            return ap.getStarted();
+        }
+
+        AudioProcessor ap = new AudioProcessor(this);
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            ap.doInBackground();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            ap.onStop();
+        }
+
+        @Override
+        protected void onProgressUpdate(double[]... values) {
+            super.onProgressUpdate(values);
+//            imageViewDisplaySpectrum.invalidate();
+//            textViewMeasuredValue.setText(imageViewDisplaySpectrum.msg);
+        }
+
+        @Override
+        protected void onCancelled(Void aVoid) {
+            super.onCancelled(aVoid);
+            ap.onStop();
+        }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+            ap.onStop();
+        }
+
+        public void backgroundThreadPlot(double[] toTransform, CalculateStatistics statistics) {
+//            imageViewDisplaySpectrum.plot(toTransform, statistics);
+            publishProgress(toTransform);
+        }
+
+
     }
 
 }

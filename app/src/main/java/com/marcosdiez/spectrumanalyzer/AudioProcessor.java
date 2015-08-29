@@ -20,14 +20,13 @@ public class AudioProcessor {
     final int audioEncoding = AudioFormat.ENCODING_PCM_16BIT;
     private RecordAudioPlotter recordAudioPlotter;
     private AudioRecord audioRecord;
-    private int frequency;
+    private int frequency=8000; // Hz
     private boolean started = false;
     private CalculateStatistics statistics = new CalculateStatistics();
 
-    public AudioProcessor(int frequency, RecordAudioPlotter recordAudioPlotter) {
+    public AudioProcessor(RecordAudioPlotter recordAudioPlotter) {
         super();
         this.recordAudioPlotter = recordAudioPlotter;
-        this.frequency = frequency;
     }
 
     public void onStop() {
